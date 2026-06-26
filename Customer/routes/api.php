@@ -30,6 +30,6 @@ Route::resource('customer-business', WJCController::class)->names([
 
 // LXController 独立v1分组
 Route::prefix('v1')->group(function () {
+    Route::post('login', [LXController::class, 'login']);
     Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);
-
 });
