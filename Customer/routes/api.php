@@ -11,5 +11,6 @@ Route::resource('customer-business', WJCController::class);
 
 // LXController 独立v1分组
 Route::prefix('v1')->group(function () {
-    Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);
+    Route::post('login', [LXController::class, 'login']);
+    Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);// 新增用户、获取用户详情、修改用户
 });

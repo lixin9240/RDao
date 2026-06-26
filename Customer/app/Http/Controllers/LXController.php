@@ -16,6 +16,24 @@ class LXController extends Controller
     }
 
     /**
+     * 用户登录
+     */
+    public function login(LXRequest $request): JsonResponse
+    {
+        $token = $this->service->login($request->validatedData());
+
+        if (! $token) {
+            return $this->error('账号或密码错误', 401);
+        }
+
+        return $this->success([
+            'token'      => $token,
+            'tokenType'  => 'bearer',
+            'expiresIn'  => config('jwt.ttl') * 60,
+        ], '登录成功');
+    }
+
+    /**
      * 新增用户
      */
     public function store(LXRequest $request): JsonResponse

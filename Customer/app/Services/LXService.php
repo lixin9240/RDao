@@ -3,9 +3,24 @@
 namespace App\Services;
 
 use App\Models\SysUser;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LXService
 {
+    /**
+     * 用户登录
+     */
+    public function login(array $credentials): ?string
+    {
+        $token = JWTAuth::attempt($credentials);
+
+        if (! $token) {
+            return null;
+        }
+
+        return $token;
+    }
+
     /**
      * 新增用户（密码由模型自动哈希）
      */

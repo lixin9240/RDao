@@ -22,6 +22,14 @@ class LXRequest extends FormRequest
      */
     public function rules(): array
     {
+        // 登录场景
+        if ($this->is('api/v1/login')) {
+            return [
+                'username' => 'required|string|max:50',
+                'password' => 'required|string|max:100',
+            ];
+        }
+
         $rules = [
             'username'           => 'required|string|max:50|unique:sys_user,username',
             'password'           => 'required|string|max:100',
@@ -53,6 +61,11 @@ class LXRequest extends FormRequest
     public function validatedData(): array
     {
         $data = $this->validated();
+
+        // 登录场景无需转换
+        if ($this->is('api/v1/login')) {
+            return $data;
+        }
 
         $map = [
             'realName'          => 'real_name',
