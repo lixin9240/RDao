@@ -50,7 +50,7 @@ class GyzRequest extends FormRequest
         $this->merge($data);
         // 新增自动填充创建人
         if (in_array($this->scene, ['basic-store','address-store','fee-store'])) {
-            $this->merge(['creator' => auth()->user()->name]);
+            $this->merge(['creator' => auth()->user()->real_name]);
         }
     }
 

@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LXController;
 use App\Http\Controllers\WJCController;
+use App\Http\Controllers\GyzController;
 
-// WJCController 路由组（需认证）
+// WJCController
 Route::middleware('auth:api')->group(function () {
     Route::resource('applicant', WJCController::class);
     Route::resource('inventor', WJCController::class);
@@ -38,3 +39,28 @@ Route::prefix('v1')->group(function () {
         Route::delete('roles/{id}', [LXController::class, 'destroyRole']);// 删除角色
     });
 });
+
+//GyzController
+Route::middleware('auth:api')->group(function () {
+    // 基本信息表
+    Route::get('customer-basic', [GyzController::class, 'basicIndex']);
+    Route::get('customer-basic/{id}', [GyzController::class, 'basicShow']);
+    Route::post('customer-basic', [GyzController::class, 'basicStore']);
+    Route::put('customer-basic/{id}', [GyzController::class, 'basicUpdate']);
+    Route::delete('customer-basic/{id}', [GyzController::class, 'basicDestroy']);
+
+    // 地址信息表
+    Route::get('customer-address', [GyzController::class, 'addressIndex']);
+    Route::get('customer-address/{id}', [GyzController::class, 'addressShow']);
+    Route::post('customer-address', [GyzController::class, 'addressStore']);
+    Route::put('customer-address/{id}', [GyzController::class, 'addressUpdate']);
+    Route::delete('customer-address/{id}', [GyzController::class, 'addressDestroy']);
+
+    // 费用信息表
+    Route::get('customer-fee', [GyzController::class, 'feeIndex']);
+    Route::get('customer-fee/{id}', [GyzController::class, 'feeShow']);
+    Route::post('customer-fee', [GyzController::class, 'feeStore']);
+    Route::put('customer-fee/{id}', [GyzController::class, 'feeUpdate']);
+    Route::delete('customer-fee/{id}', [GyzController::class, 'feeDestroy']);
+});
+
