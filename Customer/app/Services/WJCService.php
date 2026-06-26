@@ -42,7 +42,7 @@ class WJCService
 
     public function applicantList(Request $request): array
     {
-        $query = Applicant::query();
+        $query = Applicant::query()->where('is_deleted', $request->input('is_deleted', 0));
 
         if ($request->filled('customer_name')) {
             $query->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
@@ -84,7 +84,7 @@ class WJCService
 
     public function inventorList(Request $request): array
     {
-        $query = Inventor::query();
+        $query = Inventor::query()->where('is_deleted', $request->input('is_deleted', 0));
 
         if ($request->filled('customer_name')) {
             $query->where('customer_name', 'like', '%' . $request->input('customer_name') . '%');
@@ -134,8 +134,12 @@ class WJCService
             });
         }
 
+        $page    = (int) $request->input('page', 1);
         $perPage = (int) $request->input('per_page', 15);
-        $data    = $query->orderBy('id', 'desc')->paginate($perPage);
+        $sort    = $request->input('sort', 'created_at');
+        $order   = $request->input('order', 'desc');
+
+        $data = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
 
         return [
             'data' => $data->items(),
