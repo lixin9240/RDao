@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LXRequest;
 use App\Services\LXService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class LXController extends Controller
 {
@@ -65,5 +66,77 @@ class LXController extends Controller
         $user = $this->service->updateUser($id, $request->validatedData());
 
         return $this->success($user, '用户更新成功');
+    }
+
+    /**
+     * 新增部门
+     */
+    public function storeDept(LXRequest $request): JsonResponse
+    {
+        $dept = $this->service->createDept($request->validatedData());
+
+        return $this->success($dept, '部门创建成功');
+    }
+
+    /**
+     * 修改部门
+     */
+    public function updateDept(LXRequest $request, int $id): JsonResponse
+    {
+        $dept = $this->service->updateDept($id, $request->validatedData());
+
+        return $this->success($dept, '部门更新成功');
+    }
+
+    /**
+     * 获取部门树形结构
+     */
+    public function deptTree(): JsonResponse
+    {
+        $tree = $this->service->deptTree();
+
+        return $this->success($tree);
+    }
+
+    /* ==================== 角色管理 ==================== */
+
+    /**
+     * 创建角色
+     */
+    public function storeRole(LXRequest $request): JsonResponse
+    {
+        $role = $this->service->createRole($request->validatedData());
+
+        return $this->success($role, '角色创建成功');
+    }
+
+    /**
+     * 角色分页列表
+     */
+    public function roleList(Request $request): JsonResponse
+    {
+        $data = $this->service->roleList($request->all());
+
+        return $this->success($data);
+    }
+
+    /**
+     * 分配/保存角色权限
+     */
+    public function assignMenus(LXRequest $request, int $id): JsonResponse
+    {
+        $this->service->assignRoleMenus($id, $request->validatedData()['menuIds'] ?? []);
+
+        return $this->success([], '权限分配成功');
+    }
+
+    /**
+     * 获取角色已选权限
+     */
+    public function roleMenus(int $id): JsonResponse
+    {
+        $menuIds = $this->service->getRoleMenus($id);
+
+        return $this->success($menuIds);
     }
 }
