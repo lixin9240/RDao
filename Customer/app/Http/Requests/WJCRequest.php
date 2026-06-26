@@ -23,7 +23,7 @@ class WJCRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            '*' => 'sometimes',
         ];
     }
 }
