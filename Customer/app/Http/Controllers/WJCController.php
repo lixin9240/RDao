@@ -25,29 +25,47 @@ class WJCController extends Controller
         return '';
     }
 
+    private function responseOk(mixed $data = null, string $message = ''): JsonResponse
+    {
+        return match ($this->getResourceType()) {
+            'applicant', 'inventor' => response()->json(['code' => 200, 'msg' => $message, 'data' => $data]),
+            'customer-business' => response()->json(['success' => true, 'message' => $message, 'data' => $data]),
+            default => response()->json(['code' => 0, 'message' => $message, 'data' => $data]),
+        };
+    }
+
+    private function responseFail(string $message = ''): JsonResponse
+    {
+        return match ($this->getResourceType()) {
+            'applicant', 'inventor' => response()->json(['code' => 400, 'msg' => $message, 'data' => null]),
+            'customer-business' => response()->json(['success' => false, 'message' => $message, 'data' => null]),
+            default => response()->json(['code' => 1, 'message' => $message, 'data' => null]),
+        };
+    }
+
     private function handleFind(?object $item, string $message): JsonResponse
     {
         if (!$item) {
-            return $this->error('记录不存在');
+            return $this->responseFail('记录不存在');
         }
-        return $this->success($item, $message);
+        return $this->responseOk($item, $message);
     }
 
     private function handleResult(bool $result, string $message): JsonResponse
     {
         if (!$result) {
-            return $this->error('记录不存在');
+            return $this->responseFail('记录不存在');
         }
-        return $this->success(null, $message);
+        return $this->responseOk(null, $message);
     }
 
     public function index(Request $request): JsonResponse
     {
         return match ($this->getResourceType()) {
-            'applicant'       => $this->success($this->service->applicantList($request), '查询成功'),
-            'inventor'        => $this->success($this->service->inventorList($request), '查询成功'),
-            'customer-business' => $this->success($this->service->businessList($request), '获取成功'),
-            default           => $this->error('未知资源类型'),
+            'applicant'       => $this->responseOk($this->service->applicantList($request), '查询成功'),
+            'inventor'        => $this->responseOk($this->service->inventorList($request), '查询成功'),
+            'customer-business' => $this->responseOk($this->service->businessList($request), '获取成功'),
+            default           => $this->responseFail('未知资源类型'),
         };
     }
 
@@ -56,42 +74,47 @@ class WJCController extends Controller
         $data = $request->validated();
 
         return match ($this->getResourceType()) {
-            'applicant'       => $this->success(['id' => $this->service->applicantStore($data)->id], '新增成功'),
-            'inventor'        => $this->success(['id' => $this->service->inventorStore($data)->id], '新增成功'),
-            'customer-business' => $this->success(['id' => $this->service->businessStore($data)->id], '创建成功'),
-            default           => $this->error('未知资源类型'),
+            'applicant'       => $this->responseOk(['id' => $this->service->applicantStore($data)->id], '新增成功'),
+            'inventor'        => $this->responseOk(['id' => $this->service->inventorStore($data)->id], '新增成功'),
+            'customer-business' => $this->responseOk(['id' => $this->service->businessStore($data)->id], '创建成功'),
+            default           => $this->responseFail('未知资源类型'),
         };
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, ?int $id = null): JsonResponse
     {
+        $id ??= (int) $request->input('id');
+
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleFind($this->service->applicantFind($id), '查询成功'),
             'inventor'        => $this->handleFind($this->service->inventorFind($id), '查询成功'),
             'customer-business' => $this->handleFind($this->service->businessFind($id), '获取成功'),
-            default           => $this->error('未知资源类型'),
+            default           => $this->responseFail('未知资源类型'),
         };
     }
 
-    public function update(WJCRequest $request, int $id): JsonResponse
+    public function update(WJCRequest $request, ?int $id = null): JsonResponse
     {
         $data = $request->validated();
+        $id ??= (int) $request->input('id');
 
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleResult($this->service->applicantUpdate($id, $data), '编辑成功'),
             'inventor'        => $this->handleResult($this->service->inventorUpdate($id, $data), '编辑成功'),
             'customer-business' => $this->handleResult($this->service->businessUpdate($id, $data), '更新成功'),
-            default           => $this->error('未知资源类型'),
+            default           => $this->responseFail('未知资源类型'),
         };
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(Request $request, ?int $id = null): JsonResponse
     {
+        $id ??= (int) $request->input('id');
+
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleResult($this->service->applicantDelete($id), '删除成功'),
             'inventor'        => $this->handleResult($this->service->inventorDelete($id), '删除成功'),
             'customer-business' => $this->handleResult($this->service->businessDelete($id), '删除成功'),
-            default           => $this->error('未知资源类型'),
+            default           => $this->responseFail('未知资源类型'),
         };
     }
 }
