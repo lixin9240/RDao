@@ -98,6 +98,18 @@ class LXController extends Controller
         return $this->success($tree);
     }
 
+    /* ==================== 菜单管理 ==================== */
+
+    /**
+     * 获取菜单树形结构
+     */
+    public function menuTree(): JsonResponse
+    {
+        $tree = $this->service->menuTree();
+
+        return $this->success($tree);
+    }
+
     /* ==================== 角色管理 ==================== */
 
     /**
@@ -108,6 +120,40 @@ class LXController extends Controller
         $role = $this->service->createRole($request->validatedData());
 
         return $this->success($role, '角色创建成功');
+    }
+
+    /**
+     * 获取角色详情
+     */
+    public function roleDetail(int $id): JsonResponse
+    {
+        $role = $this->service->roleDetail($id);
+
+        if (! $role) {
+            return $this->error('角色不存在', 404);
+        }
+
+        return $this->success($role);
+    }
+
+    /**
+     * 修改角色
+     */
+    public function updateRole(LXRequest $request, int $id): JsonResponse
+    {
+        $role = $this->service->updateRole($id, $request->validatedData());
+
+        return $this->success($role, '角色更新成功');
+    }
+
+    /**
+     * 删除角色
+     */
+    public function destroyRole(int $id): JsonResponse
+    {
+        $this->service->deleteRole($id);
+
+        return $this->success([], '角色删除成功');
     }
 
     /**

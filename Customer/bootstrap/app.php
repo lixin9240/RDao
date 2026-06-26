@@ -14,8 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function ($middleware): void {
         $middleware->redirectGuestsTo(fn () => null);
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
+})
+   ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
