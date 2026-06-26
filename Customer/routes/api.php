@@ -70,3 +70,5 @@ Route::resource('customer-fees', GyzController::class)
         'destroy' => 'customer-fees.destroy'
     ]);
 
+
+    
