@@ -14,7 +14,6 @@ class LXRequest extends FormRequest
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,7 +28,6 @@ class LXRequest extends FormRequest
                 'password' => 'required|string|max:100',
             ];
         }
-
         $rules = [
             'username'           => 'required|string|max:50|unique:sys_user,username',
             'password'           => 'required|string|max:100',
@@ -54,7 +52,6 @@ class LXRequest extends FormRequest
 
         return $rules;
     }
-
     /**
      * 获取校验后的数据（驼峰转下划线）
      */
@@ -66,7 +63,6 @@ class LXRequest extends FormRequest
         if ($this->is('api/v1/login')) {
             return $data;
         }
-
         $map = [
             'realName'          => 'real_name',
             'deptId'            => 'dept_id',
@@ -76,14 +72,12 @@ class LXRequest extends FormRequest
             'status'            => 'account_status',
             'employmentStatus'  => 'employment_status',
         ];
-
         foreach ($map as $camel => $snake) {
             if (array_key_exists($camel, $data)) {
                 $data[$snake] = $data[$camel];
                 unset($data[$camel]);
             }
         }
-
         return $data;
     }
 }
