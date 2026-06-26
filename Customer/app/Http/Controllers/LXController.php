@@ -16,42 +16,36 @@ class LXController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
-    {
-        return response()->json([]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * 新增用户
      */
     public function store(LXRequest $request): JsonResponse
     {
-        return response()->json([]);
+        $user = $this->service->createUser($request->validatedData());
+
+        return $this->success($user, '用户创建成功');
     }
 
     /**
-     * Display the specified resource.
+     * 获取用户详情
      */
     public function show(int $id): JsonResponse
     {
-        return response()->json([]);
+        $user = $this->service->userDetail($id);
+
+        if (! $user) {
+            return $this->error('用户不存在', 404);
+        }
+
+        return $this->success($user);
     }
 
     /**
-     * Update the specified resource in storage.
+     * 修改用户
      */
     public function update(LXRequest $request, int $id): JsonResponse
     {
-        return response()->json([]);
-    }
+        $user = $this->service->updateUser($id, $request->validatedData());
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        return response()->json([]);
+        return $this->success($user, '用户更新成功');
     }
 }

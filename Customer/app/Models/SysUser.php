@@ -1,10 +1,13 @@
 <?php
-// 系统用户模型
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class SysUser extends Model
+class SysUser extends Model implements JWTSubject
 {
     protected $table = 'sys_user';
 
@@ -22,4 +25,36 @@ class SysUser extends Model
         'employment_status',  // 离职在职状态：0-离职，1-在职
         'account_status',     // 账号状态：0-禁用，1-启用
     ];
+
+    /**
+     * 密码自动哈希
+     */
+    public function setPasswordAttribute(string $value): void
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+    /**
+     * 所属部门
+     */
+    public function dept(): BelongsTo
+    {
+        return $this->belongsTo(Dept::class, 'dept_id');
+    }
+
+    /**
+     * JWT 标识符
+     */
+    public function getJWTIdentifier(): mixed
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * JWT 自定义声明
+     */
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
 }
