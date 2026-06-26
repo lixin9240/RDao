@@ -17,6 +17,7 @@ class SysUser extends Authenticatable implements JWTSubject
         'real_name',          // 姓名
         'gender',             // 性别：0-未知，1-男，2-女
         'dept_id',            // 所属部门ID
+        'role_id',            // 所属角色ID
         'job_title',          // 职位
         'email',              // 邮箱
         'phone',              // 手机号
@@ -35,11 +36,27 @@ class SysUser extends Authenticatable implements JWTSubject
     }
 
     /**
+     * 所属角色
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
      * 所属部门
      */
     public function dept(): BelongsTo
     {
         return $this->belongsTo(Dept::class, 'dept_id');
+    }
+
+    /**
+     * 判断用户是否拥有指定角色
+     */
+    public function hasRole(string $roleKey): bool
+    {
+        return $this->role !== null && $this->role->role_key === $roleKey;
     }
 
     /**
