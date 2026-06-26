@@ -81,9 +81,9 @@ class WJCController extends Controller
         };
     }
 
-    public function show(Request $request, ?int $id = null): JsonResponse
+    public function show(Request $request, string|int|null $id = null): JsonResponse
     {
-        $id ??= (int) $request->input('id');
+        $id = (int) ($request->input('id') ?? $id);
 
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleFind($this->service->applicantFind($id), '查询成功'),
@@ -93,10 +93,10 @@ class WJCController extends Controller
         };
     }
 
-    public function update(WJCRequest $request, ?int $id = null): JsonResponse
+    public function update(WJCRequest $request, string|int|null $id = null): JsonResponse
     {
         $data = $request->validated();
-        $id ??= (int) $request->input('id');
+        $id = (int) ($request->input('id') ?? $id);
 
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleResult($this->service->applicantUpdate($id, $data), '编辑成功'),
@@ -106,9 +106,9 @@ class WJCController extends Controller
         };
     }
 
-    public function destroy(Request $request, ?int $id = null): JsonResponse
+    public function destroy(Request $request, string|int|null $id = null): JsonResponse
     {
-        $id ??= (int) $request->input('id');
+        $id = (int) ($request->input('id') ?? $id);
 
         return match ($this->getResourceType()) {
             'applicant'       => $this->handleResult($this->service->applicantDelete($id), '删除成功'),
