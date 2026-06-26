@@ -1,33 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LXController;
 use App\Http\Controllers\WJCController;
-use App\Http\Controllers\InventorController;
-use App\Http\Controllers\CustomerBusinessController;
 
-// 申请人接口
-Route::resource('applicant', WJCController::class)->names([
-    'index'   => 'applicant.index',
-    'store'   => 'applicant.store',
-    'show'    => 'applicant.show',
-    'update'  => 'applicant.update',
-    'destroy' => 'applicant.destroy',
-]);
+// WJCController 路由组
+Route::resource('applicant', WJCController::class);
+Route::resource('inventor', WJCController::class);
+Route::resource('customer-business', WJCController::class);
 
-// 发明人接口
-Route::resource('inventor', WJCController::class)->names([
-    'index'   => 'inventor.index',
-    'store'   => 'inventor.store',
-    'show'    => 'inventor.show',
-    'update'  => 'inventor.update',
-    'destroy' => 'inventor.destroy',
-]);
-
-// 工商信息接口
-Route::resource('customer-business', WJCController::class)->names([
-    'index'   => 'customer-business.index',
-    'store'   => 'customer-business.store',
-    'show'    => 'customer-business.show',
-    'update'  => 'customer-business.update',
-    'destroy' => 'customer-business.destroy',
-]);
+// LXController 独立v1分组
+Route::prefix('v1')->group(function () {
+    Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);
+});
