@@ -118,6 +118,12 @@
       <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/voku/portable-ascii" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/storage/app" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/storage/framework" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/lcobucci/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/stella-maris/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/Customer/vendor/tymon/jwt-auth" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
