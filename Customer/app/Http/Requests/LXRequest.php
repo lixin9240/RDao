@@ -28,6 +28,47 @@ class LXRequest extends FormRequest
                 'password' => 'required|string|max:100',
             ];
         }
+
+        // 部门场景
+        if ($this->is('api/v1/depts') || $this->is('api/v1/depts/*')) {
+            $rules = [
+                'parentId'    => 'required|integer|min:0',
+                'deptName'    => 'required|string|max:50',
+                'deptCode'    => 'required|string|max:30|unique:sys_dept,dept_code',
+                'leaderId'    => 'nullable|integer|exists:sys_user,id',
+                'leaderName'  => 'nullable|string|max:50',
+                'description' => 'nullable|string|max:255',
+                'remark'      => 'nullable|string',
+            ];
+
+            if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
+                $deptId = $this->route('id');
+                $rules['deptCode'] = 'required|string|max:30|unique:sys_dept,dept_code,' . $deptId;
+            }
+
+            return $rules;
+        }
+
+        // 角色创建场景
+        if ($this->is('api/v1/roles') && $this->isMethod('POST')) {
+            return [
+                'roleName'    => 'required|string|max:50',
+                'roleKey'     => 'required|string|max:50|unique:sys_role,role_key',
+                'description' => 'nullable|string|max:255',
+                'status'      => 'nullable|integer|in:0,1',
+                'sortOrder'   => 'nullable|integer',
+            ];
+        }
+
+        // 角色权限分配场景
+        if ($this->is('api/v1/roles/*/menus')) {
+            return [
+                'menuIds'   => 'required|array',
+                'menuIds.*' => 'integer|exists:sys_menu,id',
+            ];
+        }
+
+        // 用户场景
         $rules = [
             'username'           => 'required|string|max:50|unique:sys_user,username',
             'password'           => 'required|string|max:100',
@@ -53,7 +94,7 @@ class LXRequest extends FormRequest
         return $rules;
     }
     /**
-     * 获取校验后的数据（驼峰转下划线）
+     * 获取校验后的数据
      */
     public function validatedData(): array
     {
@@ -63,6 +104,41 @@ class LXRequest extends FormRequest
         if ($this->is('api/v1/login')) {
             return $data;
         }
+
+        // 部门场景
+        if ($this->is('api/v1/depts') || $this->is('api/v1/depts/*')) {
+            $map = [
+                'parentId' => 'parent_id',
+                'deptName' => 'dept_name',
+                'deptCode' => 'dept_code',
+                'leaderId' => 'leader_id',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+
+        // 角色创建场景
+        if ($this->is('api/v1/roles') && $this->isMethod('POST')) {
+            $map = [
+                'roleName'  => 'role_name',
+                'roleKey'   => 'role_key',
+                'sortOrder' => 'sort_order',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+
+        // 用户场景
         $map = [
             'realName'          => 'real_name',
             'deptId'            => 'dept_id',
