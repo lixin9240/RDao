@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LXController;
 use App\Http\Controllers\WJCController;
+use App\Http\Controllers\GyzController;
 
 
 // 申请人接口（自定义路径，匹配文档）
@@ -33,3 +34,36 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);
 
 });
+
+// 客户基础信息
+Route::resource('customer-basics', GyzController::class)
+    ->only(['index','show','store','update','destroy'])
+    ->names([
+        'index'   => 'customer-basics.index',
+        'show'    => 'customer-basics.show',
+        'store'   => 'customer-basics.store',
+        'update'  => 'customer-basics.update',
+        'destroy' => 'customer-basics.destroy'
+    ]);
+
+// 客户地址
+Route::resource('customer-addresses', GyzController::class)
+    ->only(['index','show','store','update','destroy'])
+    ->names([
+        'index'   => 'customer-addresses.index',
+        'show'    => 'customer-addresses.show',
+        'store'   => 'customer-addresses.store',
+        'update'  => 'customer-addresses.update',
+        'destroy' => 'customer-addresses.destroy'
+    ]);
+
+// 客户费用
+Route::resource('customer-fees', GyzController::class)
+    ->only(['index','show','store','update','destroy'])
+    ->names([
+        'index'   => 'customer-fees.index',
+        'show'    => 'customer-fees.show',
+        'store'   => 'customer-fees.store',
+        'update'  => 'customer-fees.update',
+        'destroy' => 'customer-fees.destroy'
+    ]);

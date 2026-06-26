@@ -127,6 +127,10 @@
       <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/Customer/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/Customer/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/Customer/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/Customer/vendor/stella-maris/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/tymon/jwt-auth" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />
