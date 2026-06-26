@@ -58,7 +58,7 @@ class WJCController extends Controller
         return match ($this->getResourceType()) {
             'applicant'       => $this->success(['id' => $this->service->applicantStore($data)->id], '新增成功'),
             'inventor'        => $this->success(['id' => $this->service->inventorStore($data)->id], '新增成功'),
-            'customer-business' => $this->success($this->service->businessStore($data), '创建成功'),
+            'customer-business' => $this->success(['id' => $this->service->businessStore($data)->id], '创建成功'),
             default           => $this->error('未知资源类型'),
         };
     }
