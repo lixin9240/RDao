@@ -60,6 +60,18 @@ class LXRequest extends FormRequest
             ];
         }
 
+        // 角色修改场景
+        if ($this->is('api/v1/roles/*') && $this->isMethod('PUT')) {
+            $roleId = $this->route('id');
+            return [
+                'roleName'    => 'required|string|max:50',
+                'roleKey'     => 'required|string|max:50|unique:sys_role,role_key,' . $roleId,
+                'description' => 'nullable|string|max:255',
+                'status'      => 'nullable|integer|in:0,1',
+                'sortOrder'   => 'nullable|integer',
+            ];
+        }
+
         // 角色权限分配场景
         if ($this->is('api/v1/roles/*/menus')) {
             return [
@@ -122,8 +134,11 @@ class LXRequest extends FormRequest
             return $data;
         }
 
-        // 角色创建场景
-        if ($this->is('api/v1/roles') && $this->isMethod('POST')) {
+        // 角色场景（创建 + 修改）
+        if (
+            ($this->is('api/v1/roles') && $this->isMethod('POST'))
+            || ($this->is('api/v1/roles/*') && $this->isMethod('PUT'))
+        ) {
             $map = [
                 'roleName'  => 'role_name',
                 'roleKey'   => 'role_key',
