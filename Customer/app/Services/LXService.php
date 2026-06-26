@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Dept;
+use App\Models\Menu;
 use App\Models\Role;
 use App\Models\SysUser;
 use Illuminate\Support\Facades\DB;
@@ -177,6 +178,49 @@ class LXService
         ];
     }
 
+    /* ==================== 菜单管理 ==================== */
+
+    /**
+     * 获取菜单树形结构
+     */
+    public function menuTree(): array
+    {
+        $all = Menu::where('status', 1)
+            ->orderBy('sort_order')
+            ->get([
+                'id',
+                'parent_id',
+                'menu_name',
+                'menu_type',
+            ]);
+
+        return $this->buildMenuTree($all);
+    }
+
+    /**
+     * 递归构建菜单树
+     */
+    private function buildMenuTree($menus, int $parentId = 0): array
+    {
+        $tree = [];
+        foreach ($menus as $menu) {
+            if ($menu->parent_id == $parentId) {
+                $children = $this->buildMenuTree($menus, $menu->id);
+                $node = [
+                    'id'       => $menu->id,
+                    'label'    => $menu->menu_name,
+                    'menuType' => $menu->menu_type,
+                ];
+                if (! empty($children)) {
+                    $node['children'] = $children;
+                }
+                $tree[] = $node;
+            }
+        }
+
+        return $tree;
+    }
+
     /* ==================== 角色管理 ==================== */
 
     /**
@@ -186,15 +230,41 @@ class LXService
     {
         $role = Role::create($data);
 
-        return [
-            'id'          => $role->id,
-            'roleName'    => $role->role_name,
-            'roleKey'     => $role->role_key,
-            'description' => $role->description,
-            'status'      => $role->status,
-            'sortOrder'   => $role->sort_order,
-            'createTime'  => $role->created_at?->toDateTimeString(),
-        ];
+        return $this->roleToArray($role);
+    }
+
+    /**
+     * 获取角色详情
+     */
+    public function roleDetail(int $id): ?array
+    {
+        $role = Role::find($id);
+
+        if (! $role) {
+            return null;
+        }
+
+        return $this->roleToArray($role);
+    }
+
+    /**
+     * 修改角色
+     */
+    public function updateRole(int $id, array $data): array
+    {
+        $role = Role::findOrFail($id);
+        $role->update($data);
+
+        return $this->roleToArray($role->fresh());
+    }
+
+    /**
+     * 删除角色
+     */
+    public function deleteRole(int $id): void
+    {
+        $role = Role::findOrFail($id);
+        $role->delete();
     }
 
     /**
@@ -263,5 +333,21 @@ class LXService
             ->where('role_id', $roleId)
             ->pluck('menu_id')
             ->toArray();
+    }
+
+    /**
+     * 将角色模型转为 camelCase 数组
+     */
+    private function roleToArray(Role $role): array
+    {
+        return [
+            'id'          => $role->id,
+            'roleName'    => $role->role_name,
+            'roleKey'     => $role->role_key,
+            'description' => $role->description,
+            'status'      => $role->status,
+            'sortOrder'   => $role->sort_order,
+            'createTime'  => $role->created_at?->toDateTimeString(),
+        ];
     }
 }
