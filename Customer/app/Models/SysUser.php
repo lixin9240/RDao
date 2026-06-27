@@ -56,7 +56,11 @@ class SysUser extends Authenticatable implements JWTSubject
      */
     public function hasRole(string $roleKey): bool
     {
-        return $this->role !== null && $this->role->role_key === $roleKey;
+        if ($this->role !== null && $this->role->role_key === $roleKey) {
+            return true;
+        }
+
+        return $this->professional_level === $roleKey || $this->business_level === $roleKey;
     }
 
     /**

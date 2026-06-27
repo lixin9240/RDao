@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="LaravelPint">
-    <laravel_pint_settings>
-      <LaravelPintConfiguration tool_path="$PROJECT_DIR$/Customer/vendor/bin/pint" />
-    </laravel_pint_settings>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="MessDetectorOptionsConfiguration">
-    <option name="transferred" value="true" />
+  <component name="ChangeListManager">
+    <list default="true" id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Controllers/FmyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Controllers/FmyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Requests/FmyRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Requests/FmyRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Models/SysUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Models/SysUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Services/FmyService.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Services/FmyService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/config/filesystems.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/config/filesystems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/routes/api.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="PHPCSFixerOptionsConfiguration">
-    <option name="transferred" value="true" />
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/Customer/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
-  <component name="PHPCodeSnifferOptionsConfiguration">
-    <option name="highlightLevel" value="WARNING" />
-    <option name="transferred" value="true" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpIncludePathManager">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="D:/web/php/php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-text-template" />
       <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-timer" />
@@ -134,16 +150,58 @@
       <path value="$PROJECT_DIR$/Customer/vendor/aliyuncs/oss-sdk-php" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />
-  <component name="PhpStanOptionsConfiguration">
-    <option name="transferred" value="true" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="3EzAa2tuDU6PKxa35OT6BxaScxi" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PhpUnit">
-    <phpunit_settings>
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/Customer/phpunit.xml" custom_loader_path="$PROJECT_DIR$/Customer/vendor/autoload.php" use_configuration_file="true" />
-    </phpunit_settings>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "fmy",
+    "last_opened_file_path": "E:/RDao",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="主" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner configuration_file="$PROJECT_DIR$/Customer/phpunit.xml" scope="XML" use_alternative_configuration_file="true" />
+      <method v="2" />
+    </configuration>
   </component>
-  <component name="PsalmOptionsConfiguration">
-    <option name="transferred" value="true" />
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="" />
+      <created>1781171083175</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781171083175</updated>
+      <workItem from="1781171084220" duration="2287000" />
+      <workItem from="1781265550708" duration="623000" />
+      <workItem from="1782550896220" duration="10936000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
