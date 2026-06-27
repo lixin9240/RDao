@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Applicant;
 use App\Models\CustomerBusiness;
+use App\Models\CustomerEnterprise;
 use App\Models\Inventor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -170,6 +171,60 @@ class WJCService
     public function businessDelete(int $id): bool
     {
         $item = CustomerBusiness::find($id);
+        return $item ? $item->delete() : false;
+    }
+
+    /* ==================== 企业信息 ==================== */
+
+    public function enterpriseList(Request $request): array
+    {
+        $query = CustomerEnterprise::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function (Builder $q) use ($search) {
+                $q->where('company_type', 'like', "%{$search}%")
+                  ->orWhere('industry_category', 'like', "%{$search}%")
+                  ->orWhere('main_business', 'like', "%{$search}%");
+            });
+        }
+
+        $page    = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 15);
+        $sort    = $request->input('sort', 'created_at');
+        $order   = $request->input('order', 'desc');
+
+        $data = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+
+        return [
+            'data' => $data->items(),
+            'meta' => [
+                'current_page' => $data->currentPage(),
+                'per_page'     => $data->perPage(),
+                'total'        => $data->total(),
+                'last_page'    => $data->lastPage(),
+            ],
+        ];
+    }
+
+    public function enterpriseStore(array $data): CustomerEnterprise
+    {
+        return CustomerEnterprise::create($data);
+    }
+
+    public function enterpriseFind(int $id): ?CustomerEnterprise
+    {
+        return CustomerEnterprise::find($id);
+    }
+
+    public function enterpriseUpdate(int $id, array $data): bool
+    {
+        return $this->updateModel(CustomerEnterprise::class, $id, $data);
+    }
+
+    public function enterpriseDelete(int $id): bool
+    {
+        $item = CustomerEnterprise::find($id);
         return $item ? $item->delete() : false;
     }
 }

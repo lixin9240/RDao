@@ -22,6 +22,7 @@ class WJCController extends Controller
         if (str_starts_with($name, 'applicant.')) return 'applicant';
         if (str_starts_with($name, 'inventor.')) return 'inventor';
         if (str_starts_with($name, 'customer-business.')) return 'customer-business';
+        if (str_starts_with($name, 'customer-enterprise.')) return 'customer-enterprise';
         return '';
     }
 
@@ -29,7 +30,7 @@ class WJCController extends Controller
     {
         return match ($this->getResourceType()) {
             'applicant', 'inventor' => response()->json(['code' => 200, 'msg' => $message, 'data' => $data]),
-            'customer-business' => response()->json(['success' => true, 'message' => $message, 'data' => $data]),
+            'customer-business', 'customer-enterprise' => response()->json(['success' => true, 'message' => $message, 'data' => $data]),
             default => response()->json(['code' => 0, 'message' => $message, 'data' => $data]),
         };
     }
@@ -38,7 +39,7 @@ class WJCController extends Controller
     {
         return match ($this->getResourceType()) {
             'applicant', 'inventor' => response()->json(['code' => 400, 'msg' => $message, 'data' => null]),
-            'customer-business' => response()->json(['success' => false, 'message' => $message, 'data' => null]),
+            'customer-business', 'customer-enterprise' => response()->json(['success' => false, 'message' => $message, 'data' => null]),
             default => response()->json(['code' => 1, 'message' => $message, 'data' => null]),
         };
     }
@@ -65,6 +66,7 @@ class WJCController extends Controller
             'applicant'       => $this->responseOk($this->service->applicantList($request), '查询成功'),
             'inventor'        => $this->responseOk($this->service->inventorList($request), '查询成功'),
             'customer-business' => $this->responseOk($this->service->businessList($request), '获取成功'),
+            'customer-enterprise' => $this->responseOk($this->service->enterpriseList($request), '获取成功'),
             default           => $this->responseFail('未知资源类型'),
         };
     }
@@ -77,6 +79,7 @@ class WJCController extends Controller
             'applicant'       => $this->responseOk(['id' => $this->service->applicantStore($data)->id], '新增成功'),
             'inventor'        => $this->responseOk(['id' => $this->service->inventorStore($data)->id], '新增成功'),
             'customer-business' => $this->responseOk(['id' => $this->service->businessStore($data)->id], '创建成功'),
+            'customer-enterprise' => $this->responseOk(['id' => $this->service->enterpriseStore($data)->id], '创建成功'),
             default           => $this->responseFail('未知资源类型'),
         };
     }
@@ -89,6 +92,7 @@ class WJCController extends Controller
             'applicant'       => $this->handleFind($this->service->applicantFind($id), '查询成功'),
             'inventor'        => $this->handleFind($this->service->inventorFind($id), '查询成功'),
             'customer-business' => $this->handleFind($this->service->businessFind($id), '获取成功'),
+            'customer-enterprise' => $this->handleFind($this->service->enterpriseFind($id), '获取成功'),
             default           => $this->responseFail('未知资源类型'),
         };
     }
@@ -102,6 +106,7 @@ class WJCController extends Controller
             'applicant'       => $this->handleResult($this->service->applicantUpdate($id, $data), '编辑成功'),
             'inventor'        => $this->handleResult($this->service->inventorUpdate($id, $data), '编辑成功'),
             'customer-business' => $this->handleResult($this->service->businessUpdate($id, $data), '更新成功'),
+            'customer-enterprise' => $this->handleResult($this->service->enterpriseUpdate($id, $data), '更新成功'),
             default           => $this->responseFail('未知资源类型'),
         };
     }
@@ -114,6 +119,7 @@ class WJCController extends Controller
             'applicant'       => $this->handleResult($this->service->applicantDelete($id), '删除成功'),
             'inventor'        => $this->handleResult($this->service->inventorDelete($id), '删除成功'),
             'customer-business' => $this->handleResult($this->service->businessDelete($id), '删除成功'),
+            'customer-enterprise' => $this->handleResult($this->service->enterpriseDelete($id), '删除成功'),
             default           => $this->responseFail('未知资源类型'),
         };
     }
