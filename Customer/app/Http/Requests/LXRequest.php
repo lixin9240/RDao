@@ -49,6 +49,14 @@ class LXRequest extends FormRequest
             return $rules;
         }
 
+        // 角色权限分配场景（必须放在角色修改之前，避免被 roles/* 吞掉）
+        if ($this->is('api/v1/roles/*/menus')) {
+            return [
+                'menuIds'   => 'required|array',
+                'menuIds.*' => 'integer|exists:sys_menu,id',
+            ];
+        }
+
         // 角色创建场景
         if ($this->is('api/v1/roles') && $this->isMethod('POST')) {
             return [
@@ -72,11 +80,16 @@ class LXRequest extends FormRequest
             ];
         }
 
-        // 角色权限分配场景
-        if ($this->is('api/v1/roles/*/menus')) {
+        // 菜单创建场景
+        if ($this->is('api/v1/menus') && $this->isMethod('POST')) {
             return [
-                'menuIds'   => 'required|array',
-                'menuIds.*' => 'integer|exists:sys_menu,id',
+                'parentId'  => 'nullable|integer',
+                'menuName'  => 'required|string|max:50',
+                'menuType'  => 'required|string|in:M,C,F',
+                'perms'     => 'nullable|string|max:100',
+                'path'      => 'nullable|string|max:200',
+                'icon'      => 'nullable|string|max:100',
+                'sortOrder' => 'nullable|integer',
             ];
         }
 
@@ -117,6 +130,23 @@ class LXRequest extends FormRequest
             return $data;
         }
 
+        // 菜单场景
+        if ($this->is('api/v1/menus') && $this->isMethod('POST')) {
+            $map = [
+                'parentId'  => 'parent_id',
+                'menuName'  => 'menu_name',
+                'menuType'  => 'menu_type',
+                'sortOrder' => 'sort_order',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+
         // 部门场景
         if ($this->is('api/v1/depts') || $this->is('api/v1/depts/*')) {
             $map = [
@@ -131,6 +161,11 @@ class LXRequest extends FormRequest
                     unset($data[$camel]);
                 }
             }
+            return $data;
+        }
+
+        // 角色权限分配场景（无需转换，直接返回）
+        if ($this->is('api/v1/roles/*/menus')) {
             return $data;
         }
 

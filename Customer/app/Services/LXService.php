@@ -181,12 +181,30 @@ class LXService
     /* ==================== 菜单管理 ==================== */
 
     /**
+     * 创建菜单
+     */
+    public function createMenu(array $data): array
+    {
+        $menu = Menu::create($data);
+
+        return [
+            'id'        => $menu->id,
+            'parentId'  => $menu->parent_id,
+            'menuName'  => $menu->menu_name,
+            'menuType'  => $menu->menu_type,
+            'perms'     => $menu->perms,
+            'path'      => $menu->path,
+            'icon'      => $menu->icon,
+            'sortOrder' => $menu->sort_order,
+        ];
+    }
+
+    /**
      * 获取菜单树形结构
      */
     public function menuTree(): array
     {
-        $all = Menu::where('status', 1)
-            ->orderBy('sort_order')
+        $all = Menu::orderBy('sort_order')
             ->get([
                 'id',
                 'parent_id',

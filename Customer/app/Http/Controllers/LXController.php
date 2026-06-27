@@ -101,6 +101,16 @@ class LXController extends Controller
     /* ==================== 菜单管理 ==================== */
 
     /**
+     * 创建菜单
+     */
+    public function storeMenu(LXRequest $request): JsonResponse
+    {
+        $menu = $this->service->createMenu($request->validatedData());
+
+        return $this->success($menu, '菜单创建成功');
+    }
+
+    /**
      * 获取菜单树形结构
      */
     public function menuTree(): JsonResponse

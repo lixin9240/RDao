@@ -26,6 +26,7 @@ Route::prefix('v1')->group(function () {
         Route::put('depts/{id}', [LXController::class, 'updateDept']);// 修改部门
 
         // 菜单管理
+        Route::post('menus', [LXController::class, 'storeMenu']);// 创建菜单
         Route::get('menus/tree', [LXController::class, 'menuTree']);// 获取菜单树形结构
 
         // 角色管理、菜单分配
