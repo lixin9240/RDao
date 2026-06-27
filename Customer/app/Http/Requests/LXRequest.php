@@ -93,6 +93,75 @@ class LXRequest extends FormRequest
             ];
         }
 
+        // 字典场景
+        if ($this->is('api/v1/customer-levels') || $this->is('api/v1/customer-levels/*')) {
+            return [
+                'sortOrder'   => 'nullable|integer',
+                'levelName'   => 'required|string|max:50',
+                'levelCode'   => 'nullable|string|max:20',
+                'description' => 'nullable|string|max:255',
+                'status'      => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/customer-scales') || $this->is('api/v1/customer-scales/*')) {
+            return [
+                'sortOrder' => 'nullable|integer',
+                'scaleName' => 'required|string|max:50',
+                'status'    => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/file-descriptions') || $this->is('api/v1/file-descriptions/*')) {
+            return [
+                'projectType'       => 'required|string|max:50',
+                'countryCode'       => 'required|string|max:10',
+                'fileCategoryId'    => 'required|integer',
+                'fileSubcategoryId' => 'required|integer',
+                'fileNameTemplate'  => 'nullable|string|max:255',
+                'fileCodeRule'      => 'nullable|string|max:100',
+                'internalCode'      => 'nullable|string|max:50',
+                'authRole'          => 'nullable|string|max:100',
+                'sortOrder'         => 'nullable|integer',
+                'status'            => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/file-categories') || $this->is('api/v1/file-categories/*')) {
+            return [
+                'sortOrder' => 'nullable|integer',
+                'name'      => 'required|string|max:100',
+                'parentId'  => 'nullable|integer',
+                'level'     => 'nullable|integer',
+                'status'    => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/price-indexes') || $this->is('api/v1/price-indexes/*')) {
+            return [
+                'sortOrder'   => 'nullable|integer',
+                'indexName'   => 'required|string|max:100',
+                'description' => 'nullable|string|max:255',
+                'status'      => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/innovation-indexes') || $this->is('api/v1/innovation-indexes/*')) {
+            return [
+                'sortOrder'   => 'nullable|integer',
+                'indexName'   => 'required|string|max:100',
+                'description' => 'nullable|string|max:255',
+                'status'      => 'nullable|integer|in:0,1',
+            ];
+        }
+        if ($this->is('api/v1/industrial-parks') || $this->is('api/v1/industrial-parks/*')) {
+            return [
+                'sortOrder'     => 'nullable|integer',
+                'parkName'      => 'required|string|max:100',
+                'parkCode'      => 'nullable|string|max:50',
+                'address'       => 'nullable|string|max:255',
+                'contactPerson' => 'nullable|string|max:50',
+                'contactPhone'  => 'nullable|string|max:20',
+                'description'   => 'nullable|string|max:255',
+                'status'        => 'nullable|integer|in:0,1',
+            ];
+        }
+
         // 用户场景
         $rules = [
             'username'           => 'required|string|max:50|unique:sys_user,username',
@@ -178,6 +247,110 @@ class LXRequest extends FormRequest
                 'roleName'  => 'role_name',
                 'roleKey'   => 'role_key',
                 'sortOrder' => 'sort_order',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+
+        // 字典场景
+        if ($this->is('api/v1/customer-levels') || $this->is('api/v1/customer-levels/*')) {
+            $map = [
+                'sortOrder'   => 'sort_order',
+                'levelName'   => 'level_name',
+                'levelCode'   => 'level_code',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/customer-scales') || $this->is('api/v1/customer-scales/*')) {
+            $map = [
+                'sortOrder' => 'sort_order',
+                'scaleName' => 'scale_name',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/file-descriptions') || $this->is('api/v1/file-descriptions/*')) {
+            $map = [
+                'projectType'       => 'project_type',
+                'countryCode'       => 'country_code',
+                'fileCategoryId'    => 'file_category_id',
+                'fileSubcategoryId' => 'file_subcategory_id',
+                'fileNameTemplate'  => 'file_name_template',
+                'fileCodeRule'      => 'file_code_rule',
+                'internalCode'      => 'internal_code',
+                'authRole'          => 'auth_role',
+                'sortOrder'         => 'sort_order',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/file-categories') || $this->is('api/v1/file-categories/*')) {
+            $map = [
+                'sortOrder' => 'sort_order',
+                'parentId'  => 'parent_id',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/price-indexes') || $this->is('api/v1/price-indexes/*')) {
+            $map = [
+                'sortOrder' => 'sort_order',
+                'indexName' => 'index_name',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/innovation-indexes') || $this->is('api/v1/innovation-indexes/*')) {
+            $map = [
+                'sortOrder' => 'sort_order',
+                'indexName' => 'index_name',
+            ];
+            foreach ($map as $camel => $snake) {
+                if (array_key_exists($camel, $data)) {
+                    $data[$snake] = $data[$camel];
+                    unset($data[$camel]);
+                }
+            }
+            return $data;
+        }
+        if ($this->is('api/v1/industrial-parks') || $this->is('api/v1/industrial-parks/*')) {
+            $map = [
+                'sortOrder'     => 'sort_order',
+                'parkName'      => 'park_name',
+                'parkCode'      => 'park_code',
+                'contactPerson' => 'contact_person',
+                'contactPhone'  => 'contact_phone',
             ];
             foreach ($map as $camel => $snake) {
                 if (array_key_exists($camel, $data)) {

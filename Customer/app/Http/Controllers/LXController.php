@@ -195,4 +195,160 @@ class LXController extends Controller
 
         return $this->success($menuIds);
     }
+
+    /* ==================== 字典管理 ==================== */
+
+    // ----- 客户等级 -----
+    public function customerLevelList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->customerLevelList($request->all()));
+    }
+
+    public function customerLevelStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->customerLevelCreate($request->validatedData()), '创建成功');
+    }
+
+    public function customerLevelUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->customerLevelUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function customerLevelDestroy(int $id): JsonResponse
+    {
+        $this->service->customerLevelDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 客户规模 -----
+    public function customerScaleList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->customerScaleList($request->all()));
+    }
+
+    public function customerScaleStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->customerScaleCreate($request->validatedData()), '创建成功');
+    }
+
+    public function customerScaleUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->customerScaleUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function customerScaleDestroy(int $id): JsonResponse
+    {
+        $this->service->customerScaleDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 文件描述 -----
+    public function fileDescriptionList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->fileDescriptionList($request->all()));
+    }
+
+    public function fileDescriptionStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->fileDescriptionCreate($request->validatedData()), '创建成功');
+    }
+
+    public function fileDescriptionUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->fileDescriptionUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function fileDescriptionDestroy(int $id): JsonResponse
+    {
+        $this->service->fileDescriptionDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 文件分类 -----
+    public function fileCategoryList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->fileCategoryList($request->all()));
+    }
+
+    public function fileCategoryStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->fileCategoryCreate($request->validatedData()), '创建成功');
+    }
+
+    public function fileCategoryUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->fileCategoryUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function fileCategoryDestroy(int $id): JsonResponse
+    {
+        $this->service->fileCategoryDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 价格指数 -----
+    public function priceIndexList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->priceIndexList($request->all()));
+    }
+
+    public function priceIndexStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->priceIndexCreate($request->validatedData()), '创建成功');
+    }
+
+    public function priceIndexUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->priceIndexUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function priceIndexDestroy(int $id): JsonResponse
+    {
+        $this->service->priceIndexDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 创新指数 -----
+    public function innovationIndexList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->innovationIndexList($request->all()));
+    }
+
+    public function innovationIndexStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->innovationIndexCreate($request->validatedData()), '创建成功');
+    }
+
+    public function innovationIndexUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->innovationIndexUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function innovationIndexDestroy(int $id): JsonResponse
+    {
+        $this->service->innovationIndexDelete($id);
+        return $this->success([], '删除成功');
+    }
+
+    // ----- 工业园区 -----
+    public function industrialParkList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->industrialParkList($request->all()));
+    }
+
+    public function industrialParkStore(LXRequest $request): JsonResponse
+    {
+        return $this->success($this->service->industrialParkCreate($request->validatedData()), '创建成功');
+    }
+
+    public function industrialParkUpdate(LXRequest $request, int $id): JsonResponse
+    {
+        return $this->success($this->service->industrialParkUpdate($id, $request->validatedData()), '更新成功');
+    }
+
+    public function industrialParkDestroy(int $id): JsonResponse
+    {
+        $this->service->industrialParkDelete($id);
+        return $this->success([], '删除成功');
+    }
 }

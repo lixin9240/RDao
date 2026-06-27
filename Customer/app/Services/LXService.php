@@ -2,11 +2,19 @@
 
 namespace App\Services;
 
+use App\Models\CustomerLevel;
+use App\Models\CustomerScale;
 use App\Models\Dept;
+use App\Models\FileCategory;
+use App\Models\FileDescription;
+use App\Models\IndustrialPark;
+use App\Models\InnovationIndex;
 use App\Models\Menu;
+use App\Models\PriceIndex;
 use App\Models\Role;
 use App\Models\SysUser;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LXService
@@ -367,5 +375,210 @@ class LXService
             'sortOrder'   => $role->sort_order,
             'createTime'  => $role->created_at?->toDateTimeString(),
         ];
+    }
+
+    /* ==================== 字典管理 ==================== */
+
+    /**
+     * 通用字典列表查询
+     */
+    private function dictQuery(string $modelClass, array $params, string $nameField)
+    {
+        $query = $modelClass::query();
+        if (isset($params['status'])) {
+            $query->where('status', $params['status']);
+        }
+        if (! empty($params['keyword'])) {
+            $query->where($nameField, 'like', '%' . $params['keyword'] . '%');
+        }
+        return $query->orderBy('sort_order')->get();
+    }
+
+    /**
+     * 模型转为 camelCase 数组
+     */
+    private function modelToCamelCase($model): array
+    {
+        $data = is_array($model) ? $model : $model->toArray();
+        $result = [];
+        foreach ($data as $key => $value) {
+            $result[Str::camel($key)] = $value;
+        }
+        return $result;
+    }
+
+    // ----- 客户等级 -----
+    public function customerLevelList(array $params): array
+    {
+        return $this->dictQuery(CustomerLevel::class, $params, 'level_name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function customerLevelCreate(array $data): array
+    {
+        return $this->modelToCamelCase(CustomerLevel::create($data));
+    }
+
+    public function customerLevelUpdate(int $id, array $data): array
+    {
+        $model = CustomerLevel::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function customerLevelDelete(int $id): void
+    {
+        CustomerLevel::findOrFail($id)->delete();
+    }
+
+    // ----- 客户规模 -----
+    public function customerScaleList(array $params): array
+    {
+        return $this->dictQuery(CustomerScale::class, $params, 'scale_name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function customerScaleCreate(array $data): array
+    {
+        return $this->modelToCamelCase(CustomerScale::create($data));
+    }
+
+    public function customerScaleUpdate(int $id, array $data): array
+    {
+        $model = CustomerScale::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function customerScaleDelete(int $id): void
+    {
+        CustomerScale::findOrFail($id)->delete();
+    }
+
+    // ----- 文件描述 -----
+    public function fileDescriptionList(array $params): array
+    {
+        return $this->dictQuery(FileDescription::class, $params, 'file_name_template')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function fileDescriptionCreate(array $data): array
+    {
+        return $this->modelToCamelCase(FileDescription::create($data));
+    }
+
+    public function fileDescriptionUpdate(int $id, array $data): array
+    {
+        $model = FileDescription::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function fileDescriptionDelete(int $id): void
+    {
+        FileDescription::findOrFail($id)->delete();
+    }
+
+    // ----- 文件分类 -----
+    public function fileCategoryList(array $params): array
+    {
+        return $this->dictQuery(FileCategory::class, $params, 'name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function fileCategoryCreate(array $data): array
+    {
+        return $this->modelToCamelCase(FileCategory::create($data));
+    }
+
+    public function fileCategoryUpdate(int $id, array $data): array
+    {
+        $model = FileCategory::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function fileCategoryDelete(int $id): void
+    {
+        FileCategory::findOrFail($id)->delete();
+    }
+
+    // ----- 价格指数 -----
+    public function priceIndexList(array $params): array
+    {
+        return $this->dictQuery(PriceIndex::class, $params, 'index_name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function priceIndexCreate(array $data): array
+    {
+        return $this->modelToCamelCase(PriceIndex::create($data));
+    }
+
+    public function priceIndexUpdate(int $id, array $data): array
+    {
+        $model = PriceIndex::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function priceIndexDelete(int $id): void
+    {
+        PriceIndex::findOrFail($id)->delete();
+    }
+
+    // ----- 创新指数 -----
+    public function innovationIndexList(array $params): array
+    {
+        return $this->dictQuery(InnovationIndex::class, $params, 'index_name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function innovationIndexCreate(array $data): array
+    {
+        return $this->modelToCamelCase(InnovationIndex::create($data));
+    }
+
+    public function innovationIndexUpdate(int $id, array $data): array
+    {
+        $model = InnovationIndex::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function innovationIndexDelete(int $id): void
+    {
+        InnovationIndex::findOrFail($id)->delete();
+    }
+
+    // ----- 工业园区 -----
+    public function industrialParkList(array $params): array
+    {
+        return $this->dictQuery(IndustrialPark::class, $params, 'park_name')
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
+    }
+
+    public function industrialParkCreate(array $data): array
+    {
+        return $this->modelToCamelCase(IndustrialPark::create($data));
+    }
+
+    public function industrialParkUpdate(int $id, array $data): array
+    {
+        $model = IndustrialPark::findOrFail($id);
+        $model->update($data);
+        return $this->modelToCamelCase($model->fresh());
+    }
+
+    public function industrialParkDelete(int $id): void
+    {
+        IndustrialPark::findOrFail($id)->delete();
     }
 }

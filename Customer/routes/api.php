@@ -45,7 +45,6 @@ Route::prefix('v1')->group(function () {
     // 登录（无需认证）
     Route::post('login', [LXController::class, 'login']);
 
-    // 以下接口均需 JWT 认证
     Route::middleware('auth:api')->group(function () {
         Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);// 新增用户、获取用户详情、修改用户
 
@@ -66,6 +65,49 @@ Route::prefix('v1')->group(function () {
         Route::get('roles/{id}', [LXController::class, 'roleDetail']);// 获取角色详情
         Route::put('roles/{id}', [LXController::class, 'updateRole']);// 修改角色
         Route::delete('roles/{id}', [LXController::class, 'destroyRole']);// 删除角色
+
+        // 字典管理
+        // 客户等级
+        Route::get('customer-levels', [LXController::class, 'customerLevelList']);// 获取客户等级列表
+        Route::post('customer-levels', [LXController::class, 'customerLevelStore']);// 创建客户等级
+        Route::put('customer-levels/{id}', [LXController::class, 'customerLevelUpdate']);// 修改客户等级
+        Route::delete('customer-levels/{id}', [LXController::class, 'customerLevelDestroy']);// 删除客户等级
+
+        // 客户规模
+        Route::get('customer-scales', [LXController::class, 'customerScaleList']);// 获取客户规模列表
+        Route::post('customer-scales', [LXController::class, 'customerScaleStore']);// 创建客户规模
+        Route::put('customer-scales/{id}', [LXController::class, 'customerScaleUpdate']);// 修改客户规模
+        Route::delete('customer-scales/{id}', [LXController::class, 'customerScaleDestroy']);// 删除客户规模
+
+        // 文件描述
+        Route::get('file-descriptions', [LXController::class, 'fileDescriptionList']);// 获取文件描述列表
+        Route::post('file-descriptions', [LXController::class, 'fileDescriptionStore']);// 创建文件描述
+        Route::put('file-descriptions/{id}', [LXController::class, 'fileDescriptionUpdate']);// 修改文件描述
+        Route::delete('file-descriptions/{id}', [LXController::class, 'fileDescriptionDestroy']);// 删除文件描述
+
+        // 文件分类
+        Route::get('file-categories', [LXController::class, 'fileCategoryList']);// 获取文件分类列表
+        Route::post('file-categories', [LXController::class, 'fileCategoryStore']);// 创建文件分类
+        Route::put('file-categories/{id}', [LXController::class, 'fileCategoryUpdate']);// 修改文件分类
+        Route::delete('file-categories/{id}', [LXController::class, 'fileCategoryDestroy']);// 删除文件分类
+
+        // 价格指数
+        Route::get('price-indexes', [LXController::class, 'priceIndexList']);// 获取价格指数列表
+        Route::post('price-indexes', [LXController::class, 'priceIndexStore']);// 创建价格指数
+        Route::put('price-indexes/{id}', [LXController::class, 'priceIndexUpdate']);// 修改价格指数
+        Route::delete('price-indexes/{id}', [LXController::class, 'priceIndexDestroy']);// 删除价格指数
+
+        // 创新指数
+        Route::get('innovation-indexes', [LXController::class, 'innovationIndexList']);// 获取创新指数列表
+        Route::post('innovation-indexes', [LXController::class, 'innovationIndexStore']);// 创建创新指数
+        Route::put('innovation-indexes/{id}', [LXController::class, 'innovationIndexUpdate']);// 修改创新指数
+        Route::delete('innovation-indexes/{id}', [LXController::class, 'innovationIndexDestroy']);// 删除创新指数
+
+        // 工业园区
+        Route::get('industrial-parks', [LXController::class, 'industrialParkList']);// 获取工业园区列表
+        Route::post('industrial-parks', [LXController::class, 'industrialParkStore']);// 创建工业园区
+        Route::put('industrial-parks/{id}', [LXController::class, 'industrialParkUpdate']);// 修改工业园区
+        Route::delete('industrial-parks/{id}', [LXController::class, 'industrialParkDestroy']);// 删除工业园区
     });
 });
 
