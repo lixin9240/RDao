@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="" />
+    <list default="true" id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Controllers/FmyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Controllers/FmyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Requests/FmyRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Requests/FmyRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Models/SysUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Models/SysUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/app/Services/FmyService.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Services/FmyService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/config/filesystems.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/config/filesystems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Customer/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/routes/api.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,12 +24,132 @@
   </component>
   <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/Customer/composer.json</pharConfigPath>
-    <execution />
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="D:/web/php/php.exe" />
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="D:/web/php/php.exe">
+    <include_path>
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-invoker" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-php84" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-uuid" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-php85" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/polyfill-php86" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/Customer/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/Customer/vendor/symfony/uid" />
+      <path value="$PROJECT_DIR$/Customer/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/Customer/vendor/hamcrest/hamcrest-php" />
+      <path value="$PROJECT_DIR$/Customer/vendor/carbonphp/carbon-doctrine-types" />
+      <path value="$PROJECT_DIR$/Customer/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/fakerphp/faker" />
+      <path value="$PROJECT_DIR$/Customer/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/cli-parser" />
+      <path value="$PROJECT_DIR$/Customer/vendor/fruitcake/php-cors" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/complexity" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/lines-of-code" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/Customer/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/Customer/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/Customer/vendor/guzzlehttp/uri-template" />
+      <path value="$PROJECT_DIR$/Customer/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/Customer/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/Customer/vendor/tijsverkoyen/css-to-inline-styles" />
+      <path value="$PROJECT_DIR$/Customer/vendor/dragonmantank/cron-expression" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nunomaduro/collision" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nunomaduro/termwind" />
+      <path value="$PROJECT_DIR$/Customer/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/Customer/vendor/composer" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/Customer/vendor/filp/whoops" />
+      <path value="$PROJECT_DIR$/Customer/vendor/voku/portable-ascii" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/Customer/vendor/psy/psysh" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/Customer/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/flysystem" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/flysystem-local" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/config" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/uri-interfaces" />
+      <path value="$PROJECT_DIR$/Customer/vendor/nesbot/carbon" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/mime-type-detection" />
+      <path value="$PROJECT_DIR$/Customer/vendor/league/uri" />
+      <path value="$PROJECT_DIR$/Customer/vendor/staabm/side-effects-detector" />
+      <path value="$PROJECT_DIR$/Customer/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/Customer/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/Customer/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/agent-detector" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/framework" />
+      <path value="$PROJECT_DIR$/Customer/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/Customer/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/pint" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/prompts" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/pail" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/pao" />
+      <path value="$PROJECT_DIR$/Customer/vendor/mockery/mockery" />
+      <path value="$PROJECT_DIR$/Customer/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/serializable-closure" />
+      <path value="$PROJECT_DIR$/Customer/vendor/laravel/tinker" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/Customer/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/Customer/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/Customer/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/Customer/vendor/stella-maris/clock" />
+      <path value="$PROJECT_DIR$/Customer/vendor/tymon/jwt-auth" />
+      <path value="$PROJECT_DIR$/Customer/vendor/aliyuncs/oss-sdk-php" />
+    </include_path>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -26,22 +158,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/RDao&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "fmy",
+    "last_opened_file_path": "E:/RDao",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="主" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/Customer/phpunit.xml" scope="XML" use_alternative_configuration_file="true" />
@@ -65,6 +197,7 @@
       <updated>1781171083175</updated>
       <workItem from="1781171084220" duration="2287000" />
       <workItem from="1781265550708" duration="623000" />
+      <workItem from="1782550896220" duration="10936000" />
     </task>
     <servers />
   </component>

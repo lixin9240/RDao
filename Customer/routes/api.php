@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LXController;
 use App\Http\Controllers\WJCController;
 use App\Http\Controllers\GyzController;
+use App\Http\Controllers\FmyController;
 
 // WJCController
 Route::middleware('auth:api')->group(function () {
@@ -133,5 +134,42 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer-fee', [GyzController::class, 'feeStore']);
     Route::put('customer-fee/{id}', [GyzController::class, 'feeUpdate']);
     Route::delete('customer-fee/{id}', [GyzController::class, 'feeDestroy']);
+});
+
+// FmyController
+Route::middleware('auth:api')->group(function () {
+    // 知识产权信息表
+    Route::get('customer-ip-rights', [FmyController::class, 'ipRightIndex']);
+    Route::get('customer-ip-rights/{id}', [FmyController::class, 'ipRightShow']);
+    Route::post('customer-ip-rights', [FmyController::class, 'ipRightStore']);
+    Route::put('customer-ip-rights/{id}', [FmyController::class, 'ipRightUpdate']);
+    Route::delete('customer-ip-rights/{id}', [FmyController::class, 'ipRightDestroy']);
+
+    // 客户文件信息表
+    Route::get('customer/files', [FmyController::class, 'customerFileIndex']);
+    Route::post('customer/files', [FmyController::class, 'customerFileStore']);
+    Route::get('customer/files/types/tree', [FmyController::class, 'customerFileTree']);
+    Route::get('customer/files/view/{id}', [FmyController::class, 'customerFileView']);
+    Route::get('customer/files/download/{id}', [FmyController::class, 'customerFileDownload']);
+    Route::delete('customer/files/{id}', [FmyController::class, 'customerFileDestroy']);
+
+    // 客户下拉选项
+    Route::get('customer/options', [FmyController::class, 'customerOptions']);
+
+    // 通用文件上传
+    Route::post('file/upload', [FmyController::class, 'fileUpload']);
+
+    // 联系人信息表
+    Route::get('contacts', [FmyController::class, 'contactIndex']);
+    Route::post('contacts', [FmyController::class, 'contactStore']);
+    Route::get('contacts/{id}', [FmyController::class, 'contactShow']);
+    Route::put('customer/contact/{id}', [FmyController::class, 'contactUpdate']);
+
+    // 各类下拉查询
+    Route::get('innovation-subjects/options', [FmyController::class, 'innovationSubjectsOptions']);
+    Route::get('contact-types/options', [FmyController::class, 'contactTypesOptions']);
+    Route::get('staff/options', [FmyController::class, 'staffOptions']);
+    Route::get('assistant/options', [FmyController::class, 'assistantOptions']);
+    Route::get('tech-leaders/options', [FmyController::class, 'techLeadersOptions']);
 });
 
