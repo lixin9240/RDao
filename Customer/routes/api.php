@@ -29,6 +29,15 @@ Route::middleware('auth:api')->group(function () {
         'update'  => 'customer-business.update',
         'destroy' => 'customer-business.destroy',
     ])->parameters(['customer-business' => 'id']);
+
+    // 企业信息接口（RESTful，与文档一致）
+    Route::resource('customer-enterprises', WJCController::class)->names([
+        'index'   => 'customer-enterprise.index',
+        'store'   => 'customer-enterprise.store',
+        'show'    => 'customer-enterprise.show',
+        'update'  => 'customer-enterprise.update',
+        'destroy' => 'customer-enterprise.destroy',
+    ])->parameters(['customer-enterprises' => 'id']);
 });
 
 // LXController 独立v1分组
