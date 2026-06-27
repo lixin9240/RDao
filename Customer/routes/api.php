@@ -6,9 +6,28 @@ use App\Http\Controllers\WJCController;
 
 // WJCController 路由组（需认证）
 Route::middleware('auth:api')->group(function () {
-    Route::resource('applicant', WJCController::class);
-    Route::resource('inventor', WJCController::class);
-    Route::resource('customer-business', WJCController::class);
+    // 申请人接口（自定义路径，匹配文档）
+    Route::get('applicant/list', [WJCController::class, 'index'])->name('applicant.index');
+    Route::post('applicant/add', [WJCController::class, 'store'])->name('applicant.store');
+    Route::put('applicant/edit', [WJCController::class, 'update'])->name('applicant.update');
+    Route::get('applicant/info', [WJCController::class, 'show'])->name('applicant.show');
+    Route::delete('applicant/del', [WJCController::class, 'destroy'])->name('applicant.destroy');
+
+    // 发明人接口（自定义路径，匹配文档）
+    Route::get('inventor/list', [WJCController::class, 'index'])->name('inventor.index');
+    Route::post('inventor/add', [WJCController::class, 'store'])->name('inventor.store');
+    Route::put('inventor/edit', [WJCController::class, 'update'])->name('inventor.update');
+    Route::get('inventor/info', [WJCController::class, 'show'])->name('inventor.show');
+    Route::delete('inventor/del', [WJCController::class, 'destroy'])->name('inventor.destroy');
+
+    // 工商信息接口（RESTful，与文档一致）
+    Route::resource('customer-business', WJCController::class)->names([
+        'index'   => 'customer-business.index',
+        'store'   => 'customer-business.store',
+        'show'    => 'customer-business.show',
+        'update'  => 'customer-business.update',
+        'destroy' => 'customer-business.destroy',
+    ])->parameters(['customer-business' => 'id']);
 });
 
 // LXController 独立v1分组
