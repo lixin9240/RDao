@@ -108,6 +108,12 @@ Route::prefix('v1')->group(function () {
         Route::post('industrial-parks', [LXController::class, 'industrialParkStore']);// 创建工业园区
         Route::put('industrial-parks/{id}', [LXController::class, 'industrialParkUpdate']);// 修改工业园区
         Route::delete('industrial-parks/{id}', [LXController::class, 'industrialParkDestroy']);// 删除工业园区
+
+        // 国家/地区
+        Route::get('countries', [LXController::class, 'countryList']);// 获取国家/地区列表
+
+        // 省市区
+        Route::get('regions', [LXController::class, 'regionList']);// 获取省市区列表
     });
 });
 

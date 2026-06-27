@@ -351,4 +351,16 @@ class LXController extends Controller
         $this->service->industrialParkDelete($id);
         return $this->success([], '删除成功');
     }
+
+    // ----- 国家/地区 -----
+    public function countryList(): JsonResponse
+    {
+        return $this->success($this->service->countryList());
+    }
+
+    // ----- 省市区 -----
+    public function regionList(Request $request): JsonResponse
+    {
+        return $this->success($this->service->regionList($request->all()));
+    }
 }

@@ -111,15 +111,29 @@ class LXRequest extends FormRequest
             ];
         }
         if ($this->is('api/v1/file-descriptions') || $this->is('api/v1/file-descriptions/*')) {
+            $countryCodes = implode(',', array_column(config('countries.list', []), 'code'));
+
             return [
                 'projectType'       => 'required|string|max:50',
-                'countryCode'       => 'required|string|max:10',
-                'fileCategoryId'    => 'required|integer',
-                'fileSubcategoryId' => 'required|integer',
+                'countryCode'       => 'required|string|in:' . $countryCodes,
+                'fileCategoryId'    => 'required|integer|exists:sys_file_category,id',
+                'fileSubcategoryId' => 'required|integer|exists:sys_file_category,id',
                 'fileNameTemplate'  => 'nullable|string|max:255',
                 'fileCodeRule'      => 'nullable|string|max:100',
                 'internalCode'      => 'nullable|string|max:50',
-                'authRole'          => 'nullable|string|max:100',
+                'authRole'          => [
+                    'nullable',
+                    'string',
+                    'max:100',
+                    function ($attribute, $value, $fail) {
+                        $roles = array_map('trim', explode(',', $value));
+                        foreach ($roles as $role) {
+                            if (! \App\Models\Role::where('role_key', $role)->exists()) {
+                                $fail("角色 {$role} 不存在。");
+                            }
+                        }
+                    },
+                ],
                 'sortOrder'         => 'nullable|integer',
                 'status'            => 'nullable|integer|in:0,1',
             ];
@@ -287,15 +301,15 @@ class LXRequest extends FormRequest
         }
         if ($this->is('api/v1/file-descriptions') || $this->is('api/v1/file-descriptions/*')) {
             $map = [
-                'projectType'       => 'project_type',
-                'countryCode'       => 'country_code',
-                'fileCategoryId'    => 'file_category_id',
-                'fileSubcategoryId' => 'file_subcategory_id',
-                'fileNameTemplate'  => 'file_name_template',
-                'fileCodeRule'      => 'file_code_rule',
-                'internalCode'      => 'internal_code',
-                'authRole'          => 'auth_role',
-                'sortOrder'         => 'sort_order',
+                'projectType'       => 'project_type',//项目类型
+                'countryCode'       => 'country_code',//国家代码
+                'fileCategoryId'    => 'file_category_id',//文件分类ID
+                'fileSubcategoryId' => 'file_subcategory_id',//文件子分类ID
+                'fileNameTemplate'  => 'file_name_template',//文件名模板
+                'fileCodeRule'      => 'file_code_rule',//文件编码规则
+                'internalCode'      => 'internal_code',//内部编码
+                'authRole'          => 'auth_role',//权限角色
+                'sortOrder'         => 'sort_order',//排序
             ];
             foreach ($map as $camel => $snake) {
                 if (array_key_exists($camel, $data)) {

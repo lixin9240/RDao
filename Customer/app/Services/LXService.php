@@ -9,6 +9,7 @@ use App\Models\FileCategory;
 use App\Models\FileDescription;
 use App\Models\IndustrialPark;
 use App\Models\InnovationIndex;
+use App\Models\LocationRegion;
 use App\Models\Menu;
 use App\Models\PriceIndex;
 use App\Models\Role;
@@ -395,13 +396,16 @@ class LXService
     }
 
     /**
-     * 模型转为 camelCase 数组
+     * 模型转为 camelCase 数组，时间字段转为北京时间
      */
     private function modelToCamelCase($model): array
     {
         $data = is_array($model) ? $model : $model->toArray();
         $result = [];
         foreach ($data as $key => $value) {
+            if (in_array($key, ['created_at', 'updated_at']) && $value) {
+                $value = \Carbon\Carbon::parse($value)->timezone('Asia/Shanghai')->format('Y-m-d H:i:s');
+            }
             $result[Str::camel($key)] = $value;
         }
         return $result;
@@ -580,5 +584,41 @@ class LXService
     public function industrialParkDelete(int $id): void
     {
         IndustrialPark::findOrFail($id)->delete();
+    }
+
+    // ----- 国家/地区 -----
+    public function countryList(): array
+    {
+        return config('countries.list', []);
+    }
+
+    // ----- 省市区 -----
+    public function regionList(array $params): array
+    {
+        $parentId = $params['parentId'] ?? 0;
+
+        $regions = LocationRegion::where('parent_id', $parentId)
+            ->where('status', 1)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['id', 'region_name', 'region_code', 'region_type', 'level', 'parent_id']);
+
+        $parentIds = $regions->pluck('id')->toArray();
+        $hasChildrenIds = LocationRegion::whereIn('parent_id', $parentIds)
+            ->where('status', 1)
+            ->pluck('parent_id')
+            ->toArray();
+
+        return $regions->map(function ($item) use ($hasChildrenIds) {
+            return [
+                'id'          => $item->id,
+                'regionName'  => $item->region_name,
+                'regionCode'  => $item->region_code,
+                'regionType'  => $item->region_type,
+                'level'       => $item->level,
+                'parentId'    => $item->parent_id,
+                'hasChildren' => in_array($item->id, $hasChildrenIds),
+            ];
+        })->toArray();
     }
 }
