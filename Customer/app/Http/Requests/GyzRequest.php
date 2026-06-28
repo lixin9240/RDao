@@ -6,10 +6,10 @@ class GyzRequest extends FormRequest
 {
     protected string $scene;
 
-    public function __construct()
+    public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
-        parent::__construct();
-        $this->scene = $this->query('scene') ?? '';
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+        $this->scene = $query['scene'] ?? $this->query('scene') ?? $this->input('scene') ?? '';
     }
 
     public function authorize(): bool

@@ -15,7 +15,7 @@ class GyzController extends Controller
     // 客户基础
     public function basicIndex()
     {
-        $req = app(GyzRequest::class, ['scene' => 'basic-list']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'basic-list']]);
         $valid = $req->validated();
         $data = $this->service->basicList($valid);
         return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
@@ -31,13 +31,13 @@ class GyzController extends Controller
     }
     public function basicStore()
     {
-        $req = app(GyzRequest::class, ['scene' => 'basic-store']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'basic-store']]);
         $model = $this->service->basicCreate($req->validated());
         return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
     }
     public function basicUpdate(int $id)
     {
-        $req = app(GyzRequest::class, ['scene' => 'basic-update']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'basic-update']]);
         $model = $this->service->basicUpdate($id, $req->validated());
         return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
     }
@@ -50,7 +50,7 @@ class GyzController extends Controller
     // 客户地址
     public function addressIndex()
     {
-        $req = app(GyzRequest::class, ['scene' => 'address-list']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'address-list']]);
         $valid = $req->validated();
         $data = $this->service->addressList($valid);
         return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
@@ -66,13 +66,13 @@ class GyzController extends Controller
     }
     public function addressStore()
     {
-        $req = app(GyzRequest::class, ['scene' => 'address-store']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'address-store']]);
         $model = $this->service->addressCreate($req->validated());
         return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
     }
     public function addressUpdate(int $id)
     {
-        $req = app(GyzRequest::class, ['scene' => 'address-update']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'address-update']]);
         $model = $this->service->addressUpdate($id, $req->validated());
         return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
     }
@@ -85,7 +85,7 @@ class GyzController extends Controller
     // 客户费用
     public function feeIndex()
     {
-        $req = app(GyzRequest::class, ['scene' => 'fee-list']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'fee-list']]);
         $valid = $req->validated();
         $data = $this->service->feeList($valid);
         return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
@@ -101,13 +101,13 @@ class GyzController extends Controller
     }
     public function feeStore()
     {
-        $req = app(GyzRequest::class, ['scene' => 'fee-store']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'fee-store']]);
         $model = $this->service->feeCreate($req->validated());
         return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
     }
     public function feeUpdate(int $id)
     {
-        $req = app(GyzRequest::class, ['scene' => 'fee-update']);
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'fee-update']]);
         $model = $this->service->feeUpdate($id, $req->validated());
         return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
     }
