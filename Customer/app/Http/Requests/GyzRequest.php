@@ -6,19 +6,15 @@ class GyzRequest extends FormRequest
 {
     protected string $scene;
 
-    public function __construct()
+    public function __construct(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
-        parent::__construct();
-        $this->scene = $this->query('scene') ?? '';
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+        $this->scene = $query['scene'] ?? $this->query('scene') ?? $this->input('scene') ?? '';
     }
 
     public function authorize(): bool
     {
-        $readScene = ['basic-list','address-list','fee-list','statistics-list'];
-        if (in_array($this->scene, $readScene)) {
-            return auth()->check();
-        }
-        return auth()->check() && auth()->user()->hasRole('ADMIN');
+        return auth('api')->check();
     }
 
     public function rules(): array
@@ -54,7 +50,7 @@ class GyzRequest extends FormRequest
         $this->merge($data);
         // 新增自动填充创建人
         if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store'])) {
-            $this->merge(['creator' => auth()->user()->real_name]);
+            $this->merge(['creator' => auth('api')->user()->real_name]);
         }
     }
 
@@ -162,35 +158,24 @@ class GyzRequest extends FormRequest
             'order'    => 'in:asc,desc|nullable'
         ];
     }
-
     protected function statisticsStore(): array
     {
         return [
-            'economy_category'        => 'string|nullable|max:50',
-            'economy_sub_category'    => 'string|nullable|max:50',
-            'economy_large_category'  => 'string|nullable|max:50',
-            'economy_mid_category'   => 'string|nullable|max:50',
-            'sales_2021'             => 'numeric|nullable',
-            'sales_2020'             => 'numeric|nullable',
-            'sales_2019'             => 'numeric|nullable',
-            'rd_fee_2021'            => 'numeric|nullable',
-            'rd_fee_2020'            => 'numeric|nullable',
-            'rd_fee_2019'            => 'numeric|nullable',
-            'loan_2021'              => 'numeric|nullable',
-            'loan_2020'              => 'numeric|nullable',
-            'loan_2019'              => 'numeric|nullable',
-            'tech_verified'          => 'boolean|nullable',
-            'is_high_tech'           => 'boolean|nullable',
-            'is_provincial_enterprise' => 'boolean|nullable',
-            'is_municipal_enterprise' => 'boolean|nullable',
-            'is_engineering_center'  => 'boolean|nullable',
-            'ip_index'               => 'string|nullable|max:50',
-            'integration_standard'   => 'string|nullable|max:50',
+            'statistics_year'        => 'integer|nullable',
+            'statistics_month'       => 'integer|nullable',
+            'contract_count'         => 'integer|nullable|min:0',
+            'contract_amount'        => 'numeric|nullable',
+            'invoice_amount'         => 'numeric|nullable',
+            'received_amount'        => 'numeric|nullable',
+            'unreceived_amount'      => 'numeric|nullable',
+            'project_count'          => 'integer|nullable|min:0',
+            'new_customer_count'     => 'integer|nullable|min:0',
+            'active_customer_count'  => 'integer|nullable|min:0',
+            'remark'                 => 'string|nullable'
         ];
     }
-
     protected function statisticsUpdate(): array
     {
-        return $this->enterpriseStore();
+        return $this->statisticsStore();
     }
 }
