@@ -47,11 +47,13 @@ Route::prefix('v1')->group(function () {
     Route::post('login', [LXController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
-        Route::apiResource('users', LXController::class)->only(['store', 'show', 'update']);// 新增用户、获取用户详情、修改用户
+        Route::apiResource('users', LXController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+        // 用户列表、新增用户、获取用户详情、修改用户、删除用户
 
         // 部门管理
         Route::get('depts/tree', [LXController::class, 'deptTree']);// 获取部门树形结构
         Route::post('depts', [LXController::class, 'storeDept']);// 新增部门
+        Route::get('depts/{id}', [LXController::class, 'showDept']);// 获取部门详情
         Route::put('depts/{id}', [LXController::class, 'updateDept']);// 修改部门
 
         // 菜单管理
@@ -112,6 +114,12 @@ Route::prefix('v1')->group(function () {
 
         // 国家/地区
         Route::get('countries', [LXController::class, 'countryList']);// 获取国家/地区列表
+
+        // 行业分类
+        Route::get('industry-categories', [LXController::class, 'industryCategoryList']);// 获取行业分类列表
+
+        // 企业类型
+        Route::get('enterprise-types', [LXController::class, 'enterpriseTypeList']);// 获取企业类型列表
 
         // 省市区
         Route::get('regions', [LXController::class, 'regionList']);// 获取省市区列表

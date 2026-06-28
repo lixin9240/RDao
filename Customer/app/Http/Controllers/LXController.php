@@ -35,6 +35,16 @@ class LXController extends Controller
     }
 
     /**
+     * 用户列表
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $data = $this->service->userList($request->all());
+
+        return $this->success($data);
+    }
+
+    /**
      * 新增用户
      */
     public function store(LXRequest $request): JsonResponse
@@ -69,6 +79,16 @@ class LXController extends Controller
     }
 
     /**
+     * 删除用户
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $this->service->deleteUser($id);
+
+        return $this->success([], '用户删除成功');
+    }
+
+    /**
      * 新增部门
      */
     public function storeDept(LXRequest $request): JsonResponse
@@ -76,6 +96,20 @@ class LXController extends Controller
         $dept = $this->service->createDept($request->validatedData());
 
         return $this->success($dept, '部门创建成功');
+    }
+
+    /**
+     * 获取部门详情
+     */
+    public function showDept(int $id): JsonResponse
+    {
+        $dept = $this->service->deptDetail($id);
+
+        if (! $dept) {
+            return $this->error('部门不存在', 404);
+        }
+
+        return $this->success($dept);
     }
 
     /**
@@ -356,6 +390,18 @@ class LXController extends Controller
     public function countryList(): JsonResponse
     {
         return $this->success($this->service->countryList());
+    }
+
+    // ----- 行业分类 -----
+    public function industryCategoryList(): JsonResponse
+    {
+        return $this->success($this->service->industryCategoryList());
+    }
+
+    // ----- 企业类型 -----
+    public function enterpriseTypeList(): JsonResponse
+    {
+        return $this->success($this->service->enterpriseTypeList());
     }
 
     // ----- 省市区 -----
