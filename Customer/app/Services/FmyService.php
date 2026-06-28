@@ -126,7 +126,7 @@ class FmyService
             $originalName = $file->getClientOriginalName();
         }
 
-        $salespersonId = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : auth()->id();
+        $salespersonId = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : auth('api')->id();
 
         return CustomerFile::create([
             'category_id'    => $data['fileTypeId'],
@@ -136,8 +136,8 @@ class FmyService
             'file_url'       => $path,
             'file_size'      => $fileSize,
             'original_name'  => $originalName,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => auth('api')->id(),
+            'updated_by' => auth('api')->id(),
         ]);
     }
 
@@ -249,7 +249,7 @@ class FmyService
 
         // 根据存储方式返回不同的 URL
         if ($this->useOss) {
-            $fileUrl = $this->ossService->getUrl($file->file_url, 3600); // 1小时有效期
+            $fileUrl = $this->ossService->getPreviewUrl($file->file_url, 3600); // 1小时有效期，浏览器直接预览
         } else {
             $fileUrl = Storage::url($file->file_url);
         }
@@ -388,8 +388,8 @@ class FmyService
             'notes'                => $data['remark'] ?? null,
         ]);
         $model->forceFill([
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => auth('api')->id(),
+            'updated_by' => auth('api')->id(),
         ]);
         $model->save();
         return $model;
@@ -452,7 +452,7 @@ class FmyService
             'work_address'         => $data['workAddress'] ?? $contact->work_address,
             'notes'                => $data['remark'] ?? $contact->notes,
         ]);
-        $contact->forceFill(['updated_by' => auth()->id()]);
+        $contact->forceFill(['updated_by' => auth('api')->id()]);
         $contact->save();
 
         return $contact;

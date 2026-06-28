@@ -83,6 +83,18 @@ class OssService
     }
 
     /**
+     * 获取文件预览链接（浏览器直接打开，不下载）
+     */
+    public function getPreviewUrl(string $object, int $expires = 3600): string
+    {
+        $options = [
+            'response-content-disposition' => 'inline',
+        ];
+
+        return $this->getClient()->signUrl($this->bucket, $object, $expires, 'GET', $options);
+    }
+
+    /**
      * 删除 OSS 文件
      */
     public function delete(string $object): void
