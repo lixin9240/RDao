@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
                 'email'              => 'lx@example.com',
                 'phone'              => '13800000001',
                 'professional_level' => 'LEVEL_A',
-                'business_level'     => 'LEVEL_A',
+                'business_level'     => 'LEVEL_A',// 业务等级
                 'employment_status'  => 1,
                 'account_status'     => 1,
             ],
@@ -72,8 +72,8 @@ class DatabaseSeeder extends Seeder
                 'job_title'          => '开发人员',
                 'email'              => 'gyz@example.com',
                 'phone'              => '13800000004',
-                'professional_level' => 'LEVEL_B',
-                'business_level'     => 'LEVEL_B',
+                'professional_level' => 'LEVEL_B',// 专业等级
+                'business_level'     => 'LEVEL_B',// 业务等级
                 'employment_status'  => 1,
                 'account_status'     => 1,
             ],

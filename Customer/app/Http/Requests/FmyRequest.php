@@ -38,14 +38,7 @@ class FmyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $readScene = [
-            'ip-right-list', 'customer-file-list', 'customer-file-tree', 'customer-options', 'customer-file-view', 'customer-file-download',
-            'contact-list', 'contact-detail', 'innovation-subjects-options', 'contact-types-options', 'staff-options', 'assistant-options', 'tech-leaders-options',
-        ];
-        if (in_array($this->scene, $readScene)) {
-            return auth()->check();
-        }
-        return auth()->check() && auth()->user()->hasRole('LEVEL_A');
+        return auth('api')->check();
     }
 
     /**
