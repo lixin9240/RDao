@@ -247,7 +247,11 @@ class FmyService
             throw new \Exception('文件不存在');
         }
 
+<<<<<<< Updated upstream
         // OSS 存储：返回带 inline 的签名 URL
+=======
+        // OSS 存储：返回带 inline 的签名 URL（浏览器内预览，不强制下载）
+>>>>>>> Stashed changes
         if ($this->useOss) {
             $previewUrl = $this->ossService->getPreviewUrl(
                 $file->file_url,
