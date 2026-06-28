@@ -14,13 +14,20 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FmyService
 {
-    protected OssService $ossService;
+    protected ?OssService $ossService = null;
     protected bool $useOss;
 
     public function __construct()
     {
-        $this->ossService = new OssService();
         $this->useOss = env('FILE_STORAGE_DRIVER') === 'oss';
+    }
+
+    protected function getOssService(): OssService
+    {
+        if ($this->ossService === null) {
+            $this->ossService = new OssService();
+        }
+        return $this->ossService;
     }
 
     /**
@@ -116,7 +123,7 @@ class FmyService
 
         // 使用 OSS 或本地存储
         if ($this->useOss) {
-            $uploadResult = $this->ossService->upload($file, 'customer_files');
+            $uploadResult = $this->getOssService()->upload($file, 'customer_files');
             $path = $uploadResult['path'];
             $fileSize = $uploadResult['size'];
             $originalName = $uploadResult['original_name'];
@@ -249,7 +256,7 @@ class FmyService
 
         // 根据存储方式返回不同的 URL
         if ($this->useOss) {
-            $fileUrl = $this->ossService->getPreviewUrl($file->file_url, 3600); // 1小时有效期，浏览器直接预览
+            $fileUrl = $this->getOssService()->getPreviewUrl($file->file_url, 3600); // 1小时有效期，浏览器直接预览
         } else {
             $fileUrl = Storage::url($file->file_url);
         }
@@ -270,7 +277,7 @@ class FmyService
 
         // 使用 OSS 时返回签名下载链接
         if ($this->useOss) {
-            $downloadUrl = $this->ossService->getDownloadUrl(
+            $downloadUrl = $this->getOssService()->getDownloadUrl(
                 $file->file_url,
                 $file->original_name,
                 3600
@@ -299,7 +306,7 @@ class FmyService
         // 删除物理文件
         if ($file->file_url) {
             if ($this->useOss) {
-                $this->ossService->delete($file->file_url);
+                $this->getOssService()->delete($file->file_url);
             } elseif (Storage::exists($file->file_url)) {
                 Storage::delete($file->file_url);
             }
@@ -315,7 +322,7 @@ class FmyService
 
         // 使用 OSS 或本地存储
         if ($this->useOss) {
-            $uploadResult = $this->ossService->upload($file, 'uploads');
+            $uploadResult = $this->getOssService()->upload($file, 'uploads');
             return [
                 'fileId'   => (string) md5($uploadResult['path']),
                 'fileName' => $uploadResult['original_name'],
