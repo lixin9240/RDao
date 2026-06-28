@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\SysUser;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Seeder\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -58,8 +58,8 @@ class DatabaseSeeder extends Seeder
                 'job_title'          => '开发人员',
                 'email'              => 'fmy@example.com',
                 'phone'              => '13800000003',
-                'professional_level' => 'LEVEL_B',
-                'business_level'     => 'LEVEL_B',
+                'professional_level' => 'LEVEL_A',
+                'business_level'     => 'LEVEL_A',
                 'employment_status'  => 1,
                 'account_status'     => 1,
             ],
