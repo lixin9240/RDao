@@ -592,6 +592,18 @@ class LXService
         return config('countries.list', []);
     }
 
+    // ----- 行业分类 -----
+    public function industryCategoryList(): array
+    {
+        return config('industry_categories.list', []);
+    }
+
+    // ----- 企业类型 -----
+    public function enterpriseTypeList(): array
+    {
+        return config('enterprise_types.list', []);
+    }
+
     // ----- 省市区 -----
     public function regionList(array $params): array
     {

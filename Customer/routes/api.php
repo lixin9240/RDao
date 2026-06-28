@@ -113,6 +113,12 @@ Route::prefix('v1')->group(function () {
         // 国家/地区
         Route::get('countries', [LXController::class, 'countryList']);// 获取国家/地区列表
 
+        // 行业分类
+        Route::get('industry-categories', [LXController::class, 'industryCategoryList']);// 获取行业分类列表
+
+        // 企业类型
+        Route::get('enterprise-types', [LXController::class, 'enterpriseTypeList']);// 获取企业类型列表
+
         // 省市区
         Route::get('regions', [LXController::class, 'regionList']);// 获取省市区列表
     });

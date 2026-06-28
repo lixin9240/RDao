@@ -358,6 +358,18 @@ class LXController extends Controller
         return $this->success($this->service->countryList());
     }
 
+    // ----- 行业分类 -----
+    public function industryCategoryList(): JsonResponse
+    {
+        return $this->success($this->service->industryCategoryList());
+    }
+
+    // ----- 企业类型 -----
+    public function enterpriseTypeList(): JsonResponse
+    {
+        return $this->success($this->service->enterpriseTypeList());
+    }
+
     // ----- 省市区 -----
     public function regionList(Request $request): JsonResponse
     {
