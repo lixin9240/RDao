@@ -240,25 +240,32 @@ class FmyService
             ->toArray();
     }
 
-    public function customerFileView(int $id): array
+    public function customerFileView(int $id): mixed
     {
         $file = CustomerFile::with('category')->find($id);
         if (! $file) {
             throw new \Exception('文件不存在');
         }
 
-        // 根据存储方式返回不同的 URL
+        // OSS 存储：返回带 inline 的签名 URL
         if ($this->useOss) {
-            $fileUrl = $this->ossService->getUrl($file->file_url, 3600); // 1小时有效期
-        } else {
-            $fileUrl = Storage::url($file->file_url);
+            $previewUrl = $this->ossService->getPreviewUrl(
+                $file->file_url,
+                $file->original_name,
+                3600
+            );
+            return redirect($previewUrl);
         }
 
-        return [
-            'fileName' => $file->original_name,
-            'fileUrl'  => $fileUrl,
-            'fileType' => $file->category?->name ?? '',
-        ];
+        // 本地存储：直接返回文件流，设置 inline 响应头
+        $path = storage_path('app/' . $file->file_url);
+        if (! file_exists($path)) {
+            throw new \Exception('文件已失效');
+        }
+
+        return response()->file($path, [
+            'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
+        ]);
     }
 
     public function customerFileDownload(int $id): mixed

@@ -142,8 +142,7 @@ class FmyController extends Controller
     public function customerFileView(int $id)
     {
         try {
-            $data = $this->service->customerFileView($id);
-            return $this->success($data, '查询成功');
+            return $this->service->customerFileView($id);
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), 400);
         }
