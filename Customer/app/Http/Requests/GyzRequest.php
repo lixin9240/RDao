@@ -14,7 +14,7 @@ class GyzRequest extends FormRequest
 
     public function authorize(): bool
     {
-        $readScene = ['basic-list','address-list','fee-list'];
+        $readScene = ['basic-list','address-list','fee-list','statistics-list'];
         if (in_array($this->scene, $readScene)) {
             return auth()->check();
         }
@@ -36,6 +36,10 @@ class GyzRequest extends FormRequest
             'fee-list'      => $this->feeList(),
             'fee-store'     => $this->feeStore(),
             'fee-update'    => $this->feeUpdate(),
+            // 客户统计
+            'statistics-list'    => $this->statisticsList(),
+            'statistics-store'   => $this->statisticsStore(),
+            'statistics-update'  => $this->statisticsUpdate(),
             default => [],
         };
     }
@@ -49,7 +53,7 @@ class GyzRequest extends FormRequest
         });
         $this->merge($data);
         // 新增自动填充创建人
-        if (in_array($this->scene, ['basic-store','address-store','fee-store'])) {
+        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store'])) {
             $this->merge(['creator' => auth()->user()->real_name]);
         }
     }
@@ -145,5 +149,48 @@ class GyzRequest extends FormRequest
     protected function feeUpdate(): array
     {
         return $this->feeStore();
+    }
+
+    // ========== 客户统计 校验规则 ==========
+    protected function statisticsList(): array
+    {
+        return [
+            'page'     => 'integer|min:1',
+            'per_page' => 'integer|min:1|max:100',
+            'search'   => 'string|nullable',
+            'sort'     => 'string|nullable',
+            'order'    => 'in:asc,desc|nullable'
+        ];
+    }
+
+    protected function statisticsStore(): array
+    {
+        return [
+            'economy_category'        => 'string|nullable|max:50',
+            'economy_sub_category'    => 'string|nullable|max:50',
+            'economy_large_category'  => 'string|nullable|max:50',
+            'economy_mid_category'   => 'string|nullable|max:50',
+            'sales_2021'             => 'numeric|nullable',
+            'sales_2020'             => 'numeric|nullable',
+            'sales_2019'             => 'numeric|nullable',
+            'rd_fee_2021'            => 'numeric|nullable',
+            'rd_fee_2020'            => 'numeric|nullable',
+            'rd_fee_2019'            => 'numeric|nullable',
+            'loan_2021'              => 'numeric|nullable',
+            'loan_2020'              => 'numeric|nullable',
+            'loan_2019'              => 'numeric|nullable',
+            'tech_verified'          => 'boolean|nullable',
+            'is_high_tech'           => 'boolean|nullable',
+            'is_provincial_enterprise' => 'boolean|nullable',
+            'is_municipal_enterprise' => 'boolean|nullable',
+            'is_engineering_center'  => 'boolean|nullable',
+            'ip_index'               => 'string|nullable|max:50',
+            'integration_standard'   => 'string|nullable|max:50',
+        ];
+    }
+
+    protected function statisticsUpdate(): array
+    {
+        return $this->enterpriseStore();
     }
 }

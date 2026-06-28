@@ -1,10 +1,10 @@
 <?php
 namespace App\Services;
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics};
 
 class GyzService
 {
-    // ====================== 客户基础信息 ======================
+    // 客户基础信息
     public function basicList(array $params): array
     {
         $page = $params['page'] ?? 1;
@@ -46,7 +46,7 @@ class GyzService
         $this->basicDetail($id)->delete();
     }
 
-    // ====================== 客户地址信息 ======================
+    // 客户地址信息
     public function addressList(array $params): array
     {
         $page = $params['page'] ?? 1;
@@ -88,7 +88,7 @@ class GyzService
         $this->addressDetail($id)->delete();
     }
 
-    // ====================== 客户费用信息 ======================
+    // 客户费用信息
     public function feeList(array $params): array
     {
         $page = $params['page'] ?? 1;
@@ -128,5 +128,47 @@ class GyzService
     public function feeDelete(int $id): void
     {
         $this->feeDetail($id)->delete();
+    }
+
+    // ========== 客户统计 ==========
+    public function statisticsList(array $params): array
+    {
+        $page = $params['page'] ?? 1;
+        $perPage = $params['per_page'] ?? 15;
+        $paginate = CustomerStatistics::search($params)
+            ->paginate($perPage, ['*'], 'page', $page);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage()
+            ]
+        ];
+    }
+
+    public function statisticsDetail(int $id)
+    {
+        $row = CustomerStatistics::find($id);
+        if (!$row) throw new \Exception('客户统计不存在');
+        return $row;
+    }
+
+    public function statisticsCreate(array $data)
+    {
+        return CustomerStatistics::create($data);
+    }
+
+    public function statisticsUpdate(int $id, array $data)
+    {
+        $model = $this->statisticsDetail($id);
+        $model->update($data);
+        return $model;
+    }
+
+    public function statisticsDelete(int $id): void
+    {
+        $this->statisticsDetail($id)->delete();
     }
 }
