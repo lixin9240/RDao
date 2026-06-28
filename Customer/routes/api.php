@@ -148,6 +148,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer-fee', [GyzController::class, 'feeStore']);
     Route::put('customer-fee/{id}', [GyzController::class, 'feeUpdate']);
     Route::delete('customer-fee/{id}', [GyzController::class, 'feeDestroy']);
+
+    // 客户统计
+    Route::get('customer-statistics', [GyzController::class, 'statisticsIndex']);
+    Route::get('customer-statistics/{id}', [GyzController::class, 'statisticsShow']);
+    Route::post('customer-statistics', [GyzController::class, 'statisticsStore']);
+    Route::put('customer-statistics/{id}', [GyzController::class, 'statisticsUpdate']);
+    Route::delete('customer-statistics/{id}', [GyzController::class, 'statisticsDestroy']);
 });
 
 // FmyController
