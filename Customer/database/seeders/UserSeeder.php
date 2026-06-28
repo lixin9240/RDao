@@ -6,22 +6,12 @@ use App\Models\SysUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $this->call([
-            CustomerAddressSeeder::class,
-            CustomerBasicSeeder::class,
-            CustomerFeeSeeder::class,
-            CustomerStatisticsSeeder::class,
-        ]);
-
         $users = [
             [
                 'username'           => 'LX',

@@ -116,4 +116,38 @@ class GyzController extends Controller
         $this->service->feeDelete($id);
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
+
+    // 客户统计
+    public function statisticsIndex()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-list']]);
+        $data = $this->service->statisticsList($req->validated());
+        return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
+    }
+    public function statisticsShow(int $id)
+    {
+        try {
+            $info = $this->service->statisticsDetail($id);
+            return response()->json(['success' => true, 'message' => '查询成功', 'data' => $info]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    public function statisticsStore()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-store']]);
+        $model = $this->service->statisticsCreate($req->validated());
+        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
+    }
+    public function statisticsUpdate(int $id)
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-update']]);
+        $model = $this->service->statisticsUpdate($id, $req->validated());
+        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+    }
+    public function statisticsDestroy(int $id)
+    {
+        $this->service->statisticsDelete($id);
+        return response()->json(['success' => true, 'message' => '删除成功']);
+    }
 }
