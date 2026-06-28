@@ -82,8 +82,8 @@ class FmyRequest extends FormRequest
     protected function ipRightList(): array
     {
         return [
-            'page'     => 'integer|min:1',
-            'per_page' => 'integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+            'per_page' => 'nullable|integer|min:1|max:100',
             'search'   => 'string|nullable',
             'sort'     => 'string|nullable',
             'order'    => 'in:asc,desc|nullable',
@@ -117,8 +117,8 @@ class FmyRequest extends FormRequest
             'customerName' => 'string|nullable',
             'startTime'    => 'date|nullable',
             'endTime'      => 'date|nullable',
-            'pageNum'      => 'integer|min:1',
-            'pageSize'     => 'integer|min:1|max:100',
+            'pageNum'      => 'nullable|integer|min:1',
+            'pageSize'     => 'nullable|integer|min:1|max:100',
         ];
     }
 
@@ -169,8 +169,8 @@ class FmyRequest extends FormRequest
             'customerName'   => 'string|nullable',
             'contactType'    => 'string|nullable',
             'businessPerson' => 'string|nullable',
-            'pageNum'        => 'integer|min:1',
-            'pageSize'       => 'integer|min:1|max:100',
+            'pageNum'        => 'nullable|integer|min:1',
+            'pageSize'       => 'nullable|integer|min:1|max:100',
         ];
     }
 

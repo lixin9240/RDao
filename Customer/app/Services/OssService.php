@@ -9,10 +9,10 @@ use OSS\Core\OssException;
 
 class OssService
 {
-    protected ?OssClient $client = null;
-    protected string $bucket = '';
-    protected string $endpoint = '';
-    protected string $cdnDomain = '';
+    protected ?string $client = null;
+    protected ?string $bucket = null;
+    protected ?string $endpoint = null;
+    protected ?string $cdnDomain = null;
 
     public function __construct()
     {
@@ -30,6 +30,10 @@ class OssService
             $accessKeyId = config('filesystems.disks.oss.access_key_id');
             $accessKeySecret = config('filesystems.disks.oss.access_key_secret');
             $endpoint = $this->endpoint;
+
+            if (empty($accessKeyId) || empty($accessKeySecret) || empty($endpoint)) {
+                throw new \RuntimeException('OSS 配置不完整，请检查 .env 文件中的 OSS 相关配置');
+            }
 
             $this->client = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
         }
