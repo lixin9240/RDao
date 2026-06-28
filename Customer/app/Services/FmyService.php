@@ -249,7 +249,7 @@ class FmyService
 
         // 根据存储方式返回不同的 URL
         if ($this->useOss) {
-            $fileUrl = $this->ossService->getUrl($file->file_url, 3600); // 1小时有效期
+            $fileUrl = $this->ossService->getPreviewUrl($file->file_url, 3600); // 1小时有效期，浏览器直接预览
         } else {
             $fileUrl = Storage::url($file->file_url);
         }
