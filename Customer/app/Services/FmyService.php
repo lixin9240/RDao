@@ -126,7 +126,7 @@ class FmyService
             $originalName = $file->getClientOriginalName();
         }
 
-        $salespersonId = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : auth()->id();
+        $salespersonId = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : auth('api')->id();
 
         return CustomerFile::create([
             'category_id'    => $data['fileTypeId'],
@@ -136,8 +136,8 @@ class FmyService
             'file_url'       => $path,
             'file_size'      => $fileSize,
             'original_name'  => $originalName,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => auth('api')->id(),
+            'updated_by' => auth('api')->id(),
         ]);
     }
 
@@ -388,8 +388,8 @@ class FmyService
             'notes'                => $data['remark'] ?? null,
         ]);
         $model->forceFill([
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id(),
+            'created_by' => auth('api')->id(),
+            'updated_by' => auth('api')->id(),
         ]);
         $model->save();
         return $model;
@@ -452,7 +452,7 @@ class FmyService
             'work_address'         => $data['workAddress'] ?? $contact->work_address,
             'notes'                => $data['remark'] ?? $contact->notes,
         ]);
-        $contact->forceFill(['updated_by' => auth()->id()]);
+        $contact->forceFill(['updated_by' => auth('api')->id()]);
         $contact->save();
 
         return $contact;

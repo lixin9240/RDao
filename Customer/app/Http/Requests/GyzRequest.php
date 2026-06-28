@@ -14,11 +14,7 @@ class GyzRequest extends FormRequest
 
     public function authorize(): bool
     {
-        $readScene = ['basic-list','address-list','fee-list','statistics-list'];
-        if (in_array($this->scene, $readScene)) {
-            return auth()->check();
-        }
-        return auth()->check() && auth()->user()->hasRole('ADMIN');
+        return auth('api')->check();
     }
 
     public function rules(): array
@@ -54,7 +50,7 @@ class GyzRequest extends FormRequest
         $this->merge($data);
         // 新增自动填充创建人
         if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store'])) {
-            $this->merge(['creator' => auth()->user()->real_name]);
+            $this->merge(['creator' => auth('api')->user()->real_name]);
         }
     }
 
