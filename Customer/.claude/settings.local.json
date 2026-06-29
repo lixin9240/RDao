@@ -1,7 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php artisan *)"
+      "Bash(php artisan *)",
+      "WebSearch",
+      "WebFetch(domain:m.byqrsj.com)",
+      "WebFetch(domain:chinacraa.org)",
+      "WebFetch(domain:www.renrendoc.com)",
+      "Bash(curl -sL -o /dev/null -w \"%{http_code} %{url_effective}\" \"https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7F05871EA2E4F5B0CDD9951A3F08A36A\")",
+      "Bash(curl *)",
+      "Bash(python3 -c ' *)",
+      "Bash(pip install *)",
+      "Bash(php -r ' *)",
+      "Bash(python3 -m pip install openpyxl)",
+      "Bash(unzip -l \"国民经济行业分类注释.xlsx\")",
+      "Bash(composer require *)"
     ]
   }
 }

@@ -109,8 +109,8 @@ class FmyController extends Controller
             $req = app(FmyRequest::class);
             $req->setScene('customer-file-store');
             $valid = $req->validated();
-            $model = $this->service->customerFileCreate($valid);
-            return $this->success(['id' => (string) $model->id], '新增成功');
+            $data = $this->service->customerFileCreate($valid);
+            return $this->success($data, '新增成功');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->error($e->validator->errors()->first(), 422);
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {

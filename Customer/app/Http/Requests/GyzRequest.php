@@ -53,25 +53,19 @@ class GyzRequest extends FormRequest
     {
         $data = $this->all();
 
-        // 全局去空格
         array_walk_recursive($data, function (&$v) {
             if (is_string($v)) $v = trim($v);
         });
 
-        // camelCase 转 snake_case，解决前端参数名与后端字段名不一致问题
         $converted = [];
         foreach ($data as $key => $value) {
             $snakeKey = \Illuminate\Support\Str::snake($key);
             $converted[$snakeKey] = $value;
         }
 
-        $this->merge($converted);
+        $this->replace($converted);
 
-        // 新增自动填充创建人
-        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','financial-store'])) {
-          $this->merge(['creator' => auth('api')->user()->real_name]);
-        }  
-        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','qualification-store'])) {
+        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','financial-store','qualification-store'])) {
             $this->merge(['creator' => auth('api')->user()->real_name]);
         }
     }
@@ -161,7 +155,9 @@ class GyzRequest extends FormRequest
             'invoice_address' => 'string|nullable|max:500',
             'invoice_phone'  => 'string|nullable|max:20',
             'taxpayer_type'   => 'string|nullable|max:50',
-            'billing_address' => 'string|nullable|max:500'
+            'billing_address' => 'string|nullable|max:500',
+            'invoice_credit_code' => 'string|nullable|max:50',
+            'is_general_taxpayer' => 'boolean|nullable',
         ];
     }
     protected function feeUpdate(): array

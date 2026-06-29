@@ -12,7 +12,9 @@ class CustomerFee extends Model
         'invoice_address',
         'invoice_phone',
         'taxpayer_type',
-        'billing_address'
+        'billing_address',
+        'invoice_credit_code',
+        'is_general_taxpayer',
     ];
     protected $dates = ['created_at','updated_at'];
 

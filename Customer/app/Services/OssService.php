@@ -9,7 +9,7 @@ use OSS\Core\OssException;
 
 class OssService
 {
-    protected ?string $client = null;
+    protected ?OssClient $client = null;
     protected ?string $bucket = null;
     protected ?string $endpoint = null;
     protected ?string $cdnDomain = null;
@@ -84,18 +84,6 @@ class OssService
         }
 
         return $this->getClient()->signUrl($this->bucket, $object, $expires);
-    }
-
-    /**
-     * 获取文件预览链接（inline，浏览器内打开）
-     */
-    public function getPreviewUrl(string $object, string $originalName, int $expires = 3600): string
-    {
-        $options = [
-            'response-content-disposition' => 'inline; filename="' . urlencode($originalName) . '"',
-        ];
-
-        return $this->getClient()->signUrl($this->bucket, $object, $expires, 'GET', $options);
     }
 
     /**

@@ -132,6 +132,10 @@ Route::prefix('v1')->group(function () {
 
         // 省市区
         Route::get('regions', [LXController::class, 'regionList']);// 获取省市区列表
+
+        // 国民经济分类（四级联动）
+        Route::get('economy-categories', [LXController::class, 'economyCategoryList']);// 根据父级ID获取分类列表
+        Route::get('economy-categories/tree', [LXController::class, 'economyCategoryTree']);// 获取全量树形结构
     });
 });
 

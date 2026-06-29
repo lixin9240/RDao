@@ -388,9 +388,14 @@ class LXController extends Controller
         return $this->success($this->service->enterpriseTypeList());
     }
 
-    // ----- 省市区 -----
-    public function regionList(Request $request): JsonResponse
+    // ----- 国民经济分类四级联动 -----
+    public function economyCategoryList(Request $request): JsonResponse
     {
-        return $this->success($this->service->regionList($request->all()));
+        return $this->success($this->service->economyCategoryList($request->all()));
+    }
+
+    public function economyCategoryTree(): JsonResponse
+    {
+        return $this->success($this->service->economyCategoryTree());
     }
 }

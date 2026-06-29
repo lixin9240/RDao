@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\CustomerLevel;
 use App\Models\CustomerScale;
 use App\Models\Dept;
+use App\Models\EconomyCategory;
 use App\Models\FileCategory;
 use App\Models\FileDescription;
 use App\Models\IndustrialPark;
@@ -653,33 +654,64 @@ class LXService
         return config('enterprise_types.list', []);
     }
 
-    // ----- 省市区 -----
-    public function regionList(array $params): array
+    // ----- 国民经济分类四级联动 -----
+    public function economyCategoryList(array $params): array
     {
         $parentId = $params['parentId'] ?? 0;
 
-        $regions = LocationRegion::where('parent_id', $parentId)
+        $categories = EconomyCategory::where('parent_id', $parentId)
             ->where('status', 1)
             ->orderBy('sort_order')
             ->orderBy('id')
-            ->get(['id', 'region_name', 'region_code', 'region_type', 'level', 'parent_id']);
+            ->get(['id', 'category_code', 'category_name', 'level', 'parent_id']);
 
-        $parentIds = $regions->pluck('id')->toArray();
-        $hasChildrenIds = LocationRegion::whereIn('parent_id', $parentIds)
+        $parentIds = $categories->pluck('id')->toArray();
+        $hasChildrenIds = EconomyCategory::whereIn('parent_id', $parentIds)
             ->where('status', 1)
             ->pluck('parent_id')
             ->toArray();
 
-        return $regions->map(function ($item) use ($hasChildrenIds) {
+        return $categories->map(function ($item) use ($hasChildrenIds) {
             return [
                 'id'          => $item->id,
-                'regionName'  => $item->region_name,
-                'regionCode'  => $item->region_code,
-                'regionType'  => $item->region_type,
+                'categoryCode' => $item->category_code,
+                'categoryName' => $item->category_name,
                 'level'       => $item->level,
                 'parentId'    => $item->parent_id,
                 'hasChildren' => in_array($item->id, $hasChildrenIds),
             ];
         })->toArray();
+    }
+
+    public function economyCategoryTree(): array
+    {
+        $all = EconomyCategory::where('status', 1)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['id', 'category_code', 'category_name', 'level', 'parent_id']);
+
+        return $this->buildEconomyTree($all);
+    }
+
+    private function buildEconomyTree($categories, int $parentId = 0): array
+    {
+        $tree = [];
+        foreach ($categories as $item) {
+            if ($item->parent_id == $parentId) {
+                $children = $this->buildEconomyTree($categories, $item->id);
+                $node = [
+                    'id'            => $item->id,
+                    'categoryCode'  => $item->category_code,
+                    'categoryName'  => $item->category_name,
+                    'level'         => $item->level,
+                    'parentId'      => $item->parent_id,
+                ];
+                if (! empty($children)) {
+                    $node['children'] = $children;
+                }
+                $tree[] = $node;
+            }
+        }
+        return $tree;
     }
 }
