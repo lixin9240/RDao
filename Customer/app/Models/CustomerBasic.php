@@ -21,10 +21,13 @@ class CustomerBasic extends Model
         'latest_contract_date',
         'remark'
     ];
-    protected $dates = [
-        'latest_contract_date',
-        'created_at',
-        'updated_at'
+    protected $casts = [
+        'latest_contract_date' => 'date',
+        'price_index'         => 'decimal:2',
+        'innovation_index'    => 'decimal:2',
+        'contract_count'      => 'integer',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
     ];
 
     // 列表搜索分页

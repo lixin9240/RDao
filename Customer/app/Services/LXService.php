@@ -35,50 +35,6 @@ class LXService
     }
 
     /**
-     * 用户列表（支持分页、搜索、部门/状态筛选）
-     */
-    public function userList(array $params): array
-    {
-        $query = SysUser::with(['dept:id,dept_name', 'role:id,role_name']);
-
-        // 用户名搜索
-        if (! empty($params['username'])) {
-            $query->where('username', 'like', '%' . $params['username'] . '%');
-        }
-
-        // 姓名搜索
-        if (! empty($params['realName'])) {
-            $query->where('real_name', 'like', '%' . $params['realName'] . '%');
-        }
-
-        // 部门筛选
-        if (! empty($params['deptId'])) {
-            $query->where('dept_id', $params['deptId']);
-        }
-
-        // 账号状态筛选
-        if (isset($params['status']) && $params['status'] !== '') {
-            $query->where('account_status', $params['status']);
-        }
-
-        // 在职状态筛选
-        if (isset($params['employmentStatus']) && $params['employmentStatus'] !== '') {
-            $query->where('employment_status', $params['employmentStatus']);
-        }
-
-        $perPage = $params['perPage'] ?? 10;
-        $result = $query->orderBy('id', 'desc')->paginate($perPage);
-
-        return [
-            'list'       => collect($result->items())->map(fn (SysUser $user) => $this->userToArray($user))->all(),
-            'total'      => $result->total(),
-            'page'       => $result->currentPage(),
-            'perPage'    => $result->perPage(),
-            'totalPages' => $result->lastPage(),
-        ];
-    }
-
-    /**
      * 新增用户（密码由模型自动哈希）
      */
     public function createUser(array $data): array
@@ -109,22 +65,13 @@ class LXService
      */
     public function userDetail(int $id): ?array
     {
-        $user = SysUser::with(['dept:id,dept_name', 'role:id,role_name'])->find($id);
+        $user = SysUser::with('dept:id,dept_name')->find($id);
 
         if (! $user) {
             return null;
         }
 
         return $this->userToArray($user);
-    }
-
-    /**
-     * 删除用户
-     */
-    public function deleteUser(int $id): void
-    {
-        $user = SysUser::findOrFail($id);
-        $user->delete();
     }
 
     /**
@@ -139,8 +86,6 @@ class LXService
             'gender'            => $user->gender,
             'deptId'            => $user->dept_id,
             'deptName'          => $user->dept?->dept_name,
-            'roleId'            => $user->role_id,
-            'roleName'          => $user->role?->role_name,
             'jobTitle'          => $user->job_title,
             'email'             => $user->email,
             'phone'             => $user->phone,
@@ -148,8 +93,6 @@ class LXService
             'businessLevel'     => $user->business_level,
             'status'            => $user->account_status,
             'employmentStatus'  => $user->employment_status,
-            'createdAt'         => $user->created_at?->toDateTimeString(),
-            'updatedAt'         => $user->updated_at?->toDateTimeString(),
         ];
     }
 
@@ -176,20 +119,6 @@ class LXService
         $dept->update($data);
 
         return $this->deptToArray($dept->fresh());
-    }
-
-    /**
-     * 获取部门详情
-     */
-    public function deptDetail(int $id): ?array
-    {
-        $dept = Dept::with('leader:id,real_name')->find($id);
-
-        if (! $dept) {
-            return null;
-        }
-
-        return $this->deptToArray($dept);
     }
 
     /**
@@ -252,12 +181,9 @@ class LXService
             'deptName'    => $dept->dept_name,
             'deptCode'    => $dept->dept_code,
             'leaderId'    => $dept->leader_id,
-            'leaderName'  => $dept->leader?->real_name,
             'description' => $dept->description,
             'remark'      => $dept->remark,
             'status'      => $dept->status,
-            'createdAt'   => $dept->created_at?->toDateTimeString(),
-            'updatedAt'   => $dept->updated_at?->toDateTimeString(),
         ];
     }
 

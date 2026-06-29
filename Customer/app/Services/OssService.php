@@ -9,10 +9,10 @@ use OSS\Core\OssException;
 
 class OssService
 {
-    protected ?OssClient $client = null;
-    protected string $bucket = '';
-    protected string $endpoint = '';
-    protected string $cdnDomain = '';
+    protected ?string $client = null;
+    protected ?string $bucket = null;
+    protected ?string $endpoint = null;
+    protected ?string $cdnDomain = null;
 
     public function __construct()
     {
@@ -30,6 +30,10 @@ class OssService
             $accessKeyId = config('filesystems.disks.oss.access_key_id');
             $accessKeySecret = config('filesystems.disks.oss.access_key_secret');
             $endpoint = $this->endpoint;
+
+            if (empty($accessKeyId) || empty($accessKeySecret) || empty($endpoint)) {
+                throw new \RuntimeException('OSS 配置不完整，请检查 .env 文件中的 OSS 相关配置');
+            }
 
             $this->client = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
         }
@@ -59,12 +63,24 @@ class OssService
     }
 
     /**
+     * 对 OSS object 路径进行编码，确保中文和特殊字符正确处理
+     */
+    protected function encodeObject(string $object): string
+    {
+        $object = ltrim($object, '/');
+        // 按路径分段编码，保留斜杠
+        return implode('/', array_map('rawurlencode', explode('/', $object)));
+    }
+
+    /**
      * 获取文件访问 URL
      */
     public function getUrl(string $object, int $expires = 3600): string
     {
+        $object = $this->encodeObject($object);
+
         if ($this->cdnDomain) {
-            return rtrim($this->cdnDomain, '/') . '/' . ltrim($object, '/');
+            return rtrim($this->cdnDomain, '/') . '/' . $object;
         }
 
         return $this->getClient()->signUrl($this->bucket, $object, $expires);
@@ -87,8 +103,22 @@ class OssService
      */
     public function getDownloadUrl(string $object, string $originalName, int $expires = 3600): string
     {
+        $object = $this->encodeObject($object);
         $options = [
             'response-content-disposition' => 'attachment; filename="' . urlencode($originalName) . '"',
+        ];
+
+        return $this->getClient()->signUrl($this->bucket, $object, $expires, 'GET', $options);
+    }
+
+    /**
+     * 获取文件预览链接（浏览器直接打开，不下载）
+     */
+    public function getPreviewUrl(string $object, int $expires = 3600): string
+    {
+        $object = $this->encodeObject($object);
+        $options = [
+            'response-content-disposition' => 'inline',
         ];
 
         return $this->getClient()->signUrl($this->bucket, $object, $expires, 'GET', $options);

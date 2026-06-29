@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Dept extends Model
 {
@@ -18,12 +17,4 @@ class Dept extends Model
         'remark',      // 备注
         'status',      // 状态：0-停用，1-正常
     ];
-
-    /**
-     * 部门负责人
-     */
-    public function leader(): BelongsTo
-    {
-        return $this->belongsTo(SysUser::class, 'leader_id');
-    }
 }
