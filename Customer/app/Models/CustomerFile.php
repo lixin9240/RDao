@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\FileCategory;
 
 class CustomerFile extends Model
 {
@@ -31,26 +32,37 @@ class CustomerFile extends Model
 
     public function scopeSearch($query, $params)
     {
-        if (! empty($params['fileName'])) {
-            $query->where('original_name', 'like', "%{$params['fileName']}%");
+        $fileName = $params['file_name'] ?? $params['fileName'] ?? null;
+        $fileType = $params['file_type'] ?? $params['fileType'] ?? null;
+        $customerName = $params['customer_name'] ?? $params['customerName'] ?? null;
+        $startTime = $params['start_time'] ?? $params['startTime'] ?? null;
+        $endTime = $params['end_time'] ?? $params['endTime'] ?? null;
+
+        if (! empty($fileName)) {
+            $query->where('original_name', 'like', "%{$fileName}%");
         }
 
-        if (! empty($params['fileType'])) {
-            $query->where('category_id', $params['fileType']);
+        if (! empty($fileType)) {
+            $catIds = [$fileType];
+            $childIds = FileCategory::where('parent_id', $fileType)->pluck('id')->toArray();
+            if (! empty($childIds)) {
+                $catIds = array_merge($catIds, $childIds);
+            }
+            $query->whereIn('category_id', $catIds);
         }
 
-        if (! empty($params['customerName'])) {
-            $query->whereHas('customer', function ($q) use ($params) {
-                $q->where('innovation_subject', 'like', "%{$params['customerName']}%");
+        if (! empty($customerName)) {
+            $query->whereHas('customer', function ($q) use ($customerName) {
+                $q->where('innovation_subject', 'like', "%{$customerName}%");
             });
         }
 
-        if (! empty($params['startTime'])) {
-            $query->whereDate('created_at', '>=', $params['startTime']);
+        if (! empty($startTime)) {
+            $query->whereDate('created_at', '>=', $startTime);
         }
 
-        if (! empty($params['endTime'])) {
-            $query->whereDate('created_at', '<=', $params['endTime']);
+        if (! empty($endTime)) {
+            $query->whereDate('created_at', '<=', $endTime);
         }
 
         return $query->orderBy('created_at', 'desc');

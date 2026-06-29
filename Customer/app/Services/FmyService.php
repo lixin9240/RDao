@@ -86,8 +86,8 @@ class FmyService
     // ====================== 客户文件信息 ======================
     public function customerFileList(array $params): array
     {
-        $page = $params['pageNum'] ?? 1;
-        $perPage = $params['pageSize'] ?? 10;
+        $page = $params['page_num'] ?? $params['pageNum'] ?? 1;
+        $perPage = $params['page_size'] ?? $params['pageSize'] ?? 10;
 
         $query = CustomerFile::with(['customer', 'creator', 'category'])
             ->search($params);
