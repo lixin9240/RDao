@@ -9,9 +9,10 @@ class CustomerAddressSeeder extends Seeder
 {
     public function run(): void
     {
+        CustomerAddress::query()->delete();
+
         $data = [
             [
-                'id' => 3,
                 'nationality' => '中国',
                 'province' => '上海市',
                 'city' => '上海市',
@@ -24,7 +25,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.example-shanghai.com',
             ],
             [
-                'id' => 4,
                 'nationality' => '中国',
                 'province' => '北京市',
                 'city' => '北京市',
@@ -37,7 +37,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.example-beijing.com',
             ],
             [
-                'id' => 5,
                 'nationality' => '中国',
                 'province' => '浙江省',
                 'city' => '杭州市',
@@ -50,7 +49,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.example-hangzhou.com',
             ],
             [
-                'id' => 6,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '深圳市',
@@ -63,7 +61,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.example-shenzhen.com',
             ],
             [
-                'id' => 7,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '广州市',
@@ -76,7 +73,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.gz-mz.com',
             ],
             [
-                'id' => 8,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '佛山市',
@@ -89,7 +85,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.fs-mzxyjy.com',
             ],
             [
-                'id' => 9,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '深圳市',
@@ -102,7 +97,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.example-shenzhen.com',
             ],
             [
-                'id' => 10,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '广州市',
@@ -115,7 +109,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.gz-mz.com',
             ],
             [
-                'id' => 11,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '东莞市',
@@ -128,7 +121,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.dg-mz.com',
             ],
             [
-                'id' => 12,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '佛山市',
@@ -141,7 +133,6 @@ class CustomerAddressSeeder extends Seeder
                 'company_website' => 'https://www.fs-mz.com',
             ],
             [
-                'id' => 13,
                 'nationality' => '中国',
                 'province' => '广东省',
                 'city' => '珠海市',
@@ -156,9 +147,7 @@ class CustomerAddressSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            $model = new CustomerAddress($item);
-            $model->id = $item['id'];
-            $model->save();
+            CustomerAddress::create($item);
         }
     }
 }

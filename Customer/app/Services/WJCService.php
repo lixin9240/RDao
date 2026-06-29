@@ -261,7 +261,16 @@ class WJCService
 
     public function rdInvestmentStore(array $data): \App\Models\CustomerRdInvestment
     {
-        return \App\Models\CustomerRdInvestment::create($data);
+        if (isset($data['projects']) && is_array($data['projects'])) {
+            $data['projects'] = implode(',', $data['projects']);
+        }
+        return \App\Models\CustomerRdInvestment::updateOrCreate(
+            [
+                'basic_id' => $data['basic_id'],
+                'year' => $data['year'],
+            ],
+            $data
+        );
     }
 
     public function rdInvestmentFind(int $id): ?\App\Models\CustomerRdInvestment
@@ -271,6 +280,9 @@ class WJCService
 
     public function rdInvestmentUpdate(int $id, array $data): bool
     {
+        if (isset($data['projects']) && is_array($data['projects'])) {
+            $data['projects'] = implode(',', $data['projects']);
+        }
         return $this->updateModel(\App\Models\CustomerRdInvestment::class, $id, $data);
     }
 

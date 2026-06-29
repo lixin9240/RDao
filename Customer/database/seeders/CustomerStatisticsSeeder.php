@@ -9,9 +9,10 @@ class CustomerStatisticsSeeder extends Seeder
 {
     public function run(): void
     {
+        CustomerStatistics::query()->delete();
+
         $data = [
             [
-                'id' => 3,
                 'economy_category' => '制造业',
                 'economy_sub_category' => '专用设备制造业',
                 'economy_large_category' => '电工机械专用设备制造',
@@ -35,7 +36,6 @@ class CustomerStatisticsSeeder extends Seeder
                 'creator' => 'admin',
             ],
             [
-                'id' => 4,
                 'economy_category' => '科学研究和技术服务业',
                 'economy_sub_category' => '研究和试验发展',
                 'economy_large_category' => '工程和技术研究和试验发展',
@@ -59,7 +59,6 @@ class CustomerStatisticsSeeder extends Seeder
                 'creator' => 'admin',
             ],
             [
-                'id' => 5,
                 'economy_category' => '制造业',
                 'economy_sub_category' => '金属制品业',
                 'economy_large_category' => '通用零部件制造',
@@ -83,7 +82,6 @@ class CustomerStatisticsSeeder extends Seeder
                 'creator' => 'admin',
             ],
             [
-                'id' => 6,
                 'economy_category' => '制造业',
                 'economy_sub_category' => '计算机、通信和其他电子设备制造业',
                 'economy_large_category' => '电子器件制造业',
@@ -107,7 +105,6 @@ class CustomerStatisticsSeeder extends Seeder
                 'creator' => 'admin',
             ],
             [
-                'id' => 7,
                 'economy_category' => '制造业',
                 'economy_sub_category' => '通用设备制造业',
                 'economy_large_category' => '金属加工机械制造',
@@ -131,7 +128,6 @@ class CustomerStatisticsSeeder extends Seeder
                 'creator' => 'admin',
             ],
             [
-                'id' => 8,
                 'economy_category' => '科学研究和技术服务业',
                 'economy_sub_category' => '研究和试验发展',
                 'economy_large_category' => '工程和技术研究和试验发展',
@@ -157,9 +153,7 @@ class CustomerStatisticsSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            $model = new CustomerStatistics($item);
-            $model->id = $item['id'];
-            $model->save();
+            CustomerStatistics::create($item);
         }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerBusiness,CustomerFinancial};
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerBusiness,CustomerFinancial,CustomerQualification};
 
 class GyzService
 {
@@ -312,9 +311,8 @@ class GyzService
     {
         $this->financialDetail($id)->delete();
     }
-}
 
-       // ========== 公司资质 ==========
+    // ========== 公司资质 ==========
     public function qualificationList(array $params): array
     {
         $page = $params['page'] ?? 1;
