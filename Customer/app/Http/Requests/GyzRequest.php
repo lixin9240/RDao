@@ -40,7 +40,12 @@ class GyzRequest extends FormRequest
             'financial-list'    => $this->financialList(),
             'financial-store'   => $this->financialStore(),
             'financial-update'  => $this->financialUpdate(),
+            // 公司资质
+            'qualification-list'    => $this->qualificationList(),
+            'qualification-store'   => $this->qualificationStore(),
+            'qualification-update'  => $this->qualificationUpdate(),
             default => [],
+
         };
     }
 
@@ -54,6 +59,9 @@ class GyzRequest extends FormRequest
         $this->merge($data);
         // 新增自动填充创建人
         if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','financial-store'])) {
+          $this->merge(['creator' => auth('api')->user()->real_name]);
+        }  
+        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','qualification-store'])) {
             $this->merge(['creator' => auth('api')->user()->real_name]);
         }
     }
@@ -71,7 +79,7 @@ class GyzRequest extends FormRequest
     }
     protected function basicStore(): array
     {
-        return [
+         return [
             'customer_no'           => 'string|nullable|max:50',
             'innovation_subject'    => 'string|nullable|max:255',
             'innovation_subject_en' => 'string|nullable|max:255',
@@ -197,7 +205,7 @@ class GyzRequest extends FormRequest
 
     // ========== 客户财务 校验规则 ==========
     protected function financialList(): array
-    {
+{
         return [
             'page'     => 'integer|min:1',
             'per_page' => 'integer|min:1|max:100',
@@ -236,5 +244,42 @@ class GyzRequest extends FormRequest
             'loan_2024'   => 'numeric|nullable',
             'loan_2023'   => 'numeric|nullable',
         ];
+    }
+    // ========== CustomerQualification 校验规则 ==========
+    protected function qualificationList(): array
+    {
+       return [
+            'keyword'  => 'string|nullable',
+            'sort'     => 'string|nullable',
+            'order'    => 'in:asc,desc|nullable'
+        ];
+    }
+
+    protected function qualificationStore(): array
+    {
+        return [
+            'customer_id'                   => 'required|integer|exists:customer_basics,id',
+            'is_economic_accepted'          => 'boolean|nullable',
+            'economic_accept_time'          => 'date|nullable',
+            'is_tech_accepted'              => 'boolean|nullable',
+            'tech_accept_time'              => 'date|nullable',
+            'is_high_tech'                  => 'boolean|nullable',
+            'high_tech_time'                => 'date|nullable',
+            'is_province_tech'              => 'boolean|nullable',
+            'province_tech_time'            => 'date|nullable',
+            'is_city_tech'                  => 'boolean|nullable',
+            'city_tech_time'                => 'date|nullable',
+            'is_province_engineer_center'   => 'boolean|nullable',
+            'province_engineer_center_time' => 'date|nullable',
+            'is_ip_standard'                => 'boolean|nullable',
+            'ip_standard_time'              => 'date|nullable',
+            'is_integration_standard'       => 'boolean|nullable',
+            'integration_standard_time'     => 'date|nullable',
+        ];
+    }
+
+    protected function qualificationUpdate(): array
+    {
+        return $this->qualificationStore();
     }
 }

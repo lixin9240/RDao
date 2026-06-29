@@ -62,7 +62,7 @@ Route::prefix('v1')->group(function () {
         // 部门管理
         Route::get('depts/tree', [LXController::class, 'deptTree']);// 获取部门树形结构
         Route::post('depts', [LXController::class, 'storeDept']);// 新增部门
-        Route::get('depts/{id}', [LXController::class, 'showDept']);// 获取部门详情
+         Route::get('depts/{id}', [LXController::class, 'showDept']);// 获取部门详情
         Route::put('depts/{id}', [LXController::class, 'updateDept']);// 修改部门
 
         // 菜单管理
@@ -170,6 +170,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer-financials', [GyzController::class, 'financialStore']);
     Route::put('customer-financials/{id}', [GyzController::class, 'financialUpdate']);
     Route::delete('customer-financials/{id}', [GyzController::class, 'financialDestroy']);
+
+    // 公司资质
+    Route::get('customer-qualifications', [GyzController::class, 'qualificationList']);
+    Route::get('customer-qualifications/{id}', [GyzController::class, 'qualificationShow']);
+    Route::post('customer-qualifications', [GyzController::class, 'qualificationStore']);
+    Route::put('customer-qualifications/{id}', [GyzController::class, 'qualificationUpdate']);
+    Route::delete('customer-qualifications/{id}', [GyzController::class, 'qualificationDestroy']);
 });
 
 // FmyController

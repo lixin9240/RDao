@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerBusiness,CustomerFinancial};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification};
 
 class GyzService
 {
@@ -99,7 +100,7 @@ class GyzService
             'data' => $paginate->items(),
             'meta' => [
                 'current_page' => $paginate->currentPage(),
-                'per_page'     => $paginate->perPage(),
+                'per_page'      => $paginate->perPage(),
                 'total'        => $paginate->total(),
                 'last_page'    => $paginate->lastPage()
             ]
@@ -256,7 +257,7 @@ class GyzService
     }
 
     // ========== 客户财务 ==========
-    public function financialList(array $params): array
+   public function financialList(array $params): array
     {
         $page = $params['page'] ?? 1;
         $perPage = $params['per_page'] ?? 15;
@@ -310,5 +311,49 @@ class GyzService
     public function financialDelete(int $id): void
     {
         $this->financialDetail($id)->delete();
+    }
+}
+
+       // ========== 公司资质 ==========
+    public function qualificationList(array $params): array
+    {
+        $page = $params['page'] ?? 1;
+        $perPage = $params['per_page'] ?? 15;
+        $paginate = CustomerQualification::with('customerBasic')
+            ->search($params)
+            ->paginate($perPage, ['*'], 'page', $page);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage()
+            ]
+        ];
+    }
+
+    public function qualificationDetail(int $id)
+    {
+        $row = CustomerQualification::with('customerBasic')->find($id);
+        if (!$row) throw new \Exception('公司资质信息不存在');
+        return $row;
+    }
+
+    public function qualificationCreate(array $data)
+    {
+        return CustomerQualification::create($data);
+    }
+
+    public function qualificationUpdate(int $id, array $data)
+    {
+        $model = $this->qualificationDetail($id);
+        $model->update($data);
+        return $model;
+    }
+
+    public function qualificationDelete(int $id): void
+    {
+        $this->qualificationDetail($id)->delete();
     }
 }

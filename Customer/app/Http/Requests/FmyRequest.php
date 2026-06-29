@@ -38,7 +38,14 @@ class FmyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('api')->check();
+        $readScene = [
+            'ip-right-list', 'customer-file-list', 'customer-file-tree', 'customer-options', 'customer-file-view', 'customer-file-download',
+            'contact-list', 'contact-detail', 'innovation-subjects-options', 'contact-types-options', 'staff-options', 'assistant-options', 'tech-leaders-options',
+        ];
+        if (in_array($this->scene, $readScene)) {
+            return auth()->check();
+        }
+        return auth()->check() && auth()->user()->hasRole('LEVEL_A');
     }
 
     /**
@@ -82,8 +89,8 @@ class FmyRequest extends FormRequest
     protected function ipRightList(): array
     {
         return [
-            'page'     => 'nullable|integer|min:1',
-            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'integer|min:1',
+            'per_page' => 'integer|min:1|max:100',
             'search'   => 'string|nullable',
             'sort'     => 'string|nullable',
             'order'    => 'in:asc,desc|nullable',
@@ -117,8 +124,8 @@ class FmyRequest extends FormRequest
             'customerName' => 'string|nullable',
             'startTime'    => 'date|nullable',
             'endTime'      => 'date|nullable',
-            'pageNum'      => 'nullable|integer|min:1',
-            'pageSize'     => 'nullable|integer|min:1|max:100',
+            'pageNum'      => 'integer|min:1',
+            'pageSize'     => 'integer|min:1|max:100',
         ];
     }
 
@@ -169,8 +176,8 @@ class FmyRequest extends FormRequest
             'customerName'   => 'string|nullable',
             'contactType'    => 'string|nullable',
             'businessPerson' => 'string|nullable',
-            'pageNum'        => 'nullable|integer|min:1',
-            'pageSize'       => 'nullable|integer|min:1|max:100',
+            'pageNum'        => 'integer|min:1',
+            'pageSize'       => 'integer|min:1|max:100',
         ];
     }
 
