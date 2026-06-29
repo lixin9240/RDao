@@ -77,7 +77,7 @@ class GyzController extends Controller
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'address-update']]);
         $model = $this->service->addressUpdate($id, $req->validated());
-        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+        return response()->json(['succe ss' => true, 'message' => '更新成功', 'data' => $model]);
     }
     public function addressDestroy(int $id)
     {
@@ -120,7 +120,21 @@ class GyzController extends Controller
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
 
-    // 客户统计（只读）
+      // 客户统计
+    public function statisticsStore()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-store']]);
+        $model = $this->service->statisticsCreate($req->validated());
+        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
+    }
+
+    public function statisticsUpdate(int $id)
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-update']]);
+        $model = $this->service->statisticsUpdate($id, $req->validated());
+        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+    }
+
     public function statisticsIndex()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-list']]);
@@ -156,28 +170,11 @@ class GyzController extends Controller
             return response()->json(['success' => true, 'message' => '查询成功', 'data' => $info]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }  
-    }
-    public function statisticsStore()
-    {
-        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-store']]);
-        $model = $this->service->statisticsCreate($req->validated());
-        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
-    }
-    public function statisticsUpdate(int $id)
-    {
-        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-update']]);
-        $model = $this->service->statisticsUpdate($id, $req->validated());
-        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
-    }
-    public function statisticsDestroy(int $id)
-    {
-        $this->service->statisticsDelete($id);
-        return response()->json(['success' => true, 'message' => '删除成功']);
+        }
     }
 
     // 公司资质
-    public function qualificationList()
+    public function qualificationIndex()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-list']]);
         $valid = $req->validated();
@@ -193,6 +190,7 @@ class GyzController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+
     public function qualificationStore()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-store']]);
@@ -208,6 +206,45 @@ class GyzController extends Controller
     public function qualificationDestroy(int $id)
     {
         $this->service->qualificationDelete($id);
+        return response()->json(['success' => true, 'message' => '删除成功']);
+    }
+
+ // ========== 客户财务 ==========
+    public function financialIndex()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'financial-list']]);
+        $valid = $req->validated();
+        $data = $this->service->financialList($valid);
+        return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
+    }
+
+    public function financialShow(int $id)
+    {
+        try {
+            $info = $this->service->financialDetail($id);
+            return response()->json(['success' => true, 'message' => '查询成功', 'data' => $info]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function financialStore()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'financial-store']]);
+        $model = $this->service->financialCreate($req->validated());
+        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
+    }
+
+    public function financialUpdate(int $id)
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'financial-update']]);
+        $model = $this->service->financialUpdate($id, $req->validated());
+        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+    }
+
+    public function financialDestroy(int $id)
+    {
+        $this->service->financialDelete($id);
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
 }

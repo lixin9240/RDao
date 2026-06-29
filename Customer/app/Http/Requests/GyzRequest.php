@@ -36,6 +36,10 @@ class GyzRequest extends FormRequest
             'statistics-list'    => $this->statisticsList(),
             'statistics-store'   => $this->statisticsStore(),
             'statistics-update'  => $this->statisticsUpdate(),
+            // 客户财务
+            'financial-list'    => $this->financialList(),
+            'financial-store'   => $this->financialStore(),
+            'financial-update'  => $this->financialUpdate(),
             // 公司资质
             'qualification-list'    => $this->qualificationList(),
             'qualification-store'   => $this->qualificationStore(),
@@ -54,6 +58,9 @@ class GyzRequest extends FormRequest
         });
         $this->merge($data);
         // 新增自动填充创建人
+        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','financial-store'])) {
+          $this->merge(['creator' => auth('api')->user()->real_name]);
+        }  
         if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','qualification-store'])) {
             $this->merge(['creator' => auth('api')->user()->real_name]);
         }
@@ -72,7 +79,7 @@ class GyzRequest extends FormRequest
     }
     protected function basicStore(): array
     {
-        return [
+         return [
             'customer_no'           => 'string|nullable|max:50',
             'innovation_subject'    => 'string|nullable|max:255',
             'innovation_subject_en' => 'string|nullable|max:255',
@@ -196,12 +203,52 @@ class GyzRequest extends FormRequest
         return $this->statisticsStore();
     }
 
-    // ========== CustomerQualification 校验规则 ==========
-    protected function qualificationList(): array
-    {
+    // ========== 客户财务 校验规则 ==========
+    protected function financialList(): array
+{
         return [
             'page'     => 'integer|min:1',
             'per_page' => 'integer|min:1|max:100',
+            'search'   => 'string|nullable',
+            'basic_id' => 'integer|nullable',
+            'sort'     => 'string|nullable',
+            'order'    => 'in:asc,desc|nullable',
+        ];
+    }
+    protected function financialStore(): array
+    {
+        return [
+            'basic_id'    => 'required|integer|exists:customer_basics,id',
+            'sales_2025'  => 'numeric|nullable',
+            'sales_2024'  => 'numeric|nullable',
+            'sales_2023'  => 'numeric|nullable',
+            'rd_fee_2025' => 'numeric|nullable',
+            'rd_fee_2024' => 'numeric|nullable',
+            'rd_fee_2023' => 'numeric|nullable',
+            'loan_2025'   => 'numeric|nullable',
+            'loan_2024'   => 'numeric|nullable',
+            'loan_2023'   => 'numeric|nullable',
+        ];
+    }
+    protected function financialUpdate(): array
+    {
+        return [
+            'basic_id'    => 'integer|nullable',
+            'sales_2025'  => 'numeric|nullable',
+            'sales_2024'  => 'numeric|nullable',
+            'sales_2023'  => 'numeric|nullable',
+            'rd_fee_2025' => 'numeric|nullable',
+            'rd_fee_2024' => 'numeric|nullable',
+            'rd_fee_2023' => 'numeric|nullable',
+            'loan_2025'   => 'numeric|nullable',
+            'loan_2024'   => 'numeric|nullable',
+            'loan_2023'   => 'numeric|nullable',
+        ];
+    }
+    // ========== CustomerQualification 校验规则 ==========
+    protected function qualificationList(): array
+    {
+       return [
             'keyword'  => 'string|nullable',
             'sort'     => 'string|nullable',
             'order'    => 'in:asc,desc|nullable'

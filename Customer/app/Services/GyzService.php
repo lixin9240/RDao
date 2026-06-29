@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification,CustomerBusiness};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerBusiness,CustomerFinancial};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification};
 
 class GyzService
 {
@@ -99,7 +100,7 @@ class GyzService
             'data' => $paginate->items(),
             'meta' => [
                 'current_page' => $paginate->currentPage(),
-                'per_page'     => $paginate->perPage(),
+                'per_page'      => $paginate->perPage(),
                 'total'        => $paginate->total(),
                 'last_page'    => $paginate->lastPage()
             ]
@@ -255,7 +256,65 @@ class GyzService
         $this->statisticsDetail($id)->delete();
     }
 
-    // ========== 公司资质 ==========
+    // ========== 客户财务 ==========
+   public function financialList(array $params): array
+    {
+        $page = $params['page'] ?? 1;
+        $perPage = $params['per_page'] ?? 15;
+        $query = CustomerFinancial::query();
+        if (!empty($params['basic_id'])) {
+            $query->where('basic_id', $params['basic_id']);
+        }
+        $sort = $params['sort'] ?? 'created_at';
+        $order = $params['order'] ?? 'desc';
+        $paginate = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage(),
+            ],
+        ];
+    }
+
+    public function financialDetail(int $id)
+    {
+        // 支持按 basic_id 或主键 id 查询
+        $row = CustomerFinancial::where('basic_id', $id)->first()
+            ?? CustomerFinancial::find($id);
+        if (!$row) throw new \Exception('客户财务信息不存在');
+        return $row;
+    }
+
+    public function financialCreate(array $data)
+    {
+        $basicId = $data['basic_id'] ?? null;
+        if ($basicId) {
+            $existing = CustomerFinancial::where('basic_id', $basicId)->first();
+            if ($existing) {
+                $existing->update($data);
+                return $existing;
+            }
+        }
+        return CustomerFinancial::create($data);
+    }
+
+    public function financialUpdate(int $id, array $data)
+    {
+        $model = $this->financialDetail($id);
+        $model->update($data);
+        return $model;
+    }
+
+    public function financialDelete(int $id): void
+    {
+        $this->financialDetail($id)->delete();
+    }
+}
+
+       // ========== 公司资质 ==========
     public function qualificationList(array $params): array
     {
         $page = $params['page'] ?? 1;
