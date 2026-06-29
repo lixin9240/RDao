@@ -24,6 +24,15 @@ class WJCRequest extends FormRequest
     {
         $name = $this->route()->getName() ?? '';
 
+        if (str_starts_with($name, 'customer-rd-investment.')) {
+            return [
+                'basic_id' => 'required|integer',
+                'year'     => 'required|integer|min:2000|max:2099',
+                'projects' => 'nullable',
+                'amount'   => 'nullable|numeric',
+            ];
+        }
+
         if (str_starts_with($name, 'inventor.')) {
             return [
                 'customer_id'      => 'required|integer',

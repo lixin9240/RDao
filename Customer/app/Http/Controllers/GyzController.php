@@ -77,7 +77,7 @@ class GyzController extends Controller
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'address-update']]);
         $model = $this->service->addressUpdate($id, $req->validated());
-        return response()->json(['succe ss' => true, 'message' => '更新成功', 'data' => $model]);
+        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
     }
     public function addressDestroy(int $id)
     {
@@ -174,7 +174,7 @@ class GyzController extends Controller
     }
 
     // 公司资质
-    public function qualificationIndex()
+    public function qualificationList()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-list']]);
         $valid = $req->validated();

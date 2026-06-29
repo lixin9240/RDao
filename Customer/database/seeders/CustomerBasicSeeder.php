@@ -9,9 +9,10 @@ class CustomerBasicSeeder extends Seeder
 {
     public function run(): void
     {
+        CustomerBasic::query()->delete();
+
         $data = [
             [
-                'id' => 2,
                 'customer_no' => 'C20260002',
                 'innovation_subject' => '广州某某创新研究院',
                 'innovation_subject_en' => 'Guangzhou XXX Innovation Research Institute',
@@ -28,7 +29,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '测试客户2',
             ],
             [
-                'id' => 3,
                 'customer_no' => 'C20260003',
                 'innovation_subject' => '北京某某数据服务有限公司',
                 'innovation_subject_en' => 'Beijing XXX Data Service Co., Ltd.',
@@ -45,7 +45,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '测试客户3',
             ],
             [
-                'id' => 4,
                 'customer_no' => 'C2026060004',
                 'innovation_subject' => '北京某某科技有限公司',
                 'innovation_subject_en' => 'Beijing XXX Technology Co., Ltd.',
@@ -62,7 +61,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '重点客户',
             ],
             [
-                'id' => 5,
                 'customer_no' => 'C2026060005',
                 'innovation_subject' => '杭州某某网络技术有限公司',
                 'innovation_subject_en' => 'Hangzhou XXX Network Technology Co., Ltd.',
@@ -79,7 +77,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '优质客户',
             ],
             [
-                'id' => 6,
                 'customer_no' => 'C20260003',
                 'innovation_subject' => '深圳某某创新科技有限公司',
                 'innovation_subject_en' => 'Shenzhen XXX Innovation Technology Co., Ltd.',
@@ -96,7 +93,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '重点客户',
             ],
             [
-                'id' => 7,
                 'customer_no' => 'C20260004',
                 'innovation_subject' => '广州某智造科技股份有限公司',
                 'innovation_subject_en' => 'Guangzhou MZ Zhizao Technology Co., Ltd.',
@@ -113,7 +109,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '重点扶持企业',
             ],
             [
-                'id' => 8,
                 'customer_no' => 'C20260005',
                 'innovation_subject' => '东莞某精密机械有限公司',
                 'innovation_subject_en' => 'Dongguan MZ Precision Machinery Co., Ltd.',
@@ -130,7 +125,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '优质客户',
             ],
             [
-                'id' => 9,
                 'customer_no' => 'C20260006',
                 'innovation_subject' => '佛山某新材料研究院有限公司',
                 'innovation_subject_en' => 'Foshan MZ New Materials Research Institute Co., Ltd.',
@@ -147,7 +141,6 @@ class CustomerBasicSeeder extends Seeder
                 'remark' => '战略合作客户',
             ],
             [
-                'id' => 10,
                 'customer_no' => 'C20260007',
                 'innovation_subject' => '珠海某海洋工程装备有限公司',
                 'innovation_subject_en' => 'Zhuhai MZ Ocean Engineering Equipment Co., Ltd.',
@@ -166,9 +159,7 @@ class CustomerBasicSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            $model = new CustomerBasic($item);
-            $model->id = $item['id'];
-            $model->save();
+            CustomerBasic::create($item);
         }
     }
 }
