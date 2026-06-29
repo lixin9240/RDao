@@ -87,6 +87,18 @@ class OssService
     }
 
     /**
+     * 获取文件预览链接（inline，浏览器内打开）
+     */
+    public function getPreviewUrl(string $object, string $originalName, int $expires = 3600): string
+    {
+        $options = [
+            'response-content-disposition' => 'inline; filename="' . urlencode($originalName) . '"',
+        ];
+
+        return $this->getClient()->signUrl($this->bucket, $object, $expires, 'GET', $options);
+    }
+
+    /**
      * 获取文件下载链接
      */
     public function getDownloadUrl(string $object, string $originalName, int $expires = 3600): string

@@ -214,5 +214,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('staff/options', [FmyController::class, 'staffOptions']);
     Route::get('assistant/options', [FmyController::class, 'assistantOptions']);
     Route::get('tech-leaders/options', [FmyController::class, 'techLeadersOptions']);
+
+    // 企业投资情况
+    Route::get('enterprise-investments', [FmyController::class, 'enterpriseInvestmentIndex']);
+    Route::get('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentShow']);
+    Route::post('enterprise-investments', [FmyController::class, 'enterpriseInvestmentStore']);
+    Route::put('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentUpdate']);
+    Route::delete('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentDestroy']);
 });
 

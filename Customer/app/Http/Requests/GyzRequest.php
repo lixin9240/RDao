@@ -51,12 +51,22 @@ class GyzRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        // 全局去空格
         $data = $this->all();
+
+        // 全局去空格
         array_walk_recursive($data, function (&$v) {
             if (is_string($v)) $v = trim($v);
         });
-        $this->merge($data);
+
+        // camelCase 转 snake_case，解决前端参数名与后端字段名不一致问题
+        $converted = [];
+        foreach ($data as $key => $value) {
+            $snakeKey = \Illuminate\Support\Str::snake($key);
+            $converted[$snakeKey] = $value;
+        }
+
+        $this->merge($converted);
+
         // 新增自动填充创建人
         if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','financial-store'])) {
           $this->merge(['creator' => auth('api')->user()->real_name]);
