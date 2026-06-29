@@ -14,6 +14,10 @@ class CustomerBusiness extends Model
     protected $fillable = [
         'basic_id',
         'economy_category_code',
+        'economy_category',
+        'economy_large_category',
+        'economy_mid_category',
+        'economy_sub_category',
         'established_time',
         'employee_count',
         'registered_capital',

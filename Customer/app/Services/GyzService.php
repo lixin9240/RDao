@@ -195,18 +195,12 @@ class GyzService
      */
     protected function buildStatisticsFromBusiness(CustomerBusiness $business): array
     {
-        $data = [];
-        if ($business->economy_category_code) {
-            $economyCategory = EconomyCategory::where('category_code', $business->economy_category_code)->first();
-            if ($economyCategory) {
-                $pathParts = explode('/', trim($economyCategory->full_path ?? '', '/'));
-                $data['economy_category'] = $pathParts[0] ?? null;
-                $data['economy_large_category'] = $pathParts[1] ?? null;
-                $data['economy_mid_category'] = $pathParts[2] ?? null;
-                $data['economy_sub_category'] = $pathParts[3] ?? null;
-            }
-        }
-        return $data;
+        return [
+            'economy_category'       => $business->economy_category,
+            'economy_large_category' => $business->economy_large_category,
+            'economy_mid_category'   => $business->economy_mid_category,
+            'economy_sub_category'   => $business->economy_sub_category,
+        ];
     }
 
     /**
