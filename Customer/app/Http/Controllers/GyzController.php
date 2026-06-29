@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Http\Requests\GyzRequest;
+use App\Models\CustomerStatistics;
 use App\Services\GyzService;
+use Illuminate\Http\Request;
 
 class GyzController extends Controller
 {
@@ -117,37 +120,42 @@ class GyzController extends Controller
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
 
-    // 客户统计
+    // 客户统计（只读）
     public function statisticsIndex()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-list']]);
-        $data = $this->service->statisticsList($req->validated());
+        $valid = $req->validated();
+        if (!empty($valid['basic_id'])) {
+            $this->service->syncBusinessToStatistics($valid['basic_id']);
+        }
+        if (!empty($valid['basic_ids'])) {
+            $basicIds = is_array($valid['basic_ids']) ? $valid['basic_ids'] : explode(',', $valid['basic_ids']);
+            unset($valid['basic_ids']);
+            $data = $this->service->statisticsListByBasicIds($basicIds, $valid);
+        } else {
+            $data = $this->service->statisticsList($valid);
+        }
         return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
     }
-    public function statisticsShow(int $id)
+    public function statisticsShow(Request $request)
     {
         try {
-            $info = $this->service->statisticsDetail($id);
+            $id = $request->route('id');
+            // 支持 basic_id 或 统计记录id
+            $info = CustomerStatistics::where('basic_id', $id)->first();
+            if (!$info) {
+                $info = CustomerStatistics::find($id);
+            }
+            if (!$info) {
+                return response()->json(['success' => false, 'message' => '客户统计不存在'], 404);
+            }
+            if ($info->basic_id) {
+                $this->service->syncBusinessToStatistics($info->basic_id);
+                $info->refresh();
+            }
             return response()->json(['success' => true, 'message' => '查询成功', 'data' => $info]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-    }
-    public function statisticsStore()
-    {
-        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-store']]);
-        $model = $this->service->statisticsCreate($req->validated());
-        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
-    }
-    public function statisticsUpdate(int $id)
-    {
-        $req = app(GyzRequest::class, ['query' => ['scene' => 'statistics-update']]);
-        $model = $this->service->statisticsUpdate($id, $req->validated());
-        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
-    }
-    public function statisticsDestroy(int $id)
-    {
-        $this->service->statisticsDelete($id);
-        return response()->json(['success' => true, 'message' => '删除成功']);
     }
 }

@@ -9,6 +9,7 @@ class CustomerStatistics extends Model
     protected $table = 'customer_statistics';
 
     protected $fillable = [
+        'basic_id',
         'economy_category',
         'economy_sub_category',
         'economy_large_category',
@@ -49,8 +50,16 @@ class CustomerStatistics extends Model
         'loan_2019'             => 'decimal:4',
     ];
 
+    public function basic()
+    {
+        return $this->belongsTo(CustomerBasic::class, 'basic_id');
+    }
+
     public function scopeSearch($query, $params)
     {
+        if (!empty($params['basic_id'])) {
+            $query->where('basic_id', $params['basic_id']);
+        }
         if (!empty($params['search'])) {
             $term = $params['search'];
             $query->where(function ($q) use ($term) {
