@@ -35,6 +35,14 @@ class LXController extends Controller
     }
 
     /**
+     * 用户列表
+     */
+    public function index(Request $request): JsonResponse
+    {
+        return $this->success($this->service->userList($request->all()));
+    }
+
+    /**
      * 新增用户
      */
     public function store(LXRequest $request): JsonResponse
@@ -66,6 +74,16 @@ class LXController extends Controller
         $user = $this->service->updateUser($id, $request->validatedData());
 
         return $this->success($user, '用户更新成功');
+    }
+
+    /**
+     * 删除用户
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $this->service->deleteUser($id);
+
+        return $this->success([], '用户删除成功');
     }
 
     /**

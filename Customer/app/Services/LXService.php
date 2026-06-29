@@ -96,6 +96,55 @@ class LXService
         ];
     }
 
+    /**
+     * 用户列表（分页 + 搜索）
+     */
+    public function userList(array $params): array
+    {
+        $pageNum  = (int) ($params['pageNum'] ?? 1);
+        $pageSize = (int) ($params['pageSize'] ?? 10);
+
+        $query = SysUser::with('dept:id,dept_name');
+
+        if (! empty($params['username'])) {
+            $query->where('username', 'like', '%' . $params['username'] . '%');
+        }
+        if (! empty($params['realName'])) {
+            $query->where('real_name', 'like', '%' . $params['realName'] . '%');
+        }
+        if (! empty($params['phone'])) {
+            $query->where('phone', 'like', '%' . $params['phone'] . '%');
+        }
+        if (! empty($params['email'])) {
+            $query->where('email', 'like', '%' . $params['email'] . '%');
+        }
+        if (isset($params['deptId']) && $params['deptId'] !== '') {
+            $query->where('dept_id', (int) $params['deptId']);
+        }
+        if (isset($params['accountStatus']) && $params['accountStatus'] !== '') {
+            $query->where('account_status', (int) $params['accountStatus']);
+        }
+
+        $total = $query->count();
+        $rows  = $query->orderByDesc('id')
+                       ->offset(($pageNum - 1) * $pageSize)
+                       ->limit($pageSize)
+                       ->get();
+
+        return [
+            'total' => $total,
+            'rows'  => $rows->map(fn (SysUser $user) => $this->userToArray($user))->toArray(),
+        ];
+    }
+
+    /**
+     * 删除用户
+     */
+    public function deleteUser(int $id): void
+    {
+        SysUser::findOrFail($id)->delete();
+    }
+
     /* ==================== 部门管理 ==================== */
 
     /**

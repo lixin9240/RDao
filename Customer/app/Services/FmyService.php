@@ -9,6 +9,7 @@ use App\Models\FileCategory;
 use App\Models\FileDescription;
 use App\Models\SysUser;
 use App\Models\CustomerContact;
+use App\Repositories\EnterpriseInvestmentRepository;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -515,6 +516,51 @@ class FmyService
     public function techLeadersOptions(array $params): array
     {
         return $this->userOptions($params);
+    }
+
+    // ====================== 企业投资情况 ======================
+
+    protected function investmentRepo(): EnterpriseInvestmentRepository
+    {
+        return new EnterpriseInvestmentRepository();
+    }
+
+    public function enterpriseInvestmentList(array $params): array
+    {
+        $paginate = $this->investmentRepo()->list($params);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage(),
+            ],
+        ];
+    }
+
+    public function enterpriseInvestmentDetail(int $id)
+    {
+        $row = $this->investmentRepo()->find($id);
+        if (! $row) {
+            throw new \Exception('记录不存在');
+        }
+        return $row;
+    }
+
+    public function enterpriseInvestmentCreate(array $data)
+    {
+        return $this->investmentRepo()->create($data);
+    }
+
+    public function enterpriseInvestmentUpdate(int $id, array $data)
+    {
+        return $this->investmentRepo()->update($id, $data);
+    }
+
+    public function enterpriseInvestmentDelete(int $id): void
+    {
+        $this->investmentRepo()->delete($id);
     }
 
     protected function userOptions(array $params): array
