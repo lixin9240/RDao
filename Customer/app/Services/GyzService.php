@@ -1,6 +1,6 @@
 <?php
 namespace App\Services;
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerBusiness,EconomyCategory};
 
 class GyzService
 {
@@ -157,7 +157,96 @@ class GyzService
 
     public function statisticsCreate(array $data)
     {
+        $basicId = $data['basic_id'] ?? null;
+        if ($basicId) {
+            $this->syncBusinessToStatistics($basicId);
+            $existing = CustomerStatistics::where('basic_id', $basicId)->first();
+            if ($existing) {
+                $existing->update($data);
+                return $existing;
+            }
+        }
         return CustomerStatistics::create($data);
+    }
+
+    /**
+     * 将工商信息表的数据同步到客户统计表
+     */
+    public function syncBusinessToStatistics(int $basicId): void
+    {
+        $business = CustomerBusiness::where('basic_id', $basicId)->first();
+        if (!$business) {
+            return;
+        }
+        $statistics = CustomerStatistics::where('basic_id', $basicId)->first();
+        $statisticsData = $this->buildStatisticsFromBusiness($business);
+        if ($statistics) {
+            $statistics->update($statisticsData);
+        } else {
+            CustomerStatistics::create(array_merge($statisticsData, [
+                'basic_id' => $basicId,
+                'creator' => auth('api')->user()->real_name ?? 'system',
+            ]));
+        }
+    }
+
+    /**
+     * 从工商信息构建统计数据
+     */
+    protected function buildStatisticsFromBusiness(CustomerBusiness $business): array
+    {
+        $data = [];
+        if ($business->economy_category_code) {
+            $economyCategory = EconomyCategory::where('category_code', $business->economy_category_code)->first();
+            if ($economyCategory) {
+                $pathParts = explode('/', trim($economyCategory->full_path ?? '', '/'));
+                $data['economy_category'] = $pathParts[0] ?? null;
+                $data['economy_large_category'] = $pathParts[1] ?? null;
+                $data['economy_mid_category'] = $pathParts[2] ?? null;
+                $data['economy_sub_category'] = $pathParts[3] ?? null;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 根据客户ID获取或创建统计记录（带工商数据同步）
+     */
+    public function getOrCreateStatistics(int $basicId): CustomerStatistics
+    {
+        $this->syncBusinessToStatistics($basicId);
+        return CustomerStatistics::where('basic_id', $basicId)->first();
+    }
+
+    /**
+     * 根据客户ID列表获取统计列表（支持工商数据筛选）
+     */
+    public function statisticsListByBasicIds(array $basicIds, array $params = []): array
+    {
+        $page = $params['page'] ?? 1;
+        $perPage = $params['per_page'] ?? 15;
+        $query = CustomerStatistics::whereIn('basic_id', $basicIds);
+        if (!empty($params['search'])) {
+            $term = $params['search'];
+            $query->where(function ($q) use ($term) {
+                $q->where('economy_category', 'like', "%{$term}%")
+                    ->orWhere('economy_sub_category', 'like', "%{$term}%")
+                    ->orWhere('economy_large_category', 'like', "%{$term}%")
+                    ->orWhere('economy_mid_category', 'like', "%{$term}%");
+            });
+        }
+        $sort = $params['sort'] ?? 'created_at';
+        $order = $params['order'] ?? 'desc';
+        $paginate = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage()
+            ]
+        ];
     }
 
     public function statisticsUpdate(int $id, array $data)

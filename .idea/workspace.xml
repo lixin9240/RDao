@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Controllers/GyzController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Controllers/GyzController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Customer/app/Http/Requests/GyzRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Http/Requests/GyzRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Customer/app/Models/CustomerBasic.php" beforeDir="false" afterPath="$PROJECT_DIR$/Customer/app/Models/CustomerBasic.php" afterDir="false" />
-    </list>
+    <list default="true" id="161f6836-5a08-46da-8190-3e562728387b" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -206,6 +201,7 @@
       <workItem from="1782550896220" duration="10936000" />
       <workItem from="1782626062813" duration="3848000" />
       <workItem from="1782646211081" duration="1229000" />
+      <workItem from="1782653226009" duration="1211000" />
     </task>
     <servers />
   </component>
