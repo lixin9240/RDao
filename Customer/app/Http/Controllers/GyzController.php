@@ -150,4 +150,39 @@ class GyzController extends Controller
         $this->service->statisticsDelete($id);
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
+
+    // 公司资质
+    public function qualificationIndex()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-list']]);
+        $valid = $req->validated();
+        $data = $this->service->qualificationList($valid);
+        return response()->json(['success' => true, 'message' => '查询成功', 'data' => $data]);
+    }
+    public function qualificationShow(int $id)
+    {
+        try {
+            $info = $this->service->qualificationDetail($id);
+            return response()->json(['success' => true, 'message' => '查询成功', 'data' => $info]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    public function qualificationStore()
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-store']]);
+        $model = $this->service->qualificationCreate($req->validated());
+        return response()->json(['success' => true, 'message' => '新增成功', 'data' => $model]);
+    }
+    public function qualificationUpdate(int $id)
+    {
+        $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-update']]);
+        $model = $this->service->qualificationUpdate($id, $req->validated());
+        return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+    }
+    public function qualificationDestroy(int $id)
+    {
+        $this->service->qualificationDelete($id);
+        return response()->json(['success' => true, 'message' => '删除成功']);
+    }
 }

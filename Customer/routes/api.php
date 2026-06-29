@@ -155,6 +155,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('customer-statistics', [GyzController::class, 'statisticsStore']);
     Route::put('customer-statistics/{id}', [GyzController::class, 'statisticsUpdate']);
     Route::delete('customer-statistics/{id}', [GyzController::class, 'statisticsDestroy']);
+
+    // 公司资质
+    Route::get('customer-qualifications', [GyzController::class, 'qualificationIndex']);
+    Route::get('customer-qualifications/{id}', [GyzController::class, 'qualificationShow']);
+    Route::post('customer-qualifications', [GyzController::class, 'qualificationStore']);
+    Route::put('customer-qualifications/{id}', [GyzController::class, 'qualificationUpdate']);
+    Route::delete('customer-qualifications/{id}', [GyzController::class, 'qualificationDestroy']);
 });
 
 // FmyController

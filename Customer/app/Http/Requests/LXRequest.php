@@ -176,19 +176,6 @@ class LXRequest extends FormRequest
             ];
         }
 
-        // 用户列表场景
-        if ($this->is('api/v1/users') && $this->isMethod('GET')) {
-            return [
-                'page'             => 'integer|min:1',
-                'perPage'          => 'integer|min:1|max:100',
-                'username'         => 'nullable|string|max:50',
-                'realName'         => 'nullable|string|max:50',
-                'deptId'           => 'nullable|integer',
-                'status'           => 'nullable|integer|in:0,1',
-                'employmentStatus' => 'nullable|integer|in:0,1',
-            ];
-        }
-
         // 用户场景
         $rules = [
             'username'           => 'required|string|max:50|unique:sys_user,username',
@@ -196,7 +183,6 @@ class LXRequest extends FormRequest
             'realName'           => 'required|string|max:50',
             'gender'             => 'nullable|integer|in:0,1,2',
             'deptId'             => 'required|integer|exists:sys_dept,id',
-            'roleId'             => 'nullable|integer|exists:sys_role,id',
             'jobTitle'           => 'nullable|string|max:50',
             'email'              => 'required|string|email|max:100',
             'phone'              => 'required|string|max:20',
@@ -393,7 +379,6 @@ class LXRequest extends FormRequest
         $map = [
             'realName'          => 'real_name',
             'deptId'            => 'dept_id',
-            'roleId'            => 'role_id',
             'jobTitle'          => 'job_title',
             'professionalLevel' => 'professional_level',
             'businessLevel'     => 'business_level',

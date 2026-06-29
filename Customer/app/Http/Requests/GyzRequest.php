@@ -36,7 +36,12 @@ class GyzRequest extends FormRequest
             'statistics-list'    => $this->statisticsList(),
             'statistics-store'   => $this->statisticsStore(),
             'statistics-update'  => $this->statisticsUpdate(),
+            // 公司资质
+            'qualification-list'    => $this->qualificationList(),
+            'qualification-store'   => $this->qualificationStore(),
+            'qualification-update'  => $this->qualificationUpdate(),
             default => [],
+
         };
     }
 
@@ -49,7 +54,7 @@ class GyzRequest extends FormRequest
         });
         $this->merge($data);
         // 新增自动填充创建人
-        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store'])) {
+        if (in_array($this->scene, ['basic-store','address-store','fee-store','statistics-store','qualification-store'])) {
             $this->merge(['creator' => auth('api')->user()->real_name]);
         }
     }
@@ -177,5 +182,45 @@ class GyzRequest extends FormRequest
     protected function statisticsUpdate(): array
     {
         return $this->statisticsStore();
+    }
+
+    // ========== CustomerQualification 校验规则 ==========
+    protected function qualificationList(): array
+    {
+        return [
+            'page'     => 'integer|min:1',
+            'per_page' => 'integer|min:1|max:100',
+            'keyword'  => 'string|nullable',
+            'sort'     => 'string|nullable',
+            'order'    => 'in:asc,desc|nullable'
+        ];
+    }
+
+    protected function qualificationStore(): array
+    {
+        return [
+            'customer_id'                   => 'required|integer|exists:customer_basics,id',
+            'is_economic_accepted'          => 'boolean|nullable',
+            'economic_accept_time'          => 'date|nullable',
+            'is_tech_accepted'              => 'boolean|nullable',
+            'tech_accept_time'              => 'date|nullable',
+            'is_high_tech'                  => 'boolean|nullable',
+            'high_tech_time'                => 'date|nullable',
+            'is_province_tech'              => 'boolean|nullable',
+            'province_tech_time'            => 'date|nullable',
+            'is_city_tech'                  => 'boolean|nullable',
+            'city_tech_time'                => 'date|nullable',
+            'is_province_engineer_center'   => 'boolean|nullable',
+            'province_engineer_center_time' => 'date|nullable',
+            'is_ip_standard'                => 'boolean|nullable',
+            'ip_standard_time'              => 'date|nullable',
+            'is_integration_standard'       => 'boolean|nullable',
+            'integration_standard_time'     => 'date|nullable',
+        ];
+    }
+
+    protected function qualificationUpdate(): array
+    {
+        return $this->qualificationStore();
     }
 }
