@@ -39,6 +39,15 @@ Route::middleware('auth:api')->group(function () {
         'update'  => 'customer-enterprise.update',
         'destroy' => 'customer-enterprise.destroy',
     ])->parameters(['customer-enterprises' => 'id']);
+
+    // 研发投入接口（RESTful）
+    Route::resource('customer-rd-investments', WJCController::class)->names([
+        'index'   => 'customer-rd-investment.index',
+        'store'   => 'customer-rd-investment.store',
+        'show'    => 'customer-rd-investment.show',
+        'update'  => 'customer-rd-investment.update',
+        'destroy' => 'customer-rd-investment.destroy',
+    ])->parameters(['customer-rd-investments' => 'id']);
 });
 
 // LXController 独立v1分组
@@ -149,7 +158,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('customer-fee/{id}', [GyzController::class, 'feeUpdate']);
     Route::delete('customer-fee/{id}', [GyzController::class, 'feeDestroy']);
 
-    // 客户统计
+    // 客户统计（只读）
     Route::get('customer-statistics', [GyzController::class, 'statisticsIndex']);
     Route::get('customer-statistics/{id}', [GyzController::class, 'statisticsShow']);
     Route::post('customer-statistics', [GyzController::class, 'statisticsStore']);
@@ -157,7 +166,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('customer-statistics/{id}', [GyzController::class, 'statisticsDestroy']);
 
     // 公司资质
-    Route::get('customer-qualifications', [GyzController::class, 'qualificationIndex']);
+    Route::get('customer-qualifications', [GyzController::class, 'qualificationList']);
     Route::get('customer-qualifications/{id}', [GyzController::class, 'qualificationShow']);
     Route::post('customer-qualifications', [GyzController::class, 'qualificationStore']);
     Route::put('customer-qualifications/{id}', [GyzController::class, 'qualificationUpdate']);

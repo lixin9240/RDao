@@ -159,6 +159,8 @@ class GyzRequest extends FormRequest
             'page'     => 'integer|min:1',
             'per_page' => 'integer|min:1|max:100',
             'search'   => 'string|nullable',
+            'basic_id' => 'integer|nullable',
+            'basic_ids' => 'string|nullable',
             'sort'     => 'string|nullable',
             'order'    => 'in:asc,desc|nullable'
         ];
@@ -166,17 +168,27 @@ class GyzRequest extends FormRequest
     protected function statisticsStore(): array
     {
         return [
-            'statistics_year'        => 'integer|nullable',
-            'statistics_month'       => 'integer|nullable',
-            'contract_count'         => 'integer|nullable|min:0',
-            'contract_amount'        => 'numeric|nullable',
-            'invoice_amount'         => 'numeric|nullable',
-            'received_amount'        => 'numeric|nullable',
-            'unreceived_amount'      => 'numeric|nullable',
-            'project_count'          => 'integer|nullable|min:0',
-            'new_customer_count'     => 'integer|nullable|min:0',
-            'active_customer_count'  => 'integer|nullable|min:0',
-            'remark'                 => 'string|nullable'
+            'basic_id'                  => 'integer|nullable',
+            'economy_category'         => 'string|nullable|max:50',
+            'economy_sub_category'     => 'string|nullable|max:50',
+            'economy_large_category'   => 'string|nullable|max:50',
+            'economy_mid_category'      => 'string|nullable|max:50',
+            'sales_2021'               => 'numeric|nullable',
+            'sales_2020'               => 'numeric|nullable',
+            'sales_2019'               => 'numeric|nullable',
+            'rd_fee_2021'              => 'numeric|nullable',
+            'rd_fee_2020'              => 'numeric|nullable',
+            'rd_fee_2019'              => 'numeric|nullable',
+            'loan_2021'                => 'numeric|nullable',
+            'loan_2020'                => 'numeric|nullable',
+            'loan_2019'                => 'numeric|nullable',
+            'tech_verified'            => 'boolean|nullable',
+            'is_high_tech'             => 'boolean|nullable',
+            'is_provincial_enterprise' => 'boolean|nullable',
+            'is_municipal_enterprise'  => 'boolean|nullable',
+            'is_engineering_center'   => 'boolean|nullable',
+            'ip_index'                 => 'string|nullable|max:50',
+            'integration_standard'    => 'string|nullable|max:50',
         ];
     }
     protected function statisticsUpdate(): array

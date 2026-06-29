@@ -227,4 +227,56 @@ class WJCService
         $item = CustomerEnterprise::find($id);
         return $item ? $item->delete() : false;
     }
+
+    /* ==================== 研发投入 ==================== */
+
+    public function rdInvestmentList(Request $request): array
+    {
+        $query = \App\Models\CustomerRdInvestment::query();
+
+        if ($request->filled('basic_id')) {
+            $query->where('basic_id', $request->input('basic_id'));
+        }
+        if ($request->filled('year')) {
+            $query->where('year', $request->input('year'));
+        }
+
+        $page    = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 15);
+        $sort    = $request->input('sort', 'year');
+        $order   = $request->input('order', 'desc');
+
+        $data = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+
+        return [
+            'data' => $data->items(),
+            'meta' => [
+                'current_page' => $data->currentPage(),
+                'per_page'     => $data->perPage(),
+                'total'        => $data->total(),
+                'last_page'    => $data->lastPage(),
+            ],
+        ];
+    }
+
+    public function rdInvestmentStore(array $data): \App\Models\CustomerRdInvestment
+    {
+        return \App\Models\CustomerRdInvestment::create($data);
+    }
+
+    public function rdInvestmentFind(int $id): ?\App\Models\CustomerRdInvestment
+    {
+        return \App\Models\CustomerRdInvestment::find($id);
+    }
+
+    public function rdInvestmentUpdate(int $id, array $data): bool
+    {
+        return $this->updateModel(\App\Models\CustomerRdInvestment::class, $id, $data);
+    }
+
+    public function rdInvestmentDelete(int $id): bool
+    {
+        $item = \App\Models\CustomerRdInvestment::find($id);
+        return $item ? $item->delete() : false;
+    }
 }
