@@ -45,18 +45,17 @@ class FmyController extends Controller
     {
         $req = app(FmyRequest::class);
         $req->setScene('ip-right-list');
-        $valid = $req->validated();
-        $data = $this->service->ipRightList($valid);
-        return response()->json(['success' => true, 'message' => '获取成功', 'data' => $data]);
+        $data = $this->service->ipRightList($req->validated());
+        return $this->success($data, '获取成功');
     }
 
     public function ipRightShow(int $id)
     {
         try {
-            $info = $this->service->ipRightDetail($id);
-            return response()->json(['success' => true, 'message' => '获取成功', 'data' => $info]);
+            $data = $this->service->ipRightDetail($id);
+            return $this->success($data, '获取成功');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage(), 'errors' => []], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -65,10 +64,10 @@ class FmyController extends Controller
         try {
             $req = app(FmyRequest::class);
             $req->setScene('ip-right-store');
-            $model = $this->service->ipRightCreate($req->validated());
-            return response()->json(['success' => true, 'message' => '创建成功', 'data' => $model]);
+            $data = $this->service->ipRightCreate($req->validated());
+            return $this->success($data, '创建成功');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage(), 'errors' => []], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -77,10 +76,10 @@ class FmyController extends Controller
         try {
             $req = app(FmyRequest::class);
             $req->setScene('ip-right-update');
-            $model = $this->service->ipRightUpdate($id, $req->validated());
-            return response()->json(['success' => true, 'message' => '更新成功', 'data' => $model]);
+            $data = $this->service->ipRightUpdate($id, $req->validated());
+            return $this->success($data, '更新成功');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage(), 'errors' => []], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -88,9 +87,9 @@ class FmyController extends Controller
     {
         try {
             $this->service->ipRightDelete($id);
-            return response()->json(['success' => true, 'message' => '删除成功', 'data' => null]);
+            return $this->success(null, '删除成功');
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage(), 'errors' => []], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -181,27 +180,25 @@ class FmyController extends Controller
     {
         $req = app(FmyRequest::class);
         $req->setScene('contact-list');
-        $valid = $req->validated();
-        $data = $this->service->contactList($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->contactList($req->validated());
+        return $this->success($data, '查询成功');
     }
 
     public function contactStore()
     {
         $req = app(FmyRequest::class);
         $req->setScene('contact-store');
-        $valid = $req->validated();
-        $this->service->contactCreate($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => null]);
+        $this->service->contactCreate($req->validated());
+        return $this->success(null, '创建成功');
     }
 
     public function contactShow(int $id)
     {
         try {
             $data = $this->service->contactDetail($id);
-            return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+            return $this->success($data, '查询成功');
         } catch (\Exception $e) {
-            return response()->json(['code' => 400, 'msg' => $e->getMessage(), 'data' => null], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -210,11 +207,10 @@ class FmyController extends Controller
         try {
             $req = app(FmyRequest::class);
             $req->setScene('contact-update');
-            $valid = $req->validated();
-            $model = $this->service->contactUpdate($id, $valid);
-            return response()->json(['code' => 200, 'msg' => 'success', 'data' => ['id' => (string) $model->id]]);
+            $model = $this->service->contactUpdate($id, $req->validated());
+            return $this->success(['id' => (string) $model->id], '更新成功');
         } catch (\Exception $e) {
-            return response()->json(['code' => 400, 'msg' => $e->getMessage(), 'data' => null], 400);
+            return $this->error($e->getMessage(), 400);
         }
     }
 
@@ -222,44 +218,92 @@ class FmyController extends Controller
     {
         $req = app(FmyRequest::class);
         $req->setScene('innovation-subjects-options');
-        $valid = $req->validated();
-        $data = $this->service->innovationSubjectsOptions($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->innovationSubjectsOptions($req->validated());
+        return $this->success($data, '查询成功');
     }
 
     public function contactTypesOptions()
     {
         $req = app(FmyRequest::class);
         $req->setScene('contact-types-options');
-        $valid = $req->validated();
-        $data = $this->service->contactTypesOptions($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->contactTypesOptions($req->validated());
+        return $this->success($data, '查询成功');
     }
 
     public function staffOptions()
     {
         $req = app(FmyRequest::class);
         $req->setScene('staff-options');
-        $valid = $req->validated();
-        $data = $this->service->staffOptions($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->staffOptions($req->validated());
+        return $this->success($data, '查询成功');
     }
 
     public function assistantOptions()
     {
         $req = app(FmyRequest::class);
         $req->setScene('assistant-options');
-        $valid = $req->validated();
-        $data = $this->service->assistantOptions($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->assistantOptions($req->validated());
+        return $this->success($data, '查询成功');
     }
 
     public function techLeadersOptions()
     {
         $req = app(FmyRequest::class);
         $req->setScene('tech-leaders-options');
-        $valid = $req->validated();
-        $data = $this->service->techLeadersOptions($valid);
-        return response()->json(['code' => 200, 'msg' => 'success', 'data' => $data]);
+        $data = $this->service->techLeadersOptions($req->validated());
+        return $this->success($data, '查询成功');
+    }
+
+    // ====================== 企业投资情况 ======================
+    public function enterpriseInvestmentIndex()
+    {
+        $req = app(FmyRequest::class);
+        $req->setScene('enterprise-investment-list');
+        $data = $this->service->enterpriseInvestmentList($req->validated());
+        return $this->success($data, '获取成功');
+    }
+
+    public function enterpriseInvestmentShow(int $id)
+    {
+        try {
+            $data = $this->service->enterpriseInvestmentDetail($id);
+            return $this->success($data, '获取成功');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 400);
+        }
+    }
+
+    public function enterpriseInvestmentStore()
+    {
+        try {
+            $req = app(FmyRequest::class);
+            $req->setScene('enterprise-investment-store');
+            $data = $this->service->enterpriseInvestmentCreate($req->validated());
+            return $this->success($data, '创建成功');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 400);
+        }
+    }
+
+    public function enterpriseInvestmentUpdate(int $id)
+    {
+        try {
+            $req = app(FmyRequest::class);
+            $req->setScene('enterprise-investment-update');
+            $data = $this->service->enterpriseInvestmentUpdate($id, $req->validated());
+            return $this->success($data, '更新成功');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 400);
+        }
+    }
+
+    public function enterpriseInvestmentDestroy(int $id)
+    {
+        try {
+            $this->service->enterpriseInvestmentDelete($id);
+            return $this->success(null, '删除成功');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 400);
+        }
     }
 }

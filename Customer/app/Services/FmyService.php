@@ -9,6 +9,8 @@ use App\Models\FileCategory;
 use App\Models\FileDescription;
 use App\Models\SysUser;
 use App\Models\CustomerContact;
+use App\Models\CustomerEnterpriseInvestment;
+use App\Repositories\EnterpriseInvestmentRepository;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -16,11 +18,13 @@ class FmyService
 {
     protected OssService $ossService;
     protected bool $useOss;
+    protected EnterpriseInvestmentRepository $enterpriseInvestmentRepo;
 
     public function __construct()
     {
         $this->ossService = new OssService();
         $this->useOss = env('FILE_STORAGE_DRIVER') === 'oss';
+        $this->enterpriseInvestmentRepo = new EnterpriseInvestmentRepository();
     }
 
     /**
@@ -247,11 +251,7 @@ class FmyService
             throw new \Exception('文件不存在');
         }
 
-<<<<<<< Updated upstream
-        // OSS 存储：返回带 inline 的签名 URL
-=======
         // OSS 存储：返回带 inline 的签名 URL（浏览器内预览，不强制下载）
->>>>>>> Stashed changes
         if ($this->useOss) {
             $previewUrl = $this->ossService->getPreviewUrl(
                 $file->file_url,
@@ -542,5 +542,49 @@ class FmyService
                 'name' => $item->real_name,
             ])
             ->toArray();
+    }
+
+    // ====================== 企业投资情况 ======================
+    public function enterpriseInvestmentList(array $params): array
+    {
+        $paginate = $this->enterpriseInvestmentRepo->list($params);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage(),
+            ],
+        ];
+    }
+
+    public function enterpriseInvestmentDetail(int $id)
+    {
+        $row = $this->enterpriseInvestmentRepo->find($id);
+        if (! $row) {
+            throw new \Exception('记录不存在');
+        }
+        return $row;
+    }
+
+    public function enterpriseInvestmentCreate(array $data)
+    {
+        unset($data['created_by'], $data['updated_by']);
+        $data['created_by'] = auth()->id();
+        $data['updated_by'] = auth()->id();
+        return $this->enterpriseInvestmentRepo->create($data);
+    }
+
+    public function enterpriseInvestmentUpdate(int $id, array $data)
+    {
+        unset($data['created_by']);
+        $data['updated_by'] = auth()->id();
+        return $this->enterpriseInvestmentRepo->update($id, $data);
+    }
+
+    public function enterpriseInvestmentDelete(int $id): void
+    {
+        $this->enterpriseInvestmentRepo->delete($id);
     }
 }

@@ -65,6 +65,9 @@ class FmyRequest extends FormRequest
             'staff-options'                 => $this->staffOptions(),
             'assistant-options'             => $this->assistantOptions(),
             'tech-leaders-options'          => $this->techLeadersOptions(),
+            'enterprise-investment-list'    => $this->enterpriseInvestmentList(),
+            'enterprise-investment-store'   => $this->enterpriseInvestmentStore(),
+            'enterprise-investment-update'  => $this->enterpriseInvestmentUpdate(),
             default => [],
         };
     }
@@ -248,5 +251,45 @@ class FmyRequest extends FormRequest
         return [
             'keyword' => 'string|nullable',
         ];
+    }
+
+    // ========== CustomerEnterpriseInvestment 校验规则 ==========
+    protected function enterpriseInvestmentList(): array
+    {
+        return [
+            'customerId' => 'integer|nullable',
+            'year'       => 'integer|nullable',
+            'search'     => 'string|nullable',
+            'page'       => 'integer|min:1',
+            'per_page'   => 'integer|min:1|max:100',
+            'sort'       => 'string|nullable',
+            'order'      => 'in:asc,desc|nullable',
+        ];
+    }
+
+    protected function enterpriseInvestmentStore(): array
+    {
+        return [
+            'customer_id'                => 'required|integer',
+            'year'                       => 'required|integer|min:2000|max:2100',
+            'has_audit_report'           => 'boolean|nullable',
+            'rd_equipment_original_value'=> 'numeric|nullable|min:0',
+            'equipment_investment'       => 'numeric|nullable|min:0',
+            'informatization_investment' => 'numeric|nullable|min:0',
+            'has_imported_equipment'     => 'boolean|nullable',
+            'asset_liability_ratio'      => 'numeric|nullable|min:0|max:100',
+            'smart_equipment_investment' => 'numeric|nullable|min:0',
+            'filing_amount'              => 'numeric|nullable|min:0',
+            'has_investment_filing'      => 'boolean|nullable',
+            'fixed_asset_investment'     => 'numeric|nullable|min:0',
+            'rd_equipment_investment'    => 'numeric|nullable|min:0',
+            'filing_start_date'          => 'date|nullable',
+            'filing_end_date'            => 'date|nullable|after_or_equal:filing_start_date',
+        ];
+    }
+
+    protected function enterpriseInvestmentUpdate(): array
+    {
+        return $this->enterpriseInvestmentStore();
     }
 }
