@@ -166,11 +166,11 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('customer-statistics/{id}', [GyzController::class, 'statisticsDestroy']);
 
     // 公司资质
-    Route::get('customer-qualifications', [GyzController::class, 'qualificationList']);
-    Route::get('customer-qualifications/{id}', [GyzController::class, 'qualificationShow']);
-    Route::post('customer-qualifications', [GyzController::class, 'qualificationStore']);
-    Route::put('customer-qualifications/{id}', [GyzController::class, 'qualificationUpdate']);
-    Route::delete('customer-qualifications/{id}', [GyzController::class, 'qualificationDestroy']);
+    Route::get('customer-qualifications', [GyzController::class, 'qualificationList']);// 获取公司资质列表
+    Route::get('customer-qualifications/{id}', [GyzController::class, 'qualificationShow']);// 获取公司资质详情
+    Route::post('customer-qualifications', [GyzController::class, 'qualificationStore']);// 创建公司资质
+    Route::put('customer-qualifications/{id}', [GyzController::class, 'qualificationUpdate']);// 修改公司资质
+    Route::delete('customer-qualifications/{id}', [GyzController::class, 'qualificationDestroy']);// 删除公司资质
 });
 
 // FmyController

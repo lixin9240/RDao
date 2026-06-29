@@ -31,23 +31,23 @@ class CustomerQualification extends Model
 
     protected $casts = [
         'is_economic_accepted' => 'boolean',
-        'economic_accept_time' => 'date',
+        'economic_accept_time' => 'date:Y-m-d',
         'is_tech_accepted' => 'boolean',
-        'tech_accept_time' => 'date',
+        'tech_accept_time' => 'date:Y-m-d',
         'is_high_tech' => 'boolean',
-        'high_tech_time' => 'date',
+        'high_tech_time' => 'date:Y-m-d',
         'is_province_tech' => 'boolean',
-        'province_tech_time' => 'date',
+        'province_tech_time' => 'date:Y-m-d',
         'is_city_tech' => 'boolean',
-        'city_tech_time' => 'date',
+        'city_tech_time' => 'date:Y-m-d',
         'is_province_engineer_center' => 'boolean',
-        'province_engineer_center_time' => 'date',
+        'province_engineer_center_time' => 'date:Y-m-d',
         'is_ip_standard' => 'boolean',
-        'ip_standard_time' => 'date',
+        'ip_standard_time' => 'date:Y-m-d',
         'is_integration_standard' => 'boolean',
-        'integration_standard_time' => 'date',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'integration_standard_time' => 'date:Y-m-d',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     /**

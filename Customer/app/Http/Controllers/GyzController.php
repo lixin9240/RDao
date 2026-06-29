@@ -177,7 +177,7 @@ class GyzController extends Controller
     }
 
     // 公司资质
-    public function qualificationIndex()
+    public function qualificationList()
     {
         $req = app(GyzRequest::class, ['query' => ['scene' => 'qualification-list']]);
         $valid = $req->validated();
@@ -210,3 +210,4 @@ class GyzController extends Controller
         $this->service->qualificationDelete($id);
         return response()->json(['success' => true, 'message' => '删除成功']);
     }
+}

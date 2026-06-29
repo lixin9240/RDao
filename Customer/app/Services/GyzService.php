@@ -1,6 +1,6 @@
 <?php
 namespace App\Services;
-use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification};
+use App\Models\{CustomerBasic,CustomerAddress,CustomerFee,CustomerStatistics,CustomerQualification,CustomerBusiness};
 
 class GyzService
 {
