@@ -44,7 +44,7 @@ class OssService
     /**
      * 上传文件到 OSS
      *
-     * @return array{path: string, size: int, original_name: string}
+     * @return array{path: string, url: string, size: int, original_name: string}
      */
     public function upload(UploadedFile $file, string $directory = 'uploads'): array
     {
@@ -57,6 +57,7 @@ class OssService
 
         return [
             'path'          => $object,
+            'url'           => $this->getUrl($object),
             'size'          => $file->getSize(),
             'original_name' => $originalName,
         ];

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\CustomerEnterpriseInvestment;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EnterpriseInvestmentRepository
 {
@@ -11,25 +12,27 @@ class EnterpriseInvestmentRepository
         return CustomerEnterpriseInvestment::find($id);
     }
 
-    public function list(array $params)
+    public function findWithRelations(int $id): ?CustomerEnterpriseInvestment
     {
-        $page = $params['page'] ?? 1;
-        $perPage = $params['per_page'] ?? 15;
+        return CustomerEnterpriseInvestment::with(['customer', 'creator', 'updater'])->find($id);
+    }
 
+    public function paginateWithRelations(array $params, int $perPage, int $page): LengthAwarePaginator
+    {
         $query = CustomerEnterpriseInvestment::with('customer');
 
         if (! empty($params['customerId'])) {
-            $query->where('customer_id', $params['customerId']);
+            $query->where('customer_id', (int) $params['customerId']);
         }
 
         if (! empty($params['year'])) {
-            $query->where('year', $params['year']);
+            $query->where('year', (int) $params['year']);
         }
 
         if (! empty($params['search'])) {
             $query->whereHas('customer', function ($q) use ($params) {
                 $q->where('innovation_subject', 'like', "%{$params['search']}%")
-                  ->orWhere('customer_no', 'like', "%{$params['search']}%");
+                    ->orWhere('customer_no', 'like', "%{$params['search']}%");
             });
         }
 
@@ -40,27 +43,32 @@ class EnterpriseInvestmentRepository
             ->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function existsByCustomerAndYear(int $customerId, int $year, ?int $excludeId = null): bool
+    {
+        $query = CustomerEnterpriseInvestment::query()
+            ->where('customer_id', $customerId)
+            ->where('year', $year);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->exists();
+    }
+
     public function create(array $data): CustomerEnterpriseInvestment
     {
         return CustomerEnterpriseInvestment::create($data);
     }
 
-    public function update(int $id, array $data): CustomerEnterpriseInvestment
+    public function update(CustomerEnterpriseInvestment $model, array $data): CustomerEnterpriseInvestment
     {
-        $model = $this->find($id);
-        if (! $model) {
-            throw new \Exception('记录不存在');
-        }
         $model->update($data);
         return $model;
     }
 
-    public function delete(int $id): void
+    public function delete(CustomerEnterpriseInvestment $model): void
     {
-        $model = $this->find($id);
-        if (! $model) {
-            throw new \Exception('记录不存在');
-        }
         $model->delete();
     }
 }
