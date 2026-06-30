@@ -439,20 +439,20 @@ class FmyService
     public function contactCreate(array $data)
     {
         $model = CustomerContact::create([
-            'innovation_entity_id' => $data['innovationSubjectId'],
-            'contact_type'         => $data['contactType'],
+            'innovation_entity_id' => $data['innovation_entity_id'],
+            'contact_type'         => $data['contact_type'],
             'name'                 => $data['name'],
             'phone'                => $data['phone'],
             'landline'             => $data['landline'] ?? null,
-            'is_active'            => (bool) $data['isEmployed'],
+            'is_active'            => (bool) $data['is_active'],
             'position'             => $data['position'] ?? null,
             'email'                => $data['email'] ?? null,
-            'sales_rep_id'         => $data['businessPersonId'] ?? null,
-            'sales_assistant_id'   => $data['assistantId'] ?? null,
-            'tech_lead_dept'       => $data['techDepartment'] ?? null,
-            'tech_lead_id'         => $data['techLeaderId'] ?? null,
-            'work_address'         => $data['workAddress'] ?? null,
-            'notes'                => $data['remark'] ?? null,
+            'sales_rep_id'         => $data['sales_rep_id'] ?? null,
+            'sales_assistant_id'   => $data['sales_assistant_id'] ?? null,
+            'tech_lead_dept'       => $data['tech_lead_dept'] ?? null,
+            'tech_lead_id'         => $data['tech_lead_id'] ?? null,
+            'work_address'         => $data['work_address'] ?? null,
+            'notes'                => $data['notes'] ?? null,
         ]);
         $model->forceFill([
             'created_by' => auth('api')->id(),
@@ -498,26 +498,25 @@ class FmyService
             throw new \Exception('联系人不存在');
         }
 
-        // businessPerson / techLead / businessAssistant 可能是名称或 ID，优先按 ID 处理
-        $salesRepId   = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : $contact->sales_rep_id;
-        $techLeadId   = is_numeric($data['techLead'] ?? '') ? (int) $data['techLead'] : $contact->tech_lead_id;
-        $assistantId  = is_numeric($data['businessAssistant'] ?? '') ? (int) $data['businessAssistant'] : $contact->sales_assistant_id;
+        $salesRepId   = is_numeric($data['sales_rep_id'] ?? '') ? (int) $data['sales_rep_id'] : $contact->sales_rep_id;
+        $techLeadId   = is_numeric($data['tech_lead_id'] ?? '') ? (int) $data['tech_lead_id'] : $contact->tech_lead_id;
+        $assistantId  = is_numeric($data['sales_assistant_id'] ?? '') ? (int) $data['sales_assistant_id'] : $contact->sales_assistant_id;
 
         $contact->update([
-            'innovation_entity_id' => $data['customerId'] ?? $contact->innovation_entity_id,
-            'contact_type'         => $data['contactType'],
-            'name'                 => $data['contactName'],
-            'phone'                => $data['mobile'] ?? $contact->phone,
-            'landline'             => $data['telephone'] ?? $contact->landline,
-            'is_active'            => (bool) $data['isActive'],
+            'innovation_entity_id' => $data['customer_id'] ?? $contact->innovation_entity_id,
+            'contact_type'         => $data['contact_type'],
+            'name'                 => $data['name'],
+            'phone'                => $data['phone'] ?? $contact->phone,
+            'landline'             => $data['landline'] ?? $contact->landline,
+            'is_active'            => (bool) $data['is_active'],
             'position'             => $data['position'] ?? $contact->position,
             'email'                => $data['email'] ?? $contact->email,
             'sales_rep_id'         => $salesRepId,
             'sales_assistant_id'   => $assistantId,
-            'tech_lead_dept'       => $data['techLeadDept'] ?? $contact->tech_lead_dept,
+            'tech_lead_dept'       => $data['tech_lead_dept'] ?? $contact->tech_lead_dept,
             'tech_lead_id'         => $techLeadId,
-            'work_address'         => $data['workAddress'] ?? $contact->work_address,
-            'notes'                => $data['remark'] ?? $contact->notes,
+            'work_address'         => $data['work_address'] ?? $contact->work_address,
+            'notes'                => $data['notes'] ?? $contact->notes,
         ]);
         $contact->forceFill(['updated_by' => auth('api')->id()]);
         $contact->save();

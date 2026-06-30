@@ -79,10 +79,25 @@ class FmyRequest extends FormRequest
             if (is_string($v)) $v = trim($v);
         });
 
+        $specialMaps = [
+            'innovationSubjectId' => 'innovation_entity_id',
+            'isEmployed'          => 'is_active',
+            'businessPersonId'    => 'sales_rep_id',
+            'assistantId'         => 'sales_assistant_id',
+            'techDepartment'      => 'tech_lead_dept',
+            'techLeaderId'        => 'tech_lead_id',
+            'workAddress'         => 'work_address',
+            'remark'              => 'notes',
+        ];
+
         $converted = [];
         foreach ($data as $key => $value) {
-            $snakeKey = \Illuminate\Support\Str::snake($key);
-            $converted[$snakeKey] = $value;
+            if (isset($specialMaps[$key])) {
+                $converted[$specialMaps[$key]] = $value;
+            } else {
+                $snakeKey = \Illuminate\Support\Str::snake($key);
+                $converted[$snakeKey] = $value;
+            }
         }
 
         $this->replace($converted);
@@ -189,20 +204,20 @@ class FmyRequest extends FormRequest
     protected function contactStore(): array
     {
         return [
-            'innovation_subject_id' => 'required|integer',
-            'contact_type'          => 'required|string|max:50',
-            'name'                  => 'required|string|max:255',
-            'phone'                 => 'required|string|max:20',
-            'landline'              => 'string|nullable|max:20',
-            'is_employed'           => 'required|in:0,1',
-            'position'              => 'string|nullable|max:10',
-            'email'                 => 'email|nullable|max:255',
-            'business_person_id'    => 'integer|nullable',
-            'assistant_id'          => 'integer|nullable',
-            'tech_department'       => 'string|nullable|max:255',
-            'tech_leader_id'        => 'integer|nullable',
-            'work_address'          => 'string|nullable',
-            'remark'                => 'string|nullable',
+            'innovation_entity_id' => 'required|integer',
+            'contact_type'         => 'required|string|max:50',
+            'name'                 => 'required|string|max:255',
+            'phone'                => 'required|string|max:20',
+            'landline'             => 'string|nullable|max:20',
+            'is_active'            => 'required|in:0,1',
+            'position'             => 'string|nullable|max:10',
+            'email'                => 'email|nullable|max:255',
+            'sales_rep_id'         => 'integer|nullable',
+            'sales_assistant_id'   => 'integer|nullable',
+            'tech_lead_dept'       => 'string|nullable|max:255',
+            'tech_lead_id'         => 'integer|nullable',
+            'work_address'         => 'string|nullable',
+            'notes'                => 'string|nullable',
         ];
     }
 
@@ -211,19 +226,18 @@ class FmyRequest extends FormRequest
         return [
             'customer_id'         => 'integer|nullable',
             'contact_type'        => 'required|string|max:50',
-            'contact_name'        => 'required|string|max:255',
-            'gender'              => 'string|nullable|max:10',
-            'mobile'              => 'string|nullable|max:20',
-            'telephone'           => 'string|nullable|max:20',
+            'name'                => 'required|string|max:255',
+            'phone'               => 'string|nullable|max:20',
+            'landline'            => 'string|nullable|max:20',
             'is_active'           => 'required|in:0,1',
             'position'            => 'string|nullable|max:10',
             'email'               => 'email|nullable|max:255',
-            'business_person'     => 'string|nullable|max:255',
-            'business_assistant'  => 'string|nullable|max:255',
+            'sales_rep_id'        => 'integer|nullable',
+            'sales_assistant_id'  => 'integer|nullable',
             'tech_lead_dept'      => 'string|nullable|max:255',
-            'tech_lead'           => 'string|nullable|max:255',
+            'tech_lead_id'        => 'integer|nullable',
             'work_address'        => 'string|nullable',
-            'remark'              => 'string|nullable',
+            'notes'               => 'string|nullable',
         ];
     }
 
