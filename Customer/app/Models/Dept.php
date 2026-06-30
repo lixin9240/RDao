@@ -17,4 +17,9 @@ class Dept extends Model
         'remark',      // 备注
         'status',      // 状态：0-停用，1-正常
     ];
+
+    public function leader()
+    {
+        return $this->belongsTo(SysUser::class, 'leader_id');
+    }
 }

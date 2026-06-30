@@ -183,7 +183,7 @@ class LXService
 
     public function deptDetail(int $id): array
     {
-        $dept = Dept::find($id);
+        $dept = Dept::with('leader')->find($id);
         if (! $dept) {
             throw new \Exception('部门不存在');
         }
@@ -240,7 +240,7 @@ class LXService
             'parentId'    => $dept->parent_id,
             'deptName'    => $dept->dept_name,
             'deptCode'    => $dept->dept_code,
-            'leaderId'    => $dept->leader_id,
+            'leaderName'  => $dept->leader?->real_name ?? '',
             'description' => $dept->description,
             'remark'      => $dept->remark,
             'status'      => $dept->status,
