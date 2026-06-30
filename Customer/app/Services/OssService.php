@@ -9,7 +9,7 @@ use OSS\Core\OssException;
 
 class OssService
 {
-    protected ?string $client = null;
+    protected ?OssClient $client = null;
     protected ?string $bucket = null;
     protected ?string $endpoint = null;
     protected ?string $cdnDomain = null;

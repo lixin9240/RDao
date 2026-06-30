@@ -38,14 +38,7 @@ class FmyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $readScene = [
-            'ip-right-list', 'customer-file-list', 'customer-file-tree', 'customer-options', 'customer-file-view', 'customer-file-download',
-            'contact-list', 'contact-detail', 'innovation-subjects-options', 'contact-types-options', 'staff-options', 'assistant-options', 'tech-leaders-options',
-        ];
-        if (in_array($this->scene, $readScene)) {
-            return auth()->check();
-        }
-        return auth()->check() && auth()->user()->hasRole('LEVEL_A');
+        return auth('api')->check();
     }
 
     /**
@@ -72,6 +65,9 @@ class FmyRequest extends FormRequest
             'staff-options'                 => $this->staffOptions(),
             'assistant-options'             => $this->assistantOptions(),
             'tech-leaders-options'          => $this->techLeadersOptions(),
+            'enterprise-investment-list'    => $this->enterpriseInvestmentList(),
+            'enterprise-investment-store'   => $this->enterpriseInvestmentStore(),
+            'enterprise-investment-update'  => $this->enterpriseInvestmentUpdate(),
             default => [],
         };
     }
@@ -82,7 +78,14 @@ class FmyRequest extends FormRequest
         array_walk_recursive($data, function (&$v) {
             if (is_string($v)) $v = trim($v);
         });
-        $this->merge($data);
+
+        $converted = [];
+        foreach ($data as $key => $value) {
+            $snakeKey = \Illuminate\Support\Str::snake($key);
+            $converted[$snakeKey] = $value;
+        }
+
+        $this->replace($converted);
     }
 
     // ========== CustomerIpRight 校验规则 ==========
@@ -119,31 +122,31 @@ class FmyRequest extends FormRequest
     protected function customerFileList(): array
     {
         return [
-            'fileName'     => 'string|nullable',
-            'fileType'     => 'string|nullable',
-            'customerName' => 'string|nullable',
-            'startTime'    => 'date|nullable',
-            'endTime'      => 'date|nullable',
-            'pageNum'      => 'integer|min:1',
-            'pageSize'     => 'integer|min:1|max:100',
+            'file_name'     => 'string|nullable',
+            'file_type'     => 'string|nullable',
+            'customer_name' => 'string|nullable',
+            'start_time'    => 'date|nullable',
+            'end_time'      => 'date|nullable',
+            'page_num'      => 'integer|min:1',
+            'page_size'     => 'integer|min:1|max:100',
         ];
     }
 
     protected function customerFileStore(): array
     {
         return [
-            'fileTypeId'     => 'required|string',
-            'customerId'     => 'required|string',
-            'businessPerson' => 'integer|nullable',
-            'remark'         => 'string|nullable|max:1000',
-            'file'           => 'required|file|max:20480',
+            'file_type_id'     => 'required|string',
+            'customer_id'      => 'required|string',
+            'business_person'  => 'integer|nullable',
+            'remark'           => 'string|nullable|max:1000',
+            'file'             => 'required|file|max:20480',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'businessPerson.integer' => '业务人员必须是有效的数字',
+            'business_person.integer' => '业务人员必须是有效的数字',
         ];
     }
 
@@ -164,7 +167,9 @@ class FmyRequest extends FormRequest
     protected function customerFileUpload(): array
     {
         return [
-            'file' => 'required|file|max:20480',
+            'file'        => 'required|file|max:20480',
+            'customer_id' => 'integer',
+            'category_id' => 'integer|nullable',
         ];
     }
 
@@ -172,53 +177,53 @@ class FmyRequest extends FormRequest
     protected function contactList(): array
     {
         return [
-            'contactName'    => 'string|nullable',
-            'customerName'   => 'string|nullable',
-            'contactType'    => 'string|nullable',
-            'businessPerson' => 'string|nullable',
-            'pageNum'        => 'integer|min:1',
-            'pageSize'       => 'integer|min:1|max:100',
+            'contact_name'    => 'string|nullable',
+            'customer_name'   => 'string|nullable',
+            'contact_type'    => 'string|nullable',
+            'business_person' => 'string|nullable',
+            'page_num'        => 'integer|min:1',
+            'page_size'       => 'integer|min:1|max:100',
         ];
     }
 
     protected function contactStore(): array
     {
         return [
-            'innovationSubjectId' => 'required|integer',
-            'contactType'         => 'required|string|max:50',
-            'name'                => 'required|string|max:255',
-            'phone'               => 'required|string|max:20',
-            'landline'            => 'string|nullable|max:20',
-            'isEmployed'          => 'required|in:0,1',
-            'position'            => 'string|nullable|max:10',
-            'email'               => 'email|nullable|max:255',
-            'businessPersonId'    => 'integer|nullable',
-            'assistantId'         => 'integer|nullable',
-            'techDepartment'      => 'string|nullable|max:255',
-            'techLeaderId'        => 'integer|nullable',
-            'workAddress'         => 'string|nullable',
-            'remark'              => 'string|nullable',
+            'innovation_subject_id' => 'required|integer',
+            'contact_type'          => 'required|string|max:50',
+            'name'                  => 'required|string|max:255',
+            'phone'                 => 'required|string|max:20',
+            'landline'              => 'string|nullable|max:20',
+            'is_employed'           => 'required|in:0,1',
+            'position'              => 'string|nullable|max:10',
+            'email'                 => 'email|nullable|max:255',
+            'business_person_id'    => 'integer|nullable',
+            'assistant_id'          => 'integer|nullable',
+            'tech_department'       => 'string|nullable|max:255',
+            'tech_leader_id'        => 'integer|nullable',
+            'work_address'          => 'string|nullable',
+            'remark'                => 'string|nullable',
         ];
     }
 
     protected function contactUpdate(): array
     {
         return [
-            'customerId'     => 'integer|nullable',
-            'contactType'    => 'required|string|max:50',
-            'contactName'    => 'required|string|max:255',
-            'gender'         => 'string|nullable|max:10',
-            'mobile'         => 'string|nullable|max:20',
-            'telephone'      => 'string|nullable|max:20',
-            'isActive'       => 'required|in:0,1',
-            'position'       => 'string|nullable|max:10',
-            'email'          => 'email|nullable|max:255',
-            'businessPerson' => 'string|nullable|max:255',
-            'businessAssistant' => 'string|nullable|max:255',
-            'techLeadDept'   => 'string|nullable|max:255',
-            'techLead'       => 'string|nullable|max:255',
-            'workAddress'    => 'string|nullable',
-            'remark'         => 'string|nullable',
+            'customer_id'         => 'integer|nullable',
+            'contact_type'        => 'required|string|max:50',
+            'contact_name'        => 'required|string|max:255',
+            'gender'              => 'string|nullable|max:10',
+            'mobile'              => 'string|nullable|max:20',
+            'telephone'           => 'string|nullable|max:20',
+            'is_active'           => 'required|in:0,1',
+            'position'            => 'string|nullable|max:10',
+            'email'               => 'email|nullable|max:255',
+            'business_person'     => 'string|nullable|max:255',
+            'business_assistant'  => 'string|nullable|max:255',
+            'tech_lead_dept'      => 'string|nullable|max:255',
+            'tech_lead'           => 'string|nullable|max:255',
+            'work_address'        => 'string|nullable',
+            'remark'              => 'string|nullable',
         ];
     }
 
@@ -255,5 +260,45 @@ class FmyRequest extends FormRequest
         return [
             'keyword' => 'string|nullable',
         ];
+    }
+
+    // ========== CustomerEnterpriseInvestment 校验规则 ==========
+    protected function enterpriseInvestmentList(): array
+    {
+        return [
+            'customerId' => 'integer|nullable',
+            'year'       => 'integer|nullable',
+            'search'     => 'string|nullable',
+            'page'       => 'integer|min:1',
+            'per_page'   => 'integer|min:1|max:100',
+            'sort'       => 'string|nullable',
+            'order'      => 'in:asc,desc|nullable',
+        ];
+    }
+
+    protected function enterpriseInvestmentStore(): array
+    {
+        return [
+            'customer_id'                => 'required|integer',
+            'year'                       => 'required|integer|min:2000|max:2100',
+            'has_audit_report'           => 'boolean|nullable',
+            'rd_equipment_original_value'=> 'numeric|nullable|min:0',
+            'equipment_investment'       => 'numeric|nullable|min:0',
+            'informatization_investment' => 'numeric|nullable|min:0',
+            'has_imported_equipment'     => 'boolean|nullable',
+            'asset_liability_ratio'      => 'numeric|nullable|min:0|max:100',
+            'smart_equipment_investment' => 'numeric|nullable|min:0',
+            'filing_amount'              => 'numeric|nullable|min:0',
+            'has_investment_filing'      => 'boolean|nullable',
+            'fixed_asset_investment'     => 'numeric|nullable|min:0',
+            'rd_equipment_investment'    => 'numeric|nullable|min:0',
+            'filing_start_date'          => 'date|nullable',
+            'filing_end_date'            => 'date|nullable|after_or_equal:filing_start_date',
+        ];
+    }
+
+    protected function enterpriseInvestmentUpdate(): array
+    {
+        return $this->enterpriseInvestmentStore();
     }
 }

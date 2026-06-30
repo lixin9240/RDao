@@ -9,6 +9,7 @@ use App\Models\FileCategory;
 use App\Models\FileDescription;
 use App\Models\SysUser;
 use App\Models\CustomerContact;
+use App\Repositories\EnterpriseInvestmentRepository;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -85,8 +86,8 @@ class FmyService
     // ====================== 客户文件信息 ======================
     public function customerFileList(array $params): array
     {
-        $page = $params['pageNum'] ?? 1;
-        $perPage = $params['pageSize'] ?? 10;
+        $page = $params['page_num'] ?? $params['pageNum'] ?? 1;
+        $perPage = $params['page_size'] ?? $params['pageSize'] ?? 10;
 
         $query = CustomerFile::with(['customer', 'creator', 'category'])
             ->search($params);
@@ -119,33 +120,48 @@ class FmyService
     public function customerFileCreate(array $data)
     {
         /** @var \Illuminate\Http\UploadedFile $file */
-        $file = $data['file'];
+        $file = $data['file'] ?? $data['file'] ?? null;
 
-        // 使用 OSS 或本地存储
+        if (!$file) {
+            throw new \Exception('请上传文件');
+        }
+
         if ($this->useOss) {
             $uploadResult = $this->getOssService()->upload($file, 'customer_files');
-            $path = $uploadResult['path'];
+            $ossKey = $uploadResult['path'];
+            $fileUrl = $this->getOssService()->getUrl($ossKey);
             $fileSize = $uploadResult['size'];
             $originalName = $uploadResult['original_name'];
         } else {
-            $path = $file->store('customer_files', 'local');
+            $ossKey = $file->store('customer_files', 'local');
+            $fileUrl = Storage::url($ossKey);
             $fileSize = $file->getSize();
             $originalName = $file->getClientOriginalName();
         }
 
-        $salespersonId = is_numeric($data['businessPerson'] ?? '') ? (int) $data['businessPerson'] : auth('api')->id();
+        $salespersonId = is_numeric($data['businessPerson'] ?? $data['business_person'] ?? '') 
+            ? (int) ($data['businessPerson'] ?? $data['business_person']) 
+            : auth('api')->id();
 
-        return CustomerFile::create([
-            'category_id'    => $data['fileTypeId'],
-            'customer_id'    => $data['customerId'],
+        $record = CustomerFile::create([
+            'category_id'    => $data['fileTypeId'] ?? $data['file_type_id'] ?? null,
+            'customer_id'    => $data['customerId'] ?? $data['customer_id'] ?? null,
             'salesperson_id' => $salespersonId,
-            'remarks'        => $data['remark'] ?? '',
-            'file_url'       => $path,
+            'remarks'        => $data['remark'] ?? $data['remarks'] ?? '',
+            'file_url'       => $ossKey,
             'file_size'      => $fileSize,
             'original_name'  => $originalName,
-            'created_by' => auth('api')->id(),
-            'updated_by' => auth('api')->id(),
+            'created_by'     => auth('api')->id(),
+            'updated_by'     => auth('api')->id(),
         ]);
+
+        return [
+            'id'        => (string) $record->id,
+            'fileId'    => (string) $record->id,
+            'fileName'  => $originalName,
+            'fileUrl'   => $fileUrl,
+            'fileSize'  => $fileSize,
+        ];
     }
 
     public function customerFileTree(array $params): array
@@ -254,11 +270,36 @@ class FmyService
             throw new \Exception('文件不存在');
         }
 
-        // 根据存储方式返回不同的 URL
-        if ($this->useOss) {
-            $fileUrl = $this->getOssService()->getPreviewUrl($file->file_url, 3600); // 1小时有效期，浏览器直接预览
-        } else {
-            $fileUrl = Storage::url($file->file_url);
+        $fileUrl = null;
+        $ossKey = $file->file_url;
+
+        if (empty($ossKey) || str_starts_with($ossKey, 'https://via.placeholder')) {
+            return [
+                'fileName' => $file->original_name,
+                'fileUrl'  => null,
+                'fileType' => $file->category?->name ?? '',
+                'message'  => '无预览地址',
+            ];
+        }
+
+        if (str_starts_with($ossKey, 'http')) {
+            $ossKey = parse_url($ossKey, PHP_URL_PATH);
+            $ossKey = ltrim($ossKey, '/');
+        }
+
+        try {
+            if ($this->useOss) {
+                $fileUrl = $this->getOssService()->getPreviewUrl($ossKey, 3600);
+            } else {
+                $fileUrl = Storage::url($file->file_url);
+            }
+        } catch (\Exception $e) {
+            return [
+                'fileName' => $file->original_name,
+                'fileUrl'  => null,
+                'fileType' => $file->category?->name ?? '',
+                'message'  => '无预览地址',
+            ];
         }
 
         return [
@@ -275,17 +316,21 @@ class FmyService
             throw new \Exception('文件不存在');
         }
 
-        // 使用 OSS 时返回签名下载链接
+        $ossKey = $file->file_url;
+        if (str_starts_with($ossKey, 'http')) {
+            $ossKey = parse_url($ossKey, PHP_URL_PATH);
+            $ossKey = ltrim($ossKey, '/');
+        }
+
         if ($this->useOss) {
             $downloadUrl = $this->getOssService()->getDownloadUrl(
-                $file->file_url,
+                $ossKey,
                 $file->original_name,
                 3600
             );
             return redirect($downloadUrl);
         }
 
-        // 本地存储直接下载
         $path = storage_path('app/' . $file->file_url);
         if (! file_exists($path)) {
             throw new \Exception('文件已失效');
@@ -323,20 +368,35 @@ class FmyService
         // 使用 OSS 或本地存储
         if ($this->useOss) {
             $uploadResult = $this->getOssService()->upload($file, 'uploads');
-            return [
-                'fileId'   => (string) md5($uploadResult['path']),
-                'fileName' => $uploadResult['original_name'],
-                'fileUrl'  => $uploadResult['url'],
-                'fileSize' => $uploadResult['size'],
+            $ossKey = $uploadResult['path'];
+            $fileUrl = $this->getOssService()->getUrl($ossKey);
+        } else {
+            $uploadResult = [
+                'path' => $file->store('uploads', 'local'),
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
             ];
+            $ossKey = $uploadResult['path'];
+            $fileUrl = Storage::url($uploadResult['path']);
         }
 
-        $path = $file->store('uploads', 'local');
+        $record = \App\Models\CustomerFile::create([
+            'category_id' => $data['category_id'] ?? null,
+            'customer_id' => $data['customer_id'] ?? null,
+            'salesperson_id' => auth('api')->id(),
+            'remarks' => $data['remarks'] ?? null,
+            'file_url' => $ossKey,
+            'file_size' => $uploadResult['size'],
+            'original_name' => $uploadResult['original_name'],
+            'created_by' => auth('api')->id(),
+            'updated_by' => auth('api')->id(),
+        ]);
+
         return [
-            'fileId'   => (string) md5($path),
-            'fileName' => $file->getClientOriginalName(),
-            'fileUrl'  => Storage::url($path),
-            'fileSize' => $file->getSize(),
+            'fileId'   => (string) $record->id,
+            'fileName' => $uploadResult['original_name'],
+            'fileUrl'  => $fileUrl,
+            'fileSize' => $uploadResult['size'],
         ];
     }
 
@@ -515,6 +575,51 @@ class FmyService
     public function techLeadersOptions(array $params): array
     {
         return $this->userOptions($params);
+    }
+
+    // ====================== 企业投资情况 ======================
+
+    protected function investmentRepo(): EnterpriseInvestmentRepository
+    {
+        return new EnterpriseInvestmentRepository();
+    }
+
+    public function enterpriseInvestmentList(array $params): array
+    {
+        $paginate = $this->investmentRepo()->list($params);
+        return [
+            'data' => $paginate->items(),
+            'meta' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page'     => $paginate->perPage(),
+                'total'        => $paginate->total(),
+                'last_page'    => $paginate->lastPage(),
+            ],
+        ];
+    }
+
+    public function enterpriseInvestmentDetail(int $id)
+    {
+        $row = $this->investmentRepo()->find($id);
+        if (! $row) {
+            throw new \Exception('记录不存在');
+        }
+        return $row;
+    }
+
+    public function enterpriseInvestmentCreate(array $data)
+    {
+        return $this->investmentRepo()->create($data);
+    }
+
+    public function enterpriseInvestmentUpdate(int $id, array $data)
+    {
+        return $this->investmentRepo()->update($id, $data);
+    }
+
+    public function enterpriseInvestmentDelete(int $id): void
+    {
+        $this->investmentRepo()->delete($id);
     }
 
     protected function userOptions(array $params): array

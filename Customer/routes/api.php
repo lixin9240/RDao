@@ -132,6 +132,10 @@ Route::prefix('v1')->group(function () {
 
         // 省市区
         Route::get('regions', [LXController::class, 'regionList']);// 获取省市区列表
+
+        // 国民经济分类（四级联动）
+        Route::get('economy-categories', [LXController::class, 'economyCategoryList']);// 根据父级ID获取分类列表
+        Route::get('economy-categories/tree', [LXController::class, 'economyCategoryTree']);// 获取全量树形结构
     });
 });
 
@@ -214,5 +218,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('staff/options', [FmyController::class, 'staffOptions']);
     Route::get('assistant/options', [FmyController::class, 'assistantOptions']);
     Route::get('tech-leaders/options', [FmyController::class, 'techLeadersOptions']);
+
+    // 企业投资情况
+    Route::get('enterprise-investments', [FmyController::class, 'enterpriseInvestmentIndex']);
+    Route::get('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentShow']);
+    Route::post('enterprise-investments', [FmyController::class, 'enterpriseInvestmentStore']);
+    Route::put('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentUpdate']);
+    Route::delete('enterprise-investments/{id}', [FmyController::class, 'enterpriseInvestmentDestroy']);
 });
 
