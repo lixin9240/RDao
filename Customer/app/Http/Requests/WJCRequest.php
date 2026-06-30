@@ -34,12 +34,14 @@ class WJCRequest extends FormRequest
         }
 
         if (str_starts_with($name, 'inventor.')) {
+            $isUpdate = str_ends_with($name, '.update');
+
             return [
-                'customer_id'      => 'required|integer',
-                'customer_name'    => 'required|string|max:100',
-                'name'             => 'required|string|max:100',
-                'phone'            => 'required|string|max:20',
-                'email'            => 'required|string|email|max:100',
+                'customer_id'      => $isUpdate ? 'sometimes|integer'         : 'required|integer',
+                'customer_name'    => $isUpdate ? 'sometimes|string|max:100'   : 'required|string|max:100',
+                'name'             => $isUpdate ? 'sometimes|string|max:100'   : 'required|string|max:100',
+                'phone'            => $isUpdate ? 'sometimes|string|max:20'    : 'required|string|max:20',
+                'email'            => $isUpdate ? 'sometimes|email|max:100'    : 'required|email|max:100',
                 'nationality'      => 'nullable|string|max:50',
                 'id_type'          => 'nullable|string|max:50',
                 'id_no'            => 'nullable|string|max:50',
@@ -56,12 +58,14 @@ class WJCRequest extends FormRequest
         }
 
         if (str_starts_with($name, 'applicant.')) {
+            $isUpdate = str_ends_with($name, '.update');
+
             return [
-                'customer_id'           => 'required|integer',
-                'customer_name'         => 'required|string|max:100',
-                'applicant_name_cn'     => 'required|string|max:100',
-                'applicant_type'        => 'required|string|max:50',
-                'entity_type'           => 'required|string|max:50',
+                'customer_id'           => $isUpdate ? 'sometimes|integer'         : 'required|integer',
+                'customer_name'         => $isUpdate ? 'sometimes|string|max:100'   : 'required|string|max:100',
+                'applicant_name_cn'     => $isUpdate ? 'sometimes|string|max:100'   : 'required|string|max:100',
+                'applicant_type'        => $isUpdate ? 'sometimes|string|max:50'    : 'required|string|max:50',
+                'entity_type'           => $isUpdate ? 'sometimes|string|max:50'    : 'required|string|max:50',
                 'nationality'           => 'nullable|string|max:50',
                 'id_type'               => 'nullable|string|max:50',
                 'id_no'                 => 'nullable|string|max:50',
@@ -73,7 +77,7 @@ class WJCRequest extends FormRequest
                 'business_address'      => 'nullable|string|max:200',
                 'address_en'            => 'nullable|string|max:300',
                 'zip_code'              => 'nullable|string|max:10',
-                'email'                 => 'nullable|string|email|max:100',
+                'email'                 => 'nullable|email|max:100',
                 'phone'                 => 'nullable|string|max:20',
                 'attorney_power_no'     => 'nullable|string|max:50',
                 'sync_date'             => 'nullable|date',
