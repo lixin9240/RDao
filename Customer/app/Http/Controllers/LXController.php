@@ -116,6 +116,13 @@ class LXController extends Controller
         return $this->success($tree);
     }
 
+    public function showDept(int $id): JsonResponse
+    {
+        $dept = $this->service->deptDetail($id);
+
+        return $this->success($dept);
+    }
+
     /* ==================== 菜单管理 ==================== */
 
     /**

@@ -181,6 +181,16 @@ class LXService
         return $this->buildTree($all);
     }
 
+    public function deptDetail(int $id): array
+    {
+        $dept = Dept::find($id);
+        if (! $dept) {
+            throw new \Exception('部门不存在');
+        }
+
+        return $this->deptToArray($dept);
+    }
+
     /**
      * 根据 leaderName 解析 leaderId
      */
