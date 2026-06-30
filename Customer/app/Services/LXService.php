@@ -105,26 +105,7 @@ class LXService
         $pageNum  = (int) ($params['pageNum'] ?? 1);
         $pageSize = (int) ($params['pageSize'] ?? 10);
 
-        $query = SysUser::with('dept:id,dept_name');
-
-        if (! empty($params['username'])) {
-            $query->where('username', 'like', '%' . $params['username'] . '%');
-        }
-        if (! empty($params['realName'])) {
-            $query->where('real_name', 'like', '%' . $params['realName'] . '%');
-        }
-        if (! empty($params['phone'])) {
-            $query->where('phone', 'like', '%' . $params['phone'] . '%');
-        }
-        if (! empty($params['email'])) {
-            $query->where('email', 'like', '%' . $params['email'] . '%');
-        }
-        if (isset($params['deptId']) && $params['deptId'] !== '') {
-            $query->where('dept_id', (int) $params['deptId']);
-        }
-        if (isset($params['accountStatus']) && $params['accountStatus'] !== '') {
-            $query->where('account_status', (int) $params['accountStatus']);
-        }
+        $query = SysUser::with('dept:id,dept_name')->search($params);
 
         $total = $query->count();
         $rows  = $query->orderByDesc('id')
@@ -392,23 +373,8 @@ class LXService
      */
     public function assignRoleMenus(int $roleId, array $menuIds): void
     {
-        DB::transaction(function () use ($roleId, $menuIds) {
-            DB::table('sys_role_menu')->where('role_id', $roleId)->delete();
-
-            $insertData = [];
-            foreach (array_unique($menuIds) as $menuId) {
-                $insertData[] = [
-                    'role_id'    => $roleId,
-                    'menu_id'    => $menuId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            if (! empty($insertData)) {
-                DB::table('sys_role_menu')->insert($insertData);
-            }
-        });
+        $role = Role::findOrFail($roleId);
+        $role->assignMenus($menuIds);
     }
 
     /**
@@ -416,10 +382,8 @@ class LXService
      */
     public function getRoleMenus(int $roleId): array
     {
-        return DB::table('sys_role_menu')
-            ->where('role_id', $roleId)
-            ->pluck('menu_id')
-            ->toArray();
+        $role = Role::findOrFail($roleId);
+        return $role->getMenuIds();
     }
 
     /**
@@ -441,18 +405,14 @@ class LXService
     /* ==================== 字典管理 ==================== */
 
     /**
-     * 通用字典列表查询
+     * 通用字典列表查询（调用 Model 的 scopeDictList）
      */
-    private function dictQuery(string $modelClass, array $params, string $nameField)
+    private function dictList(string $modelClass, array $params, string $nameField): array
     {
-        $query = $modelClass::query();
-        if (isset($params['status'])) {
-            $query->where('status', $params['status']);
-        }
-        if (! empty($params['keyword'])) {
-            $query->where($nameField, 'like', '%' . $params['keyword'] . '%');
-        }
-        return $query->orderBy('sort_order')->get();
+        return $modelClass::dictList($params, $nameField)
+            ->get()
+            ->map(fn ($item) => $this->modelToCamelCase($item))
+            ->toArray();
     }
 
     /**
@@ -474,9 +434,7 @@ class LXService
     // ----- 客户等级 -----
     public function customerLevelList(array $params): array
     {
-        return $this->dictQuery(CustomerLevel::class, $params, 'level_name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(CustomerLevel::class, $params, 'level_name');
     }
 
     public function customerLevelCreate(array $data): array
@@ -499,9 +457,7 @@ class LXService
     // ----- 客户规模 -----
     public function customerScaleList(array $params): array
     {
-        return $this->dictQuery(CustomerScale::class, $params, 'scale_name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(CustomerScale::class, $params, 'scale_name');
     }
 
     public function customerScaleCreate(array $data): array
@@ -524,9 +480,7 @@ class LXService
     // ----- 文件描述 -----
     public function fileDescriptionList(array $params): array
     {
-        return $this->dictQuery(FileDescription::class, $params, 'file_name_template')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(FileDescription::class, $params, 'file_name_template');
     }
 
     public function fileDescriptionCreate(array $data): array
@@ -549,9 +503,7 @@ class LXService
     // ----- 文件分类 -----
     public function fileCategoryList(array $params): array
     {
-        return $this->dictQuery(FileCategory::class, $params, 'name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(FileCategory::class, $params, 'name');
     }
 
     public function fileCategoryCreate(array $data): array
@@ -574,9 +526,7 @@ class LXService
     // ----- 价格指数 -----
     public function priceIndexList(array $params): array
     {
-        return $this->dictQuery(PriceIndex::class, $params, 'index_name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(PriceIndex::class, $params, 'index_name');
     }
 
     public function priceIndexCreate(array $data): array
@@ -599,9 +549,7 @@ class LXService
     // ----- 创新指数 -----
     public function innovationIndexList(array $params): array
     {
-        return $this->dictQuery(InnovationIndex::class, $params, 'index_name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(InnovationIndex::class, $params, 'index_name');
     }
 
     public function innovationIndexCreate(array $data): array
@@ -624,9 +572,7 @@ class LXService
     // ----- 工业园区 -----
     public function industrialParkList(array $params): array
     {
-        return $this->dictQuery(IndustrialPark::class, $params, 'park_name')
-            ->map(fn ($item) => $this->modelToCamelCase($item))
-            ->toArray();
+        return $this->dictList(IndustrialPark::class, $params, 'park_name');
     }
 
     public function industrialParkCreate(array $data): array

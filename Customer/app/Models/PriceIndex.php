@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PriceIndex extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'biz_price_index';
 
     protected $fillable = [

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerLevel extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'sys_customer_level';
 
     protected $fillable = [

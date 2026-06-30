@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class InnovationIndex extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'biz_innovation_index';
 
     protected $fillable = [

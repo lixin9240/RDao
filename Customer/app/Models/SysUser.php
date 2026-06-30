@@ -78,4 +78,31 @@ class SysUser extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * 列表搜索作用域
+     */
+    public function scopeSearch($query, array $params)
+    {
+        if (! empty($params['username'])) {
+            $query->where('username', 'like', '%' . $params['username'] . '%');
+        }
+        if (! empty($params['realName'])) {
+            $query->where('real_name', 'like', '%' . $params['realName'] . '%');
+        }
+        if (! empty($params['phone'])) {
+            $query->where('phone', 'like', '%' . $params['phone'] . '%');
+        }
+        if (! empty($params['email'])) {
+            $query->where('email', 'like', '%' . $params['email'] . '%');
+        }
+        if (isset($params['deptId']) && $params['deptId'] !== '') {
+            $query->where('dept_id', (int) $params['deptId']);
+        }
+        if (isset($params['accountStatus']) && $params['accountStatus'] !== '') {
+            $query->where('account_status', (int) $params['accountStatus']);
+        }
+
+        return $query;
+    }
 }

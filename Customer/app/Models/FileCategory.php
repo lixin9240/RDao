@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FileCategory extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'sys_file_category';
 
     protected $fillable = [

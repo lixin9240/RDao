@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerScale extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'sys_customer_scale';
 
     protected $fillable = [

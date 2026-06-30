@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FileDescription extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'biz_file_description';
 
     protected $fillable = [

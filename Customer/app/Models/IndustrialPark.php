@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class IndustrialPark extends Model
 {
+    use Traits\DictModelTrait;
+
     protected $table = 'sys_industrial_park';
 
     protected $fillable = [

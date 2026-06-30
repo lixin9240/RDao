@@ -21,7 +21,7 @@ class LXController extends Controller
      */
     public function login(LXRequest $request): JsonResponse
     {
-        $token = $this->service->login($request->validatedData());
+        $token = $this->service->login($request->validated());
 
         if (! $token) {
             return $this->error('账号或密码错误', 401);
@@ -47,7 +47,7 @@ class LXController extends Controller
      */
     public function store(LXRequest $request): JsonResponse
     {
-        $user = $this->service->createUser($request->validatedData());
+        $user = $this->service->createUser($request->validated());
 
         return $this->success($user, '用户创建成功');
     }
@@ -71,7 +71,7 @@ class LXController extends Controller
      */
     public function update(LXRequest $request, int $id): JsonResponse
     {
-        $user = $this->service->updateUser($id, $request->validatedData());
+        $user = $this->service->updateUser($id, $request->validated());
 
         return $this->success($user, '用户更新成功');
     }
@@ -91,7 +91,7 @@ class LXController extends Controller
      */
     public function storeDept(LXRequest $request): JsonResponse
     {
-        $dept = $this->service->createDept($request->validatedData());
+        $dept = $this->service->createDept($request->validated());
 
         return $this->success($dept, '部门创建成功');
     }
@@ -101,7 +101,7 @@ class LXController extends Controller
      */
     public function updateDept(LXRequest $request, int $id): JsonResponse
     {
-        $dept = $this->service->updateDept($id, $request->validatedData());
+        $dept = $this->service->updateDept($id, $request->validated());
 
         return $this->success($dept, '部门更新成功');
     }
@@ -130,7 +130,7 @@ class LXController extends Controller
      */
     public function storeMenu(LXRequest $request): JsonResponse
     {
-        $menu = $this->service->createMenu($request->validatedData());
+        $menu = $this->service->createMenu($request->validated());
 
         return $this->success($menu, '菜单创建成功');
     }
@@ -152,7 +152,7 @@ class LXController extends Controller
      */
     public function storeRole(LXRequest $request): JsonResponse
     {
-        $role = $this->service->createRole($request->validatedData());
+        $role = $this->service->createRole($request->validated());
 
         return $this->success($role, '角色创建成功');
     }
@@ -176,7 +176,7 @@ class LXController extends Controller
      */
     public function updateRole(LXRequest $request, int $id): JsonResponse
     {
-        $role = $this->service->updateRole($id, $request->validatedData());
+        $role = $this->service->updateRole($id, $request->validated());
 
         return $this->success($role, '角色更新成功');
     }
@@ -206,7 +206,7 @@ class LXController extends Controller
      */
     public function assignMenus(LXRequest $request, int $id): JsonResponse
     {
-        $this->service->assignRoleMenus($id, $request->validatedData()['menuIds'] ?? []);
+        $this->service->assignRoleMenus($id, $request->validated()['menu_ids'] ?? []);
 
         return $this->success([], '权限分配成功');
     }
@@ -231,12 +231,12 @@ class LXController extends Controller
 
     public function customerLevelStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->customerLevelCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->customerLevelCreate($request->validated()), '创建成功');
     }
 
     public function customerLevelUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->customerLevelUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->customerLevelUpdate($id, $request->validated()), '更新成功');
     }
 
     public function customerLevelDestroy(int $id): JsonResponse
@@ -253,12 +253,12 @@ class LXController extends Controller
 
     public function customerScaleStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->customerScaleCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->customerScaleCreate($request->validated()), '创建成功');
     }
 
     public function customerScaleUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->customerScaleUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->customerScaleUpdate($id, $request->validated()), '更新成功');
     }
 
     public function customerScaleDestroy(int $id): JsonResponse
@@ -275,12 +275,12 @@ class LXController extends Controller
 
     public function fileDescriptionStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->fileDescriptionCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->fileDescriptionCreate($request->validated()), '创建成功');
     }
 
     public function fileDescriptionUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->fileDescriptionUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->fileDescriptionUpdate($id, $request->validated()), '更新成功');
     }
 
     public function fileDescriptionDestroy(int $id): JsonResponse
@@ -297,12 +297,12 @@ class LXController extends Controller
 
     public function fileCategoryStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->fileCategoryCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->fileCategoryCreate($request->validated()), '创建成功');
     }
 
     public function fileCategoryUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->fileCategoryUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->fileCategoryUpdate($id, $request->validated()), '更新成功');
     }
 
     public function fileCategoryDestroy(int $id): JsonResponse
@@ -319,12 +319,12 @@ class LXController extends Controller
 
     public function priceIndexStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->priceIndexCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->priceIndexCreate($request->validated()), '创建成功');
     }
 
     public function priceIndexUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->priceIndexUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->priceIndexUpdate($id, $request->validated()), '更新成功');
     }
 
     public function priceIndexDestroy(int $id): JsonResponse
@@ -341,12 +341,12 @@ class LXController extends Controller
 
     public function innovationIndexStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->innovationIndexCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->innovationIndexCreate($request->validated()), '创建成功');
     }
 
     public function innovationIndexUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->innovationIndexUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->innovationIndexUpdate($id, $request->validated()), '更新成功');
     }
 
     public function innovationIndexDestroy(int $id): JsonResponse
@@ -363,12 +363,12 @@ class LXController extends Controller
 
     public function industrialParkStore(LXRequest $request): JsonResponse
     {
-        return $this->success($this->service->industrialParkCreate($request->validatedData()), '创建成功');
+        return $this->success($this->service->industrialParkCreate($request->validated()), '创建成功');
     }
 
     public function industrialParkUpdate(LXRequest $request, int $id): JsonResponse
     {
-        return $this->success($this->service->industrialParkUpdate($id, $request->validatedData()), '更新成功');
+        return $this->success($this->service->industrialParkUpdate($id, $request->validated()), '更新成功');
     }
 
     public function industrialParkDestroy(int $id): JsonResponse
