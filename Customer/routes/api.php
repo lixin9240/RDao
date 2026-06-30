@@ -8,46 +8,40 @@ use App\Http\Controllers\FmyController;
 
 // WJCController
 Route::middleware('auth:api')->group(function () {
-    // 申请人接口（自定义路径，匹配文档）
-    Route::get('applicant/list', [WJCController::class, 'index'])->name('applicant.index');
-    Route::post('applicant/add', [WJCController::class, 'store'])->name('applicant.store');
-    Route::put('applicant/edit', [WJCController::class, 'update'])->name('applicant.update');
-    Route::get('applicant/info', [WJCController::class, 'show'])->name('applicant.show');
-    Route::delete('applicant/del', [WJCController::class, 'destroy'])->name('applicant.destroy');
+    // 申请人接口
+    Route::get('applicant/list', [WJCController::class, 'index'])->name('applicant.index');//获取申请人列表
+    Route::post('applicant/add', [WJCController::class, 'store'])->name('applicant.store');//新增申请人
+    Route::put('applicant/edit', [WJCController::class, 'update'])->name('applicant.update');//修改申请人
+    Route::get('applicant/info', [WJCController::class, 'show'])->name('applicant.show');//获取申请人详情
+    Route::delete('applicant/del', [WJCController::class, 'destroy'])->name('applicant.destroy');//删除申请人
 
-    // 发明人接口（自定义路径，匹配文档）
-    Route::get('inventor/list', [WJCController::class, 'index'])->name('inventor.index');
-    Route::post('inventor/add', [WJCController::class, 'store'])->name('inventor.store');
-    Route::put('inventor/edit', [WJCController::class, 'update'])->name('inventor.update');
-    Route::get('inventor/info', [WJCController::class, 'show'])->name('inventor.show');
-    Route::delete('inventor/del', [WJCController::class, 'destroy'])->name('inventor.destroy');
+    // 发明人接口
+    Route::get('inventor/list', [WJCController::class, 'index'])->name('inventor.index');//获取发明人列表
+    Route::post('inventor/add', [WJCController::class, 'store'])->name('inventor.store');//新增发明人
+    Route::put('inventor/edit', [WJCController::class, 'update'])->name('inventor.update');//修改发明人
+    Route::get('inventor/info', [WJCController::class, 'show'])->name('inventor.show');//获取发明人详情
+    Route::delete('inventor/del', [WJCController::class, 'destroy'])->name('inventor.destroy');//删除发明人
 
-    // 工商信息接口（RESTful，与文档一致）
-    Route::resource('customer-business', WJCController::class)->names([
-        'index'   => 'customer-business.index',
-        'store'   => 'customer-business.store',
-        'show'    => 'customer-business.show',
-        'update'  => 'customer-business.update',
-        'destroy' => 'customer-business.destroy',
-    ])->parameters(['customer-business' => 'id']);
+    // 工商信息接口
+    Route::get('customer-business', [WJCController::class, 'index'])->name('customer-business.index');//获取工商信息列表
+    Route::post('customer-business', [WJCController::class, 'store'])->name('customer-business.store');//新增工商信息
+    Route::get('customer-business/{id}', [WJCController::class, 'show'])->name('customer-business.show');//获取工商信息详情
+    Route::put('customer-business/{id}', [WJCController::class, 'update'])->name('customer-business.update');//修改工商信息
+    Route::delete('customer-business/{id}', [WJCController::class, 'destroy'])->name('customer-business.destroy');//删除工商信息
 
-    // 企业信息接口（RESTful，与文档一致）
-    Route::resource('customer-enterprises', WJCController::class)->names([
-        'index'   => 'customer-enterprise.index',
-        'store'   => 'customer-enterprise.store',
-        'show'    => 'customer-enterprise.show',
-        'update'  => 'customer-enterprise.update',
-        'destroy' => 'customer-enterprise.destroy',
-    ])->parameters(['customer-enterprises' => 'id']);
+    // 企业信息接口
+    Route::get('customer-enterprises', [WJCController::class, 'index'])->name('customer-enterprise.index');//获取企业信息列表
+    Route::post('customer-enterprises', [WJCController::class, 'store'])->name('customer-enterprise.store');//新增企业信息
+    Route::get('customer-enterprises/{id}', [WJCController::class, 'show'])->name('customer-enterprise.show');//获取企业信息详情
+    Route::put('customer-enterprises/{id}', [WJCController::class, 'update'])->name('customer-enterprise.update');//修改企业信息
+    Route::delete('customer-enterprises/{id}', [WJCController::class, 'destroy'])->name('customer-enterprise.destroy');//删除企业信息
 
-    // 研发投入接口（RESTful）
-    Route::resource('customer-rd-investments', WJCController::class)->names([
-        'index'   => 'customer-rd-investment.index',
-        'store'   => 'customer-rd-investment.store',
-        'show'    => 'customer-rd-investment.show',
-        'update'  => 'customer-rd-investment.update',
-        'destroy' => 'customer-rd-investment.destroy',
-    ])->parameters(['customer-rd-investments' => 'id']);
+    // 研发投入接口
+    Route::get('customer-rd-investments', [WJCController::class, 'index'])->name('customer-rd-investment.index');//获取研发投入列表
+    Route::post('customer-rd-investments', [WJCController::class, 'store'])->name('customer-rd-investment.store');//新增研发投入
+    Route::get('customer-rd-investments/{id}', [WJCController::class, 'show'])->name('customer-rd-investment.show');//获取研发投入详情
+    Route::put('customer-rd-investments/{id}', [WJCController::class, 'update'])->name('customer-rd-investment.update');//修改研发投入
+    Route::delete('customer-rd-investments/{id}', [WJCController::class, 'destroy'])->name('customer-rd-investment.destroy');//删除研发投入
 });
 
 // LXController 独立v1分组
