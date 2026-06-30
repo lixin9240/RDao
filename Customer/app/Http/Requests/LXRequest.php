@@ -237,6 +237,7 @@ class LXRequest extends FormRequest
                 'deptName' => 'dept_name',
                 'deptCode' => 'dept_code',
                 'leaderId' => 'leader_id',
+                'leaderName' => 'leader_name',
             ];
             foreach ($map as $camel => $snake) {
                 if (array_key_exists($camel, $data)) {
